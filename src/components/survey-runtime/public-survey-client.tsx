@@ -127,7 +127,7 @@ export function PublicSurveyClient({
                 {t("publicSurvey.estimatedTime")}: {estimatedMinutes} {t("common.minutes")}
               </p>
               {reward.enabled && (
-                <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-mint-50 px-3 py-1.5 text-xs font-semibold text-mint-700">
+                <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-mint-50 px-3 py-1.5 text-xs font-semibold text-mint-content">
                   {formatCurrency(reward.amount, locale, reward.currency)} · {t("publicSurvey.yourReward")}
                 </div>
               )}
@@ -197,12 +197,12 @@ export function PublicSurveyClient({
 
               {reward.enabled && (
                 <div className="mt-6 w-full rounded-xl border border-mint-200 bg-mint-50/60 p-5">
-                  <p className="text-xs font-medium uppercase tracking-wide text-mint-700">{t("publicSurvey.yourReward")}</p>
-                  <p className="mt-1 text-2xl font-semibold text-mint-800">{formatCurrency(reward.amount, locale, reward.currency)}</p>
-                  <p className="mt-3 text-sm font-medium text-mint-700">
+                  <p className="text-xs font-medium uppercase tracking-wide text-mint-content">{t("publicSurvey.yourReward")}</p>
+                  <p className="mt-1 text-2xl font-semibold text-mint-content">{formatCurrency(reward.amount, locale, reward.currency)}</p>
+                  <p className="mt-3 text-sm font-medium text-mint-content">
                     {rewardResult?.status === "completed" ? t("publicSurvey.rewardReady") : t("publicSurvey.rewardPending")}
                   </p>
-                  <p className="mt-1 text-xs text-mint-600">
+                  <p className="mt-1 text-xs text-mint-content">
                     {reward.rewardType === "cash" && t("publicSurvey.redemptionCash")}
                     {reward.rewardType === "gift_card" && t("publicSurvey.redemptionGiftCard")}
                     {reward.rewardType === "coupon" && t("publicSurvey.redemptionCoupon")}

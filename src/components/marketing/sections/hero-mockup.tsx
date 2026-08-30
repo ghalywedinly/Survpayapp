@@ -39,7 +39,7 @@ export function HeroMockup({ locale }: { locale: Locale }) {
       <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {tiles.map((tile) => (
           <div key={tile.label} className="rounded-xl border border-ink-100 bg-ink-50/50 p-3">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-600">{tile.icon}</div>
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-content">{tile.icon}</div>
             <p className="mt-2 text-[11px] text-ink-500">{tile.label}</p>
             <p className="text-sm font-semibold text-ink-900">{tile.value}</p>
           </div>

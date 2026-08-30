@@ -66,7 +66,7 @@ export function SurveysTable({ surveys }: { surveys: SurveyRow[] }) {
             return (
               <TR key={s.id}>
                 <TD className="max-w-[240px]">
-                  <Link href={`/${locale}/surveys/${s.id}`} className="block truncate font-medium text-ink-900 hover:text-brand-600">
+                  <Link href={`/${locale}/surveys/${s.id}`} className="block truncate font-medium text-ink-900 hover:text-brand-content">
                     {title}
                   </Link>
                   {target > 0 && (

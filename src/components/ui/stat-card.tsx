@@ -23,7 +23,7 @@ export function StatCard({
     <Card className={cn("p-5", className)}>
       <div className="flex items-center gap-3">
         {icon && (
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-content">
             {icon}
           </div>
         )}
@@ -31,7 +31,7 @@ export function StatCard({
       </div>
       <p className="mt-3 text-2xl font-semibold tracking-tight text-ink-900">{value}</p>
       {delta && (
-        <p className={cn("mt-1.5 text-xs font-medium", deltaTone === "success" ? "text-mint-600" : "text-red-600")}>
+        <p className={cn("mt-1.5 text-xs font-medium", deltaTone === "success" ? "text-mint-content" : "text-danger-content")}>
           <span className="inline-flex items-center gap-1">
             {deltaTone === "success" ? "↑" : "↓"} {delta}
           </span>{" "}

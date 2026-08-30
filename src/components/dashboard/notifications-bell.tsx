@@ -48,7 +48,7 @@ export function NotificationsBell({ notifications, unreadCount }: { notification
                   router.refresh();
                 })
               }
-              className="text-xs font-medium text-brand-600 hover:text-brand-700"
+              className="text-xs font-medium text-brand-content hover:text-brand-content"
             >
               {t("notifications.markAllRead")}
             </button>

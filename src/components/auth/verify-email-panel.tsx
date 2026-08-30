@@ -16,7 +16,7 @@ export function VerifyEmailPanel({ email, verified, dashboardHref }: { email: st
   if (verified) {
     return (
       <div className="space-y-4">
-        <p className="rounded-lg bg-mint-50 px-3 py-2.5 text-sm text-mint-700">✓ {email}</p>
+        <p className="rounded-lg bg-mint-50 px-3 py-2.5 text-sm text-mint-content">✓ {email}</p>
         <Button size="lg" className="w-full" onClick={() => router.push(dashboardHref)}>
           {t("auth.continueToApp")}
         </Button>

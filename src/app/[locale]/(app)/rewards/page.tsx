@@ -57,7 +57,7 @@ export default async function RewardsPage({ params }: { params: { locale: Locale
                 return (
                   <TR key={b.id}>
                     <TD>
-                      <Link href={`/${params.locale}/surveys/${b.survey.id}/budget`} className="font-medium text-ink-900 hover:text-brand-600">
+                      <Link href={`/${params.locale}/surveys/${b.survey.id}/budget`} className="font-medium text-ink-900 hover:text-brand-content">
                         {title}
                       </Link>
                       <Progress value={pct} className="mt-1.5 h-1 w-32" />
@@ -67,7 +67,7 @@ export default async function RewardsPage({ params }: { params: { locale: Locale
                     </TD>
                     <TD>{formatCurrency(b.fundedAmount, params.locale)}</TD>
                     <TD>{formatCurrency(b.distributedAmount, params.locale)}</TD>
-                    <TD className="font-medium text-mint-600">{formatCurrency(remaining, params.locale)}</TD>
+                    <TD className="font-medium text-mint-content">{formatCurrency(remaining, params.locale)}</TD>
                   </TR>
                 );
               })}

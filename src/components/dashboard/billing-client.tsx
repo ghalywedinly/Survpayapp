@@ -101,7 +101,7 @@ export function BillingClient({
             </div>
             <div>
               <p className="text-xs text-ink-400">{t("billing.totalRemaining")}</p>
-              <p className="text-xl font-semibold text-mint-600">{formatCurrency(totals.remaining, locale)}</p>
+              <p className="text-xl font-semibold text-mint-content">{formatCurrency(totals.remaining, locale)}</p>
             </div>
           </div>
         </CardContent>
@@ -165,7 +165,7 @@ export function BillingClient({
                     <TD>
                       <Badge tone={inv.status === "paid" ? "success" : "neutral"}>{inv.status}</Badge>
                     </TD>
-                    <TD className="text-brand-600">{t("billing.download")}</TD>
+                    <TD className="text-brand-content">{t("billing.download")}</TD>
                   </TR>
                 ))}
               </TBody>

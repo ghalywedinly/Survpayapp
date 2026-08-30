@@ -24,7 +24,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
     <form action={formAction} className="space-y-4">
       <input type="hidden" name="locale" value={locale} />
       <input type="hidden" name="token" value={token} />
-      {state?.error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{t(`auth.${state.error}`)}</p>}
+      {state?.error && <p className="rounded-lg bg-danger-tint px-3 py-2 text-sm text-danger-content">{t(`auth.${state.error}`)}</p>}
       <div>
         <Label htmlFor="password">{t("auth.password")}</Label>
         <Input id="password" name="password" type="password" required minLength={8} autoComplete="new-password" />

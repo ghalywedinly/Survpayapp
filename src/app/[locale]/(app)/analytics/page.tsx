@@ -62,7 +62,7 @@ export default async function AnalyticsOverviewPage({ params }: { params: { loca
                   <TD>{s._count.responses.toLocaleString()}</TD>
                   <TD>{s.completionRate.toFixed(1)}%</TD>
                   <TD>
-                    <Link href={`/${params.locale}/surveys/${s.id}/analytics`} className="text-sm font-medium text-brand-600 hover:text-brand-700">
+                    <Link href={`/${params.locale}/surveys/${s.id}/analytics`} className="text-sm font-medium text-brand-content hover:text-brand-content">
                       {dict.common.viewDetails} →
                     </Link>
                   </TD>

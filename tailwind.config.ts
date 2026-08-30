@@ -49,6 +49,14 @@ const config: Config = {
           800: "#3f28ac",
           900: "#352589",
           950: "#211653",
+          // The readable-text counterpart to bg-brand-50/100 chips and
+          // accent links — 600/700/800 above are also used as *solid*
+          // fills (buttons, radio dots, switches) that must stay a fixed
+          // vivid purple in both themes, so they can't themselves become
+          // reactive. This is the separate, reactive "text on a tint"
+          // color: the same dark purple in light mode, but brightened in
+          // dark mode so it doesn't go dark-on-dark against a dark chip.
+          content: "rgb(var(--brand-content) / <alpha-value>)",
         },
         mint: {
           50: "rgb(var(--mint-50) / <alpha-value>)",
@@ -61,12 +69,29 @@ const config: Config = {
           700: "#12744c",
           800: "#135c3f",
           900: "#124c36",
+          content: "rgb(var(--mint-content) / <alpha-value>)",
         },
         amber: {
           50: "rgb(var(--amber-50) / <alpha-value>)",
           400: "#fbbf35",
           500: "#f2a70d",
           600: "#d6870a",
+          content: "rgb(var(--amber-content) / <alpha-value>)",
+        },
+        // Tailwind's default red/sky are used for a handful of danger/info
+        // badges paired with a -50 tint background; that default -50 is a
+        // flat, non-reactive pastel, so in dark mode it stayed glaringly
+        // light against a dark page. These give those specific badges a
+        // dark-aware tint + readable text, without touching the many other
+        // literal red-500/border-red-200/etc. usages that already read
+        // fine in both themes.
+        danger: {
+          tint: "rgb(var(--danger-tint) / <alpha-value>)",
+          content: "rgb(var(--danger-content) / <alpha-value>)",
+        },
+        info: {
+          tint: "rgb(var(--info-tint) / <alpha-value>)",
+          content: "rgb(var(--info-content) / <alpha-value>)",
         },
       },
       boxShadow: {

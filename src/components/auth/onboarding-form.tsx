@@ -36,7 +36,7 @@ export function OnboardingForm() {
     <form action={formAction} className="space-y-5">
       <input type="hidden" name="locale" value={locale} />
       <input type="hidden" name="role" value={role} />
-      {state?.error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{t(`auth.${state.error}`)}</p>}
+      {state?.error && <p className="rounded-lg bg-danger-tint px-3 py-2 text-sm text-danger-content">{t(`auth.${state.error}`)}</p>}
 
       <div>
         <Label htmlFor="companyName">{t("onboarding.companyLabel")}</Label>
@@ -54,7 +54,7 @@ export function OnboardingForm() {
               className={cn(
                 "rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors",
                 role === r.value
-                  ? "border-brand-600 bg-brand-50 text-brand-700"
+                  ? "border-brand-600 bg-brand-50 text-brand-content"
                   : "border-ink-200 text-ink-600 hover:border-ink-300"
               )}
             >

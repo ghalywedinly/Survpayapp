@@ -55,7 +55,7 @@ export default async function ResponsesOverviewPage({ params }: { params: { loca
                   </TD>
                   <TD>{s._count.responses.toLocaleString()}</TD>
                   <TD>
-                    <Link href={`/${params.locale}/surveys/${s.id}/responses`} className="text-sm font-medium text-brand-600 hover:text-brand-700">
+                    <Link href={`/${params.locale}/surveys/${s.id}/responses`} className="text-sm font-medium text-brand-content hover:text-brand-content">
                       {dict.common.viewDetails} →
                     </Link>
                   </TD>

@@ -59,10 +59,10 @@ export function DashboardSidebar({
               onClick={onClose}
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                active ? "bg-brand-50 text-brand-700" : "text-ink-600 hover:bg-ink-50 hover:text-ink-900"
+                active ? "bg-brand-50 text-brand-content" : "text-ink-600 hover:bg-ink-50 hover:text-ink-900"
               )}
             >
-              <item.icon className={cn("h-[18px] w-[18px]", active ? "text-brand-600" : "text-ink-400")} />
+              <item.icon className={cn("h-[18px] w-[18px]", active ? "text-brand-content" : "text-ink-400")} />
               {item.label}
             </Link>
           );
@@ -75,7 +75,7 @@ export function DashboardSidebar({
           <p className="mt-1 text-xs leading-relaxed text-ink-500">{t("common.upgradeDesc")}</p>
           <Link
             href={`/${locale}/pricing`}
-            className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-600 hover:text-brand-700"
+            className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-content hover:text-brand-content"
           >
             {t("common.upgradeNow")}
           </Link>

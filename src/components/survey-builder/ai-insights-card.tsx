@@ -26,7 +26,7 @@ export function AIInsightsCard({ surveyId, initial }: { surveyId: string; initia
       <CardHeader>
         <div>
           <CardTitle className="flex items-center gap-1.5">
-            <RobotIcon className="h-4 w-4 text-brand-600" /> {t("analyticsPage.aiSectionTitle")}
+            <RobotIcon className="h-4 w-4 text-brand-content" /> {t("analyticsPage.aiSectionTitle")}
           </CardTitle>
           <CardDescription>{t("analyticsPage.aiSectionSubtitle")}</CardDescription>
         </div>
@@ -62,8 +62,8 @@ export function AIInsightsCard({ surveyId, initial }: { surveyId: string; initia
             </div>
             {payload.recommendation && (
               <div className="rounded-xl border border-brand-200 bg-brand-50/60 p-4">
-                <p className="text-sm font-semibold text-brand-800">{t("analyticsPage.recommendation")}</p>
-                <p className="mt-1 text-sm text-brand-700">{locale === "ar" ? payload.recommendation.bodyAr : payload.recommendation.body}</p>
+                <p className="text-sm font-semibold text-brand-content">{t("analyticsPage.recommendation")}</p>
+                <p className="mt-1 text-sm text-brand-content">{locale === "ar" ? payload.recommendation.bodyAr : payload.recommendation.body}</p>
               </div>
             )}
           </div>

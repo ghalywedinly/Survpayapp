@@ -109,7 +109,7 @@ export function QuestionCanvasCard({
                   )}
                 </div>
               ))}
-              <button onClick={addOption} className="flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700">
+              <button onClick={addOption} className="flex items-center gap-1 text-xs font-medium text-brand-content hover:text-brand-content">
                 <PlusIcon className="h-3.5 w-3.5" />
                 {t("builder.addOption")}
               </button>
@@ -132,7 +132,7 @@ export function QuestionCanvasCard({
               ))}
               <button
                 onClick={() => onChange({ ...question, matrixRows: [...question.matrixRows, `Row ${question.matrixRows.length + 1}`] })}
-                className="flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700"
+                className="flex items-center gap-1 text-xs font-medium text-brand-content hover:text-brand-content"
               >
                 <PlusIcon className="h-3.5 w-3.5" />
                 {t("builder.addOption")}
@@ -151,7 +151,7 @@ export function QuestionCanvasCard({
                   onClick={() => setAdvancedOpen((v) => !v)}
                   className={cn(
                     "me-1 rounded-lg px-2 py-1 text-xs font-medium",
-                    advancedOpen ? "bg-brand-50 text-brand-700" : "text-ink-400 hover:bg-ink-100"
+                    advancedOpen ? "bg-brand-50 text-brand-content" : "text-ink-400 hover:bg-ink-100"
                   )}
                 >
                   {t("builder.questionSettings")}
@@ -170,7 +170,7 @@ export function QuestionCanvasCard({
               <button onClick={onDuplicate} className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-400 hover:bg-ink-100" title={t("builder.duplicateQuestion")}>
                 <CopyIcon className="h-3.5 w-3.5" />
               </button>
-              <button onClick={onDelete} className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-400 hover:bg-red-50 hover:text-red-500" title={t("builder.deleteQuestion")}>
+              <button onClick={onDelete} className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-400 hover:bg-danger-tint hover:text-red-500" title={t("builder.deleteQuestion")}>
                 <TrashIcon className="h-3.5 w-3.5" />
               </button>
             </div>

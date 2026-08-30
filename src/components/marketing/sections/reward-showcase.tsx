@@ -20,7 +20,7 @@ export function RewardShowcase() {
   return (
     <section className="border-t border-ink-100 bg-surface py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-6">
-        <p className="text-sm font-semibold uppercase tracking-wide text-brand-600">{t("marketing.rewardEyebrow")}</p>
+        <p className="text-sm font-semibold uppercase tracking-wide text-brand-content">{t("marketing.rewardEyebrow")}</p>
         <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">
           {t("marketing.rewardTitle")}
         </h2>
@@ -63,7 +63,7 @@ export function RewardShowcase() {
 
           <div className="rounded-xl border border-ink-200 bg-surface p-6 shadow-soft lg:col-span-2">
             <div className="flex items-center gap-2 text-ink-900">
-              <WalletIcon className="h-5 w-5 text-brand-600" />
+              <WalletIcon className="h-5 w-5 text-brand-content" />
               <p className="text-sm font-semibold">{t("marketing.rewardLabelBudget")}</p>
             </div>
             <p className="mt-2 text-3xl font-semibold tracking-tight text-ink-900">{formatCurrency(budget, locale)}</p>

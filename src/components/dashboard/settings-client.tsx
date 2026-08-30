@@ -241,7 +241,7 @@ function TeamTab({ members }: { members: Member[] }) {
                       router.refresh();
                     })
                   }
-                  className="flex h-8 w-8 items-center justify-center rounded-lg text-ink-400 hover:bg-red-50 hover:text-red-500"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg text-ink-400 hover:bg-danger-tint hover:text-red-500"
                 >
                   <TrashIcon className="h-4 w-4" />
                 </button>
@@ -343,7 +343,7 @@ function SecurityTab({ sessions }: { sessions: Session[] }) {
           <CardTitle>{t("settings.changePassword")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{t(`auth.${error}`)}</p>}
+          {error && <p className="rounded-lg bg-danger-tint px-3 py-2 text-sm text-danger-content">{t(`auth.${error}`)}</p>}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div>
               <Label>{t("settings.currentPassword")}</Label>
@@ -404,7 +404,7 @@ function SecurityTab({ sessions }: { sessions: Session[] }) {
                       router.refresh();
                     })
                   }
-                  className="text-xs font-medium text-red-500 hover:text-red-600"
+                  className="text-xs font-medium text-red-500 hover:text-danger-content"
                 >
                   {t("common.remove")}
                 </button>

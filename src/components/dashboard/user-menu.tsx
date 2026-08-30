@@ -33,7 +33,7 @@ export function UserMenu({ name, email }: { name: string; email: string }) {
         <DropdownMenuSeparator />
         <form action={logoutAction}>
           <input type="hidden" name="locale" value={locale} />
-          <button type="submit" className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-start text-sm text-red-600 hover:bg-red-50">
+          <button type="submit" className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-start text-sm text-danger-content hover:bg-danger-tint">
             <LogOutIcon className="h-4 w-4" />
             {t("common.logout")}
           </button>

@@ -84,7 +84,7 @@ export function DropdownMenuItem({
       }}
       className={cn(
         "flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-start text-sm text-ink-700 transition-colors hover:bg-ink-50",
-        destructive && "text-red-600 hover:bg-red-50",
+        destructive && "text-danger-content hover:bg-danger-tint",
         className
       )}
     >

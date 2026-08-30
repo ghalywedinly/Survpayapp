@@ -47,7 +47,7 @@ export function QuestionRenderer({
   return (
     <div className="animate-fade-in">
       <div className="flex items-start gap-2.5">
-        <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-50 text-[11px] font-semibold text-brand-700">
+        <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-50 text-[11px] font-semibold text-brand-content">
           {index + 1}
         </span>
         <div className="flex-1">
@@ -90,7 +90,7 @@ function QuestionInput({
               onClick={() => onChange(o.value)}
               className={cn(
                 "flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-start text-sm transition-colors",
-                value === o.value ? "border-brand-500 bg-brand-50 text-brand-800" : "border-ink-200 text-ink-700 hover:border-ink-300"
+                value === o.value ? "border-brand-500 bg-brand-50 text-brand-content" : "border-ink-200 text-ink-700 hover:border-ink-300"
               )}
             >
               <span
@@ -120,7 +120,7 @@ function QuestionInput({
                 onClick={() => onChange(checked ? arr.filter((v) => v !== o.value) : [...arr, o.value])}
                 className={cn(
                   "flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-start text-sm transition-colors",
-                  checked ? "border-brand-500 bg-brand-50 text-brand-800" : "border-ink-200 text-ink-700 hover:border-ink-300"
+                  checked ? "border-brand-500 bg-brand-50 text-brand-content" : "border-ink-200 text-ink-700 hover:border-ink-300"
                 )}
               >
                 <span className={cn("flex h-4 w-4 shrink-0 items-center justify-center rounded border-2", checked ? "border-brand-600 bg-brand-600" : "border-ink-300")}>
@@ -190,7 +190,7 @@ function QuestionInput({
               onClick={() => onChange(opt.v)}
               className={cn(
                 "flex-1 rounded-xl border px-4 py-3 text-sm font-medium transition-colors",
-                value === opt.v ? "border-brand-500 bg-brand-50 text-brand-800" : "border-ink-200 text-ink-700 hover:border-ink-300"
+                value === opt.v ? "border-brand-500 bg-brand-50 text-brand-content" : "border-ink-200 text-ink-700 hover:border-ink-300"
               )}
             >
               {opt.label}
@@ -209,7 +209,7 @@ function QuestionInput({
               onClick={() => onChange(n)}
               className={cn(
                 "flex h-11 w-11 items-center justify-center rounded-full border text-sm font-semibold transition-colors",
-                Number(value) >= n ? "border-amber-400 bg-amber-50 text-amber-600" : "border-ink-200 text-ink-400 hover:border-ink-300"
+                Number(value) >= n ? "border-amber-400 bg-amber-50 text-amber-content" : "border-ink-200 text-ink-400 hover:border-ink-300"
               )}
             >
               ★
@@ -247,7 +247,7 @@ function QuestionInput({
               onClick={() => onChange(o.value)}
               className={cn(
                 "rounded-xl border px-3 py-3 text-center text-xs font-medium transition-colors",
-                value === o.value ? "border-brand-500 bg-brand-50 text-brand-800" : "border-ink-200 text-ink-600 hover:border-ink-300"
+                value === o.value ? "border-brand-500 bg-brand-50 text-brand-content" : "border-ink-200 text-ink-600 hover:border-ink-300"
               )}
             >
               {optLabel(o, locale)}

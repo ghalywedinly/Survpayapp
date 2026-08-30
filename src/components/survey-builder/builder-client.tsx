@@ -131,7 +131,7 @@ export function BuilderClient({ surveyId, initialQuestions, status }: { surveyId
                 onClick={() => setSelectedId(q.id)}
                 className={cn(
                   "flex w-full items-center gap-2 truncate rounded-lg px-2.5 py-1.5 text-start text-xs font-medium",
-                  selectedId === q.id ? "bg-brand-50 text-brand-700" : "text-ink-500 hover:bg-ink-50"
+                  selectedId === q.id ? "bg-brand-50 text-brand-content" : "text-ink-500 hover:bg-ink-50"
                 )}
               >
                 <span className="shrink-0 text-ink-300">{i + 1}.</span>

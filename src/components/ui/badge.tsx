@@ -5,11 +5,11 @@ type Tone = "neutral" | "brand" | "success" | "warning" | "danger" | "info";
 
 const toneClasses: Record<Tone, string> = {
   neutral: "bg-ink-100 text-ink-600",
-  brand: "bg-brand-50 text-brand-700",
-  success: "bg-mint-50 text-mint-700",
-  warning: "bg-amber-50 text-amber-600",
-  danger: "bg-red-50 text-red-600",
-  info: "bg-sky-50 text-sky-700",
+  brand: "bg-brand-50 text-brand-content",
+  success: "bg-mint-50 text-mint-content",
+  warning: "bg-amber-50 text-amber-content",
+  danger: "bg-danger-tint text-danger-content",
+  info: "bg-info-tint text-info-content",
 };
 
 export function Badge({

@@ -27,9 +27,9 @@ export function LoginForm() {
     <form action={formAction} className="space-y-4">
       <input type="hidden" name="locale" value={locale} />
       {params.get("reset") === "1" && (
-        <p className="rounded-lg bg-mint-50 px-3 py-2 text-sm text-mint-700">{t("auth.passwordUpdated")}</p>
+        <p className="rounded-lg bg-mint-50 px-3 py-2 text-sm text-mint-content">{t("auth.passwordUpdated")}</p>
       )}
-      {state?.error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{t(`auth.${state.error}`)}</p>}
+      {state?.error && <p className="rounded-lg bg-danger-tint px-3 py-2 text-sm text-danger-content">{t(`auth.${state.error}`)}</p>}
       <div>
         <Label htmlFor="email">{t("auth.email")}</Label>
         <Input id="email" name="email" type="email" required autoComplete="email" placeholder="you@company.com" />
@@ -37,7 +37,7 @@ export function LoginForm() {
       <div>
         <div className="flex items-center justify-between">
           <Label htmlFor="password">{t("auth.password")}</Label>
-          <Link href={`/${locale}/forgot-password`} className="text-xs font-medium text-brand-600 hover:text-brand-700">
+          <Link href={`/${locale}/forgot-password`} className="text-xs font-medium text-brand-content hover:text-brand-content">
             {t("auth.forgotPassword")}
           </Link>
         </div>
@@ -46,7 +46,7 @@ export function LoginForm() {
       <SubmitButton label={t("auth.loginCta")} />
       <p className="text-center text-sm text-ink-500">
         {t("auth.noAccount")}{" "}
-        <Link href={`/${locale}/signup`} className="font-medium text-brand-600 hover:text-brand-700">
+        <Link href={`/${locale}/signup`} className="font-medium text-brand-content hover:text-brand-content">
           {t("auth.signUpFree")}
         </Link>
       </p>

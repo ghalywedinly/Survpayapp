@@ -27,7 +27,7 @@ export function Avatar({
     <div
       style={{ width: size, height: size }}
       className={cn(
-        "flex items-center justify-center rounded-full bg-brand-100 font-semibold text-brand-700",
+        "flex items-center justify-center rounded-full bg-brand-100 font-semibold text-brand-content",
         className
       )}
     >

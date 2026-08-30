@@ -49,7 +49,7 @@ export default function FeaturesPage({ params }: { params: { locale: Locale } })
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
               <div className="rounded-2xl border border-ink-200/70 p-8 shadow-soft">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-content">
                   <LayersIcon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 text-lg font-semibold text-ink-900">{dict.builder.questionType}</h3>
@@ -64,7 +64,7 @@ export default function FeaturesPage({ params }: { params: { locale: Locale } })
               </div>
 
               <div className="rounded-2xl border border-ink-200/70 p-8 shadow-soft">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-mint-50 text-mint-600">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-mint-50 text-mint-content">
                   <TargetIcon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 text-lg font-semibold text-ink-900">{dict.marketing.feature5Title}</h3>
@@ -77,7 +77,7 @@ export default function FeaturesPage({ params }: { params: { locale: Locale } })
               </div>
 
               <div className="rounded-2xl border border-ink-200/70 p-8 shadow-soft">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-info-tint text-info-content">
                   <FileTextIcon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 text-lg font-semibold text-ink-900">{dict.marketing.feature4Title}</h3>
@@ -85,7 +85,7 @@ export default function FeaturesPage({ params }: { params: { locale: Locale } })
               </div>
 
               <div className="rounded-2xl border border-ink-200/70 p-8 shadow-soft">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-content">
                   <ShieldIcon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 text-lg font-semibold text-ink-900">{dict.marketing.trust1Title}</h3>

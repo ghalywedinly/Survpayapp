@@ -322,8 +322,8 @@ export function SurveyWizard() {
               </dl>
               {state.reward.enabled && (
                 <div className="mt-4 flex items-center justify-between rounded-lg bg-brand-50 px-4 py-3">
-                  <span className="text-sm font-medium text-brand-800">{t("wizard.summaryTotalCost")}</span>
-                  <span className="text-lg font-semibold text-brand-800">{formatCurrency(budget.total, locale)}</span>
+                  <span className="text-sm font-medium text-brand-content">{t("wizard.summaryTotalCost")}</span>
+                  <span className="text-lg font-semibold text-brand-content">{formatCurrency(budget.total, locale)}</span>
                 </div>
               )}
             </div>

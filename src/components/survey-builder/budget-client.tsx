@@ -101,7 +101,7 @@ export function BudgetClient({
             </div>
             <div>
               <p className="text-xs text-ink-400">{t("rewards.remaining")}</p>
-              <p className="text-xl font-semibold text-mint-600">{formatCurrency(remaining, locale)}</p>
+              <p className="text-xl font-semibold text-mint-content">{formatCurrency(remaining, locale)}</p>
             </div>
           </div>
           <Progress value={funded > 0 ? (distributed / funded) * 100 : 0} className="mt-4" />

@@ -32,6 +32,14 @@
   --mint-50: 238 253 245;
   --mint-100: 214 250 230;
   --amber-50: 255 251 235;
+
+  --brand-content: 76 47 214; /* brand-700 */
+  --mint-content: 18 116 76; /* mint-700 */
+  --amber-content: 214 135 10; /* amber-600 */
+  --danger-tint: 254 242 242; /* red-50 */
+  --danger-content: 220 38 38; /* red-600 */
+  --info-tint: 240 249 255; /* sky-50 */
+  --info-content: 3 105 161; /* sky-700 */
 }
 
 .dark {
@@ -57,6 +65,14 @@
   --mint-50: 18 39 30;
   --mint-100: 22 52 42;
   --amber-50: 46 34 16;
+
+  --brand-content: 196 181 253; /* bright lavender, reads on a dark chip */
+  --mint-content: 120 229 176; /* mint-300 */
+  --amber-content: 251 191 53; /* amber-400 */
+  --danger-tint: 58 26 26;
+  --danger-content: 248 113 113; /* red-400 */
+  --info-tint: 20 36 51;
+  --info-content: 56 189 248; /* sky-400 */
 }
 
 html {

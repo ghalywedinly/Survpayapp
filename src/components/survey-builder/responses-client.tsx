@@ -106,7 +106,7 @@ export function ResponsesClient({ surveyId, responses, questions }: { surveyId: 
                 <Badge tone={statusTone[r.status] ?? "neutral"} dot>
                   {t(`responses.status${cap(r.status)}`)}
                 </Badge>
-                {r.failedAttentionCheck && <span className="ms-1.5 text-[11px] text-amber-600">⚠</span>}
+                {r.failedAttentionCheck && <span className="ms-1.5 text-[11px] text-amber-content">⚠</span>}
               </TD>
               <TD>
                 <Badge tone={rewardTone[r.rewardStatus] ?? "neutral"}>{r.rewardStatus.replace("_", " ")}</Badge>

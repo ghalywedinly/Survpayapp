@@ -24,17 +24,17 @@ export function ForgotPasswordForm() {
   if (state?.success) {
     return (
       <div className="space-y-4">
-        <p className="rounded-lg bg-mint-50 px-3 py-2.5 text-sm text-mint-700">{t("auth.resetLinkSent")}</p>
+        <p className="rounded-lg bg-mint-50 px-3 py-2.5 text-sm text-mint-content">{t("auth.resetLinkSent")}</p>
         {state.devLink && (
           <div className="rounded-lg border border-dashed border-ink-200 bg-ink-50 p-3 text-xs text-ink-500">
             <p className="font-medium text-ink-700">Demo mode</p>
             <p className="mt-1">No email provider is connected in this environment, so here is your reset link directly:</p>
-            <Link href={state.devLink} className="mt-1.5 block break-all font-medium text-brand-600 hover:text-brand-700">
+            <Link href={state.devLink} className="mt-1.5 block break-all font-medium text-brand-content hover:text-brand-content">
               {state.devLink}
             </Link>
           </div>
         )}
-        <Link href={`/${locale}/login`} className="block text-center text-sm font-medium text-brand-600 hover:text-brand-700">
+        <Link href={`/${locale}/login`} className="block text-center text-sm font-medium text-brand-content hover:text-brand-content">
           {t("auth.backToLogin")}
         </Link>
       </div>
@@ -49,7 +49,7 @@ export function ForgotPasswordForm() {
         <Input id="email" name="email" type="email" required autoComplete="email" placeholder="you@company.com" />
       </div>
       <SubmitButton label={t("auth.sendResetLink")} />
-      <Link href={`/${locale}/login`} className="block text-center text-sm font-medium text-brand-600 hover:text-brand-700">
+      <Link href={`/${locale}/login`} className="block text-center text-sm font-medium text-brand-content hover:text-brand-content">
         {t("auth.backToLogin")}
       </Link>
     </form>

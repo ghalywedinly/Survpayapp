@@ -44,7 +44,7 @@ export function PricingTable() {
             className={cn("flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium", yearly ? "bg-[#12151e] text-white" : "text-ink-500")}
           >
             {t("pricingPage.yearly")}
-            <span className="rounded-full bg-mint-100 px-1.5 py-0.5 text-[10px] font-semibold text-mint-700">
+            <span className="rounded-full bg-mint-100 px-1.5 py-0.5 text-[10px] font-semibold text-mint-content">
               {t("pricingPage.yearlyDiscount")}
             </span>
           </button>

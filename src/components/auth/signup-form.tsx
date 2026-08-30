@@ -24,7 +24,7 @@ export function SignupForm() {
   return (
     <form action={formAction} className="space-y-4">
       <input type="hidden" name="locale" value={locale} />
-      {state?.error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{t(`auth.${state.error}`)}</p>}
+      {state?.error && <p className="rounded-lg bg-danger-tint px-3 py-2 text-sm text-danger-content">{t(`auth.${state.error}`)}</p>}
       <div>
         <Label htmlFor="name">{t("auth.fullName")}</Label>
         <Input id="name" name="name" type="text" required autoComplete="name" placeholder="Sara Al-Otaibi" />
@@ -55,7 +55,7 @@ export function SignupForm() {
       </p>
       <p className="text-center text-sm text-ink-500">
         {t("auth.haveAccount")}{" "}
-        <Link href={`/${locale}/login`} className="font-medium text-brand-600 hover:text-brand-700">
+        <Link href={`/${locale}/login`} className="font-medium text-brand-content hover:text-brand-content">
           {t("auth.loginCta")}
         </Link>
       </p>

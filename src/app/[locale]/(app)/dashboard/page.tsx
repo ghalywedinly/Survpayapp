@@ -116,7 +116,7 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
                     {topSurveys.map((s) => (
                       <TR key={s.id}>
                         <TD>
-                          <Link href={`/${params.locale}/surveys/${s.id}`} className="font-medium text-ink-900 hover:text-brand-600">
+                          <Link href={`/${params.locale}/surveys/${s.id}`} className="font-medium text-ink-900 hover:text-brand-content">
                             {params.locale === "ar" && s.titleAr ? s.titleAr : s.title}
                           </Link>
                         </TD>
@@ -132,7 +132,7 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
                 </Table>
               </CardContent>
               <div className="border-t border-ink-100 p-4 text-center">
-                <Link href={`/${params.locale}/surveys`} className="text-sm font-medium text-brand-600 hover:text-brand-700">
+                <Link href={`/${params.locale}/surveys`} className="text-sm font-medium text-brand-content hover:text-brand-content">
                   {dict.surveys.title} →
                 </Link>
               </div>
@@ -160,7 +160,7 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
                 </ul>
                 <Link
                   href={`/${params.locale}/analytics`}
-                  className="mt-5 inline-block text-sm font-medium text-brand-600 hover:text-brand-700"
+                  className="mt-5 inline-block text-sm font-medium text-brand-content hover:text-brand-content"
                 >
                   {dict.dashboard.viewFullAnalytics} →
                 </Link>

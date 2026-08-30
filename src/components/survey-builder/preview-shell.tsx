@@ -71,7 +71,7 @@ export function PreviewShell({
               <div className="flex flex-col items-center py-10 text-center">
                 <CheckCircleIcon className="h-10 w-10 text-mint-500" />
                 <p className="mt-4 text-base font-semibold text-ink-900">{t("publicSurvey.thankYouTitle")}</p>
-                <button onClick={() => { setDone(false); setStarted(false); }} className="mt-4 text-sm font-medium text-brand-600 hover:text-brand-700">
+                <button onClick={() => { setDone(false); setStarted(false); }} className="mt-4 text-sm font-medium text-brand-content hover:text-brand-content">
                   {t("preview.title")} ↻
                 </button>
               </div>
