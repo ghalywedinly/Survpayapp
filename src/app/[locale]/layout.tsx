@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   title: "SurvPay — Create surveys. Reward responses. Get insights.",
   description:
     "SurvPay is the bilingual survey and respondent-rewards platform for researchers, universities and product teams across Saudi Arabia and the GCC.",
-  icons: { icon: "/favicon.svg" },
+  icons: { icon: "/favicon.svg", apple: "/apple-touch-icon.png" },
 };
 
 export default function LocaleLayout({

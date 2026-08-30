@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Inter, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { cookies, headers } from "next/headers";
 import { db } from "@/lib/db";
@@ -6,6 +7,10 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { I18nProvider } from "@/lib/i18n/provider";
 import { ToastProvider } from "@/components/ui/toast";
 import "../../globals.css";
+
+export const metadata: Metadata = {
+  icons: { icon: "/favicon.svg", apple: "/apple-touch-icon.png" },
+};
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const arabic = IBM_Plex_Sans_Arabic({

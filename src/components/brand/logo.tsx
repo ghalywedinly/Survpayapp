@@ -1,38 +1,34 @@
 import { cn } from "@/lib/utils";
 
+// Real brand assets, extracted from the official logo file (public/brand/) —
+// see public/brand/logo-icon.svg (mark only, 80:96) and logo-full.svg
+// (mark + "Survpay" wordmark, 428:96). Both render on a light background;
+// there's no dark-background usage of <Logo> in the app today.
+const ICON_ASPECT = 80 / 96;
+const FULL_ASPECT = 428 / 96;
+
 export function LogoMark({ size = 28, className }: { size?: number; className?: string }) {
   return (
-    <svg
-      width={size}
+    // eslint-disable-next-line @next/next/no-img-element -- static brand asset, not a Next/Image-optimizable content image
+    <img
+      src="/brand/logo-icon.svg"
+      alt=""
+      width={Math.round(size * ICON_ASPECT)}
       height={size}
-      viewBox="0 0 40 40"
-      fill="none"
       className={cn("shrink-0", className)}
-      aria-hidden
-    >
-      <defs>
-        <linearGradient id="survpayGrad" x1="4" y1="4" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#22D3EE" />
-          <stop offset="45%" stopColor="#A21CAF" />
-          <stop offset="100%" stopColor="#4338CA" />
-        </linearGradient>
-      </defs>
-      <path
-        d="M30 6H20a7 7 0 0 0 0 14h0a7 7 0 0 1 0 14H10"
-        stroke="url(#survpayGrad)"
-        strokeWidth="8"
-        strokeLinecap="round"
-        fill="none"
-      />
-    </svg>
+    />
   );
 }
 
-export function Logo({ className, wordmarkClassName, size = 26 }: { className?: string; wordmarkClassName?: string; size?: number }) {
+export function Logo({ className, size = 26 }: { className?: string; wordmarkClassName?: string; size?: number }) {
   return (
-    <span className={cn("inline-flex items-center gap-2", className)}>
-      <LogoMark size={size} />
-      <span className={cn("text-[1.05rem] font-semibold tracking-tight text-ink-900", wordmarkClassName)}>SurvPay</span>
-    </span>
+    // eslint-disable-next-line @next/next/no-img-element -- static brand asset, not a Next/Image-optimizable content image
+    <img
+      src="/brand/logo-full.svg"
+      alt="Survpay"
+      width={Math.round(size * FULL_ASPECT)}
+      height={size}
+      className={cn("shrink-0", className)}
+    />
   );
 }

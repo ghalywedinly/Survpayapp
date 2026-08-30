@@ -1,8 +1,9 @@
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { PDFDocument, StandardFonts, rgb, degrees, type PDFImage, type PDFPage } from "pdf-lib";
 import ExcelJS from "exceljs";
 import { db } from "@/lib/db";
 import { AnalyticsService } from "./analytics-service";
 import { AIService } from "./ai-service";
+import { SURVPAY_ICON_PNG_BASE64 } from "./report-assets";
 
 async function loadReportData(surveyId: string) {
   const survey = await db.survey.findUnique({ where: { id: surveyId } });
@@ -21,10 +22,33 @@ export async function buildReportPdf(surveyId: string): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
   const font = await doc.embedFont(StandardFonts.Helvetica);
   const bold = await doc.embedFont(StandardFonts.HelveticaBold);
+  const icon = await doc.embedPng(Buffer.from(SURVPAY_ICON_PNG_BASE64, "base64"));
   const margin = 50;
   const pageWidth = 595;
   const pageHeight = 842;
-  let page = doc.addPage([pageWidth, pageHeight]);
+
+  // Faint, centered, rotated icon on every page — proves the report came
+  // from SurvPay even once printed or screenshotted out of context.
+  function drawWatermark(target: PDFPage, image: PDFImage) {
+    const wmHeight = 340;
+    const wmWidth = wmHeight * (image.width / image.height);
+    target.drawImage(image, {
+      x: pageWidth / 2 - wmWidth / 2,
+      y: pageHeight / 2 - wmHeight / 2,
+      width: wmWidth,
+      height: wmHeight,
+      opacity: 0.06,
+      rotate: degrees(-25),
+    });
+  }
+
+  function newPage() {
+    const p = doc.addPage([pageWidth, pageHeight]);
+    drawWatermark(p, icon);
+    return p;
+  }
+
+  let page = newPage();
   let y = pageHeight - margin;
 
   const ink = rgb(0.07, 0.08, 0.12);
@@ -33,7 +57,7 @@ export async function buildReportPdf(surveyId: string): Promise<Uint8Array> {
 
   function ensureSpace(lines = 1, size = 12) {
     if (y - lines * (size + 6) < margin) {
-      page = doc.addPage([pageWidth, pageHeight]);
+      page = newPage();
       y = pageHeight - margin;
     }
   }
@@ -72,8 +96,11 @@ export async function buildReportPdf(surveyId: string): Promise<Uint8Array> {
     }
   }
 
-  page.drawText("SurvPay", { x: margin, y, size: 20, font: bold, color: brand });
-  y -= 28;
+  const headerIconHeight = 20;
+  const headerIconWidth = headerIconHeight * (icon.width / icon.height);
+  page.drawImage(icon, { x: margin, y: y - 3, width: headerIconWidth, height: headerIconHeight });
+  page.drawText("Survpay", { x: margin + headerIconWidth + 8, y, size: 20, font: bold, color: brand });
+  y -= 32;
   page.drawText(survey.title, { x: margin, y, size: 18, font: bold, color: ink });
   y -= 22;
   paragraph(`Generated ${new Date().toLocaleDateString("en-US")} · Research report`, 10, gray);
