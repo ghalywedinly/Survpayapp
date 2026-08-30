@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "prisma generate",
     "dev": "next dev",
     "build": "NEXT_IGNORE_INCORRECT_LOCKFILE=1 next build",
     "start": "next start",
@@ -13,7 +14,7 @@
     "db:reset": "prisma db push --force-reset && tsx prisma/seed.ts"
   },
   "dependencies": {
-    "@prisma/client": "5.20.0",
+    "@prisma/client": "^5.20.0",
     "bcryptjs": "2.4.3",
     "clsx": "2.1.1",
     "exceljs": "4.4.0",
