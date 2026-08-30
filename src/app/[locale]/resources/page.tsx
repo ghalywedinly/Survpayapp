@@ -12,7 +12,7 @@ export default function ResourcesPage({ params }: { params: { locale: Locale } }
     <>
       <MarketingNav />
       <main>
-        <section className="border-b border-ink-100 bg-dot-grid py-16 sm:py-20">
+        <section className="border-b border-ink-100 bg-brand-wash py-16 sm:py-20">
           <div className="mx-auto max-w-3xl px-6 text-center">
             <h1 className="text-4xl font-semibold tracking-tight text-ink-900">{content.heading}</h1>
             <p className="mt-4 text-lg text-ink-500">{content.subheading}</p>

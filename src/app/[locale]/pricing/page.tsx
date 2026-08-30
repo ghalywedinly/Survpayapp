@@ -9,7 +9,7 @@ export default function PricingPage({ params }: { params: { locale: Locale } }) 
   return (
     <>
       <MarketingNav />
-      <main className="bg-dot-grid">
+      <main className="bg-brand-wash">
         <section className="py-16 sm:py-20">
           <div className="mx-auto max-w-3xl px-6 text-center">
             <h1 className="text-4xl font-semibold tracking-tight text-ink-900">{dict.pricingPage.title}</h1>

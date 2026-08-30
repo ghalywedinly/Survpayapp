@@ -10,7 +10,7 @@ export function Hero({ locale }: { locale: Locale }) {
   const t = dict.marketing;
 
   return (
-    <section className="relative overflow-hidden bg-dot-grid">
+    <section className="relative overflow-hidden bg-brand-wash">
       <div className="absolute inset-x-0 top-0 -z-10 h-[560px] bg-gradient-to-b from-brand-50/70 via-white to-white" />
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-14 px-6 pb-20 pt-16 lg:grid-cols-2 lg:pb-28 lg:pt-24">
         <div className="animate-slide-up">
