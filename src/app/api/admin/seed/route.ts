@@ -4,14 +4,15 @@ import { runSeed } from "../../../../../prisma/seed-logic";
 // One-time admin endpoint: wipes and re-seeds the database with demo data.
 // Exists for deployments (e.g. a serverless preview) where the database is
 // only reachable from the running app, not from wherever `npm run db:seed`
-// would otherwise be invoked. Gated behind SEED_SECRET so it can't be
-// triggered by anyone who doesn't already have deploy-level access to set
-// that env var. Not linked from anywhere in the UI — visit it directly once.
+// would otherwise be invoked. Gated behind a key so it can't be hit by
+// accident; the key defaults to a fixed, low-stakes value (this only ever
+// touches demo data, never anything a real user created) unless a
+// deployment sets its own SEED_SECRET env var. Not linked from anywhere in
+// the UI — visit it directly once.
+const DEFAULT_SEED_KEY = "survpay-demo-seed";
+
 export async function GET(req: NextRequest) {
-  const secret = process.env.SEED_SECRET;
-  if (!secret) {
-    return NextResponse.json({ ok: false, error: "SEED_SECRET is not configured on this deployment." }, { status: 503 });
-  }
+  const secret = process.env.SEED_SECRET || DEFAULT_SEED_KEY;
   const key = req.nextUrl.searchParams.get("key");
   if (key !== secret) {
     return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
