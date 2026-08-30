@@ -9,7 +9,7 @@ This is the Phase 1 build: researchers bring their own audience via a shared lin
 ## Stack
 
 - **Next.js 14** (App Router) + **TypeScript** + **Tailwind CSS**
-- **Prisma** + **SQLite** (swap the `DATABASE_URL` for Postgres/MySQL in production — the schema is provider-agnostic)
+- **Prisma** + **Postgres** (developed against Supabase; the schema is provider-agnostic — swap `DATABASE_URL` for any Postgres/MySQL/SQLite instance)
 - Hand-rolled UI primitives (no component library dependency) styled to a Stripe/Linear/Notion-inspired system
 - **Recharts** for analytics, **pdf-lib** + **ExcelJS** for report export, **qrcode** for distribution QR codes
 - Cookie-based credentials auth (bcrypt + signed session tokens) — structured so OAuth providers can be added later (`Account` model already present)
@@ -19,8 +19,8 @@ This is the Phase 1 build: researchers bring their own audience via a shared lin
 
 ```bash
 npm install
-cp .env.example .env   # defaults are fine for local dev
-npm run db:push        # create the SQLite schema
+cp .env.example .env   # fill in DATABASE_URL / DIRECT_URL — see "Database" below
+npm run db:push        # create the schema
 npm run db:seed        # seed realistic GCC demo data (5 surveys, 2,650+ responses)
 npm run dev
 ```
@@ -29,12 +29,27 @@ Visit `http://localhost:3000` — you'll be redirected to `/en` (or `/ar` based 
 
 **Demo login:** `demo@survpay.com` / `Demo1234!` (organization: *Al Faisal Research Group*)
 
+### Database
+
+The app needs a Postgres database. The easiest option is a free [Supabase](https://supabase.com) project:
+
+1. Create a project, then go to **Project Settings → Database → Connect** and copy the **Transaction pooler** URI (port `6543`) and the **direct** URI (port `5432`).
+2. Put them in `.env` as `DATABASE_URL` (pooled, add `?pgbouncer=true`) and `DIRECT_URL` (direct) — see `.env.example`.
+3. `npm run db:push && npm run db:seed`.
+
+### Deploying (Vercel + Supabase)
+
+1. In the Vercel project's environment variables, set `DATABASE_URL` and `DIRECT_URL` (same as above).
+2. Also set `AUTO_DB_PUSH=1` — this makes the build run `prisma db push` against `DATABASE_URL` before `next build`, so the deployment self-provisions its schema on a fresh database. It's opt-in (via `scripts/maybe-db-push.mjs`) specifically so ordinary local builds never need database access.
+3. Set `SEED_SECRET` to a random string, then after the deploy is live, visit `https://<your-deployment>/api/admin/seed?key=<SEED_SECRET>` once in a browser to load the demo data. That route only exists to work around the database being reachable solely from the deployed app in some setups (e.g. a sandboxed CI environment) — it's not linked from the UI.
+4. Once the schema is stable, you can unset `AUTO_DB_PUSH` again and manage schema changes with `prisma migrate` instead for a production-grade workflow — `db push` is convenient for bootstrapping but isn't a migration history.
+
 ### Useful scripts
 
 | Script | What it does |
 | --- | --- |
 | `npm run dev` | Start the dev server |
-| `npm run build` | Production build |
+| `npm run build` | Production build (runs `prisma db push` first only if `AUTO_DB_PUSH=1`) |
 | `npm run db:push` | Sync the Prisma schema to the database |
 | `npm run db:seed` | Seed demo data (safe to re-run — it clears and re-seeds) |
 | `npm run db:reset` | Drop, recreate and re-seed in one step |
