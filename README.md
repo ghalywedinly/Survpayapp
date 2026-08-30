@@ -39,10 +39,14 @@ The app needs a Postgres database. The easiest option is a free [Supabase](https
 
 ### Deploying (Vercel + Supabase)
 
-1. In the Vercel project's environment variables, set `DATABASE_URL` and `DIRECT_URL` (same as above).
-2. Also set `AUTO_DB_PUSH=1` — this makes the build run `prisma db push` against `DATABASE_URL` before `next build`, so the deployment self-provisions its schema on a fresh database. It's opt-in (via `scripts/prebuild.mjs`) specifically so ordinary local builds never need database access.
+1. In the Vercel project's environment variables, set `DATABASE_URL` and `DIRECT_URL` (same as above) — for both the Production **and** Preview environments if you want PR previews to work too.
+2. Create the schema in the database **once**, directly in Supabase, rather than from the Vercel build: run
+   ```
+   npx prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script
+   ```
+   locally (no database connection needed — it just diffs against an empty schema) and paste the resulting SQL into Supabase's **SQL Editor** (Database → SQL Editor → New query → Run). Deliberately not done from the Vercel build: `prisma db push` needs a direct, non-pooled connection for the advisory locks it takes, and from Vercel's build network it can end up going through the pooled transaction-mode URL instead, which can't coordinate those locks — the build then hangs until Vercel kills it. Running the SQL inside Supabase's own SQL editor sidesteps that network path entirely.
 3. After the deploy is live, visit `https://<your-deployment>/api/admin/seed?key=survpay-demo-seed` once in a browser to load the demo data (5 surveys, 2,650+ responses). That route exists to work around the database being reachable solely from the deployed app in some setups — it's not linked from the UI. The key defaults to `survpay-demo-seed`; set your own `SEED_SECRET` env var if you'd rather it not be a fixed, published value (it only ever touches demo data either way, never anything a real user created).
-4. Once the schema is stable, you can unset `AUTO_DB_PUSH` again and manage schema changes with `prisma migrate` instead for a production-grade workflow — `db push` is convenient for bootstrapping but isn't a migration history.
+4. For schema changes later, repeat step 2 with `prisma migrate diff --from-migrations ...` (or adopt `prisma migrate` properly once you have a migrations history) — always applied directly in Supabase, never from the build.
 
 ### Useful scripts
 
