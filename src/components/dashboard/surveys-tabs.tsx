@@ -22,7 +22,7 @@ export function SurveysTabs({ activeTab }: { activeTab: string }) {
           href={`/${locale}/surveys${tab.value === "all" ? "" : `?tab=${tab.value}`}`}
           className={cn(
             "rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
-            activeTab === tab.value ? "bg-white text-ink-900 shadow-soft" : "text-ink-500 hover:text-ink-800"
+            activeTab === tab.value ? "bg-surface text-ink-900 shadow-soft" : "text-ink-500 hover:text-ink-800"
           )}
         >
           {t(`surveys.${tab.key}`)}

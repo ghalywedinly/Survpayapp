@@ -1,7 +1,8 @@
 "use client";
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
-import { categoricalPalette } from "./theme";
+import { getCategoricalPalette, getTooltipStyle } from "./theme";
+import { useTheme } from "@/lib/theme/provider";
 
 export function DonutChart({
   data,
@@ -10,6 +11,8 @@ export function DonutChart({
   data: { label: string; value: number }[];
   size?: number;
 }) {
+  const { theme } = useTheme();
+  const palette = getCategoricalPalette(theme === "dark");
   const total = data.reduce((s, d) => s + d.value, 0);
   return (
     <div className="relative" style={{ width: size, height: size }}>
@@ -17,10 +20,10 @@ export function DonutChart({
         <PieChart>
           <Pie data={data} dataKey="value" nameKey="label" innerRadius="68%" outerRadius="100%" paddingAngle={2} stroke="none">
             {data.map((_, i) => (
-              <Cell key={i} fill={categoricalPalette[i % categoricalPalette.length]} />
+              <Cell key={i} fill={palette[i % palette.length]} />
             ))}
           </Pie>
-          <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid #e4e6ec", fontSize: 12 }} />
+          <Tooltip contentStyle={getTooltipStyle(theme === "dark")} />
         </PieChart>
       </ResponsiveContainer>
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">

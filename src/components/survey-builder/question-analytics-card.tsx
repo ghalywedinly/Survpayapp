@@ -3,7 +3,8 @@
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, CartesianGrid } from "recharts";
 import { useI18n } from "@/lib/i18n/provider";
 import { Card, CardContent } from "@/components/ui/card";
-import { chartColors, categoricalPalette } from "@/components/charts/theme";
+import { getChartColors, getCategoricalPalette, getTooltipStyle } from "@/components/charts/theme";
+import { useTheme } from "@/lib/theme/provider";
 
 export interface QuestionBreakdownItem {
   question: { id: string; text: string; textAr: string | null; type: string };
@@ -16,6 +17,9 @@ export interface QuestionBreakdownItem {
 
 export function QuestionAnalyticsCard({ item }: { item: QuestionBreakdownItem }) {
   const { locale, t } = useI18n();
+  const { theme } = useTheme();
+  const chartColors = getChartColors(theme === "dark");
+  const categoricalPalette = getCategoricalPalette(theme === "dark");
   const text = locale === "ar" && item.question.textAr ? item.question.textAr : item.question.text;
 
   return (
@@ -39,7 +43,7 @@ export function QuestionAnalyticsCard({ item }: { item: QuestionBreakdownItem })
                 <CartesianGrid horizontal={false} stroke={chartColors.grid} />
                 <XAxis type="number" hide />
                 <YAxis type="category" dataKey="label" width={140} tick={{ fontSize: 12, fill: chartColors.ink }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid #e4e6ec", fontSize: 12 }} formatter={(v: number, _n, p) => [`${v} (${p.payload.pct}%)`, ""]} />
+                <Tooltip contentStyle={getTooltipStyle(theme === "dark")} formatter={(v: number, _n, p) => [`${v} (${p.payload.pct}%)`, ""]} />
                 <Bar dataKey="value" radius={[0, 6, 6, 0]} fill={categoricalPalette[0]} />
               </BarChart>
             </ResponsiveContainer>

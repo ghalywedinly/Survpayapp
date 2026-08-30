@@ -109,7 +109,7 @@ export function QuestionSettingsPanel({
                 value={question.conditionValue ?? ""}
                 onChange={(e) => onChange({ ...question, conditionValue: e.target.value })}
                 placeholder="yes / no"
-                className="flex h-10 w-full rounded-lg border border-ink-200 bg-white px-3 text-sm shadow-soft focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                className="flex h-10 w-full rounded-lg border border-ink-200 bg-surface px-3 text-sm shadow-soft focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
               />
             )}
           </>

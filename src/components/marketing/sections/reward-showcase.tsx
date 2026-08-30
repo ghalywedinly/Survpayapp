@@ -18,7 +18,7 @@ export function RewardShowcase() {
   }, [amount, maxResponses]);
 
   return (
-    <section className="border-t border-ink-100 bg-white py-20 sm:py-28">
+    <section className="border-t border-ink-100 bg-surface py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-6">
         <p className="text-sm font-semibold uppercase tracking-wide text-brand-600">{t("marketing.rewardEyebrow")}</p>
         <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">
@@ -61,7 +61,7 @@ export function RewardShowcase() {
             <p className="text-xs leading-relaxed text-ink-400">{t("marketing.rewardFootnote")}</p>
           </div>
 
-          <div className="rounded-xl border border-ink-200 bg-white p-6 shadow-soft lg:col-span-2">
+          <div className="rounded-xl border border-ink-200 bg-surface p-6 shadow-soft lg:col-span-2">
             <div className="flex items-center gap-2 text-ink-900">
               <WalletIcon className="h-5 w-5 text-brand-600" />
               <p className="text-sm font-semibold">{t("marketing.rewardLabelBudget")}</p>

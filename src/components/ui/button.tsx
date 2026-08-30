@@ -7,10 +7,13 @@ type Size = "sm" | "md" | "lg" | "icon";
 const variantClasses: Record<Variant, string> = {
   primary:
     "bg-brand-600 text-white shadow-soft hover:bg-brand-700 focus-visible:outline-brand-600 disabled:bg-ink-200 disabled:text-ink-400",
+  // Fixed near-black (not the reactive ink-900 token) — a solid dark pill
+  // that reads correctly as a secondary action in both light and dark mode,
+  // rather than inverting to near-white and losing its "solid button" look.
   secondary:
-    "bg-ink-900 text-white shadow-soft hover:bg-ink-800 focus-visible:outline-ink-900 disabled:bg-ink-200 disabled:text-ink-400",
+    "bg-[#12151e] text-white shadow-soft hover:bg-[#242a38] focus-visible:outline-[#12151e] disabled:bg-ink-200 disabled:text-ink-400",
   outline:
-    "border border-ink-200 bg-white text-ink-800 hover:bg-ink-50 focus-visible:outline-ink-400 disabled:text-ink-300",
+    "border border-ink-200 bg-surface text-ink-800 hover:bg-ink-50 focus-visible:outline-ink-400 disabled:text-ink-300",
   ghost: "text-ink-600 hover:bg-ink-100 hover:text-ink-900 disabled:text-ink-300",
   destructive: "bg-red-600 text-white hover:bg-red-700 focus-visible:outline-red-600 disabled:bg-ink-200",
   success: "bg-mint-500 text-white hover:bg-mint-600 focus-visible:outline-mint-500 disabled:bg-ink-200",

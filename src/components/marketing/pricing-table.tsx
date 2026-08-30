@@ -32,16 +32,16 @@ export function PricingTable() {
   return (
     <div>
       <div className="flex justify-center">
-        <div className="inline-flex items-center rounded-full border border-ink-200 bg-white p-1 shadow-soft">
+        <div className="inline-flex items-center rounded-full border border-ink-200 bg-surface p-1 shadow-soft">
           <button
             onClick={() => setYearly(false)}
-            className={cn("rounded-full px-4 py-1.5 text-sm font-medium", !yearly ? "bg-ink-900 text-white" : "text-ink-500")}
+            className={cn("rounded-full px-4 py-1.5 text-sm font-medium", !yearly ? "bg-[#12151e] text-white" : "text-ink-500")}
           >
             {t("pricingPage.monthly")}
           </button>
           <button
             onClick={() => setYearly(true)}
-            className={cn("flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium", yearly ? "bg-ink-900 text-white" : "text-ink-500")}
+            className={cn("flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium", yearly ? "bg-[#12151e] text-white" : "text-ink-500")}
           >
             {t("pricingPage.yearly")}
             <span className="rounded-full bg-mint-100 px-1.5 py-0.5 text-[10px] font-semibold text-mint-700">
@@ -60,7 +60,7 @@ export function PricingTable() {
               key={plan.id}
               className={cn(
                 "relative flex flex-col rounded-2xl border p-8 shadow-soft",
-                plan.highlighted ? "border-brand-300 bg-white ring-2 ring-brand-500/20" : "border-ink-200/70 bg-white"
+                plan.highlighted ? "border-brand-300 bg-surface ring-2 ring-brand-500/20" : "border-ink-200/70 bg-surface"
               )}
             >
               {plan.highlighted && (
@@ -115,7 +115,7 @@ export function PricingTable() {
 function FaqItem({ question, answer }: { question: string; answer: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="rounded-xl border border-ink-200 bg-white">
+    <div className="rounded-xl border border-ink-200 bg-surface">
       <button
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center justify-between px-5 py-4 text-start text-sm font-medium text-ink-900"

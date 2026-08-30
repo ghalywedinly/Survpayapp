@@ -9,7 +9,7 @@ export function FinalCta({ locale }: { locale: Locale }) {
   const t = dict.marketing;
 
   return (
-    <section className="border-t border-ink-100 bg-white py-20 sm:py-28">
+    <section className="border-t border-ink-100 bg-surface py-20 sm:py-28">
       <div className="mx-auto max-w-4xl px-6 text-center">
         <h2 className="text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">{t.finalCtaTitle}</h2>
         <p className="mt-4 text-lg text-ink-500">{t.finalCtaSubtitle}</p>

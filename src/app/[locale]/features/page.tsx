@@ -45,7 +45,7 @@ export default function FeaturesPage({ params }: { params: { locale: Locale } })
 
         <Features locale={params.locale} />
 
-        <section className="border-t border-ink-100 bg-white py-20">
+        <section className="border-t border-ink-100 bg-surface py-20">
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
               <div className="rounded-2xl border border-ink-200/70 p-8 shadow-soft">

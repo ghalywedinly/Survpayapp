@@ -76,7 +76,7 @@ export function DistributionClient({
               <CodeIcon className="h-4 w-4" /> {t("distribution.embedTitle")}
             </p>
             <p className="mb-2 text-xs text-ink-400">{t("distribution.embedDesc")}</p>
-            <pre className="overflow-x-auto rounded-lg bg-ink-900 p-3 text-xs text-mint-300">{embedCode}</pre>
+            <pre className="overflow-x-auto rounded-lg bg-[#12151e] p-3 text-xs text-mint-300">{embedCode}</pre>
             <Button variant="outline" size="sm" className="mt-2 gap-1.5" onClick={() => copy(embedCode, "embed")}>
               <CopyIcon className="h-3.5 w-3.5" />
               {copied === "embed" ? t("common.copied") : t("distribution.copyEmbed")}

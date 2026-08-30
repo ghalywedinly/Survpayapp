@@ -26,7 +26,7 @@ export function HeroMockup({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <div className="relative rounded-2xl border border-ink-200/70 bg-white p-4 shadow-pop sm:p-6">
+    <div className="relative rounded-2xl border border-ink-200/70 bg-surface p-4 shadow-pop sm:p-6">
       <div className="flex items-center justify-between border-b border-ink-100 pb-4">
         <Logo size={20} />
         <div className="hidden items-center gap-2 sm:flex">

@@ -120,7 +120,7 @@ export function BuilderClient({ surveyId, initialQuestions, status }: { surveyId
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[220px_1fr_280px]">
-        <div className="hidden rounded-2xl border border-ink-200/70 bg-white p-3 lg:block">
+        <div className="hidden rounded-2xl border border-ink-200/70 bg-surface p-3 lg:block">
           <div className="flex items-center justify-between px-1 pb-2">
             <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">{t("builder.pages")}</p>
           </div>
@@ -168,7 +168,7 @@ export function BuilderClient({ surveyId, initialQuestions, status }: { surveyId
           )}
         </div>
 
-        <div className="hidden rounded-2xl border border-ink-200/70 bg-white lg:block">
+        <div className="hidden rounded-2xl border border-ink-200/70 bg-surface lg:block">
           <div className="border-b border-ink-100 px-4 py-3">
             <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">{t("builder.questionSettings")}</p>
           </div>

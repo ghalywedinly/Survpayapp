@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { ThemeToggle } from "@/components/theme-toggle";
 import type { Locale } from "@/lib/i18n/config";
 
 export function AuthShell({
@@ -23,7 +24,10 @@ export function AuthShell({
           <Link href={`/${locale}`}>
             <Logo />
           </Link>
-          <LanguageSwitcher />
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <LanguageSwitcher />
+          </div>
         </div>
 
         <div className="mx-auto w-full max-w-sm py-12">
@@ -35,7 +39,7 @@ export function AuthShell({
         <div className="text-center text-xs text-ink-400">{footer}</div>
       </div>
 
-      <div className="relative hidden overflow-hidden bg-ink-950 lg:block">
+      <div className="relative hidden overflow-hidden bg-[#0a0c12] lg:block">
         <div
           className="absolute inset-0"
           style={{

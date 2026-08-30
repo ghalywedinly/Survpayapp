@@ -14,7 +14,7 @@ export function Trust({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="relative overflow-hidden border-t border-ink-100 bg-ink-950 py-20 text-white sm:py-28">
+    <section className="relative overflow-hidden border-t border-ink-100 bg-[#0a0c12] py-20 text-white sm:py-28">
       <div
         className="absolute inset-0"
         style={{ background: "radial-gradient(50% 40% at 15% 10%, rgba(139,92,246,0.28), transparent)" }}

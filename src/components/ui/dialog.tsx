@@ -31,7 +31,7 @@ export function Dialog({
       onClick={(e) => {
         if (e.target === ref.current) onOpenChange(false);
       }}
-      className="m-auto w-full max-w-md rounded-2xl border border-ink-200 bg-white p-0 shadow-pop backdrop:bg-ink-900/40 backdrop:backdrop-blur-sm open:animate-slide-up"
+      className="m-auto w-full max-w-md rounded-2xl border border-ink-200 bg-surface p-0 shadow-pop backdrop:bg-[#12151e]/40 backdrop:backdrop-blur-sm open:animate-slide-up"
     >
       {open && <div className="p-6">{children}</div>}
     </dialog>

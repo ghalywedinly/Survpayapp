@@ -5,6 +5,7 @@ import { DashboardSidebar } from "./sidebar";
 import { NotificationsBell, type NotificationItem } from "./notifications-bell";
 import { UserMenu } from "./user-menu";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { MenuIcon, XIcon } from "@/components/icons";
 
 export function DashboardShell({
@@ -34,7 +35,7 @@ export function DashboardShell({
 
       {mobileOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-ink-900/40" onClick={() => setMobileOpen(false)} />
+          <div className="absolute inset-0 bg-[#12151e]/40" onClick={() => setMobileOpen(false)} />
           <div className="absolute inset-y-0 start-0 animate-slide-up">
             <DashboardSidebar orgName={orgName} plan={plan} onClose={() => setMobileOpen(false)} />
           </div>
@@ -42,7 +43,7 @@ export function DashboardShell({
       )}
 
       <div className="flex min-h-screen flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-ink-100 bg-white/90 px-4 backdrop-blur sm:px-6">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-ink-100 bg-surface/90 px-4 backdrop-blur sm:px-6">
           <button
             onClick={() => setMobileOpen((v) => !v)}
             className="flex h-9 w-9 items-center justify-center rounded-lg text-ink-600 lg:hidden"
@@ -51,6 +52,7 @@ export function DashboardShell({
           </button>
           <div className="hidden lg:block" />
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <LanguageSwitcher />
             <NotificationsBell notifications={notifications} unreadCount={unreadCount} />
             <UserMenu name={userName} email={userEmail} />

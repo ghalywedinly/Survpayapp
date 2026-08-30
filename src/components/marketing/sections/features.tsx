@@ -24,7 +24,7 @@ export function Features({ locale }: { locale: Locale }) {
 
         <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((f) => (
-            <div key={f.title} className="rounded-2xl border border-ink-200/70 bg-white p-6 shadow-soft transition-shadow hover:shadow-card">
+            <div key={f.title} className="rounded-2xl border border-ink-200/70 bg-surface p-6 shadow-soft transition-shadow hover:shadow-card">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
                 <f.icon className="h-5 w-5" />
               </div>

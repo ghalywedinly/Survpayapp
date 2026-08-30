@@ -12,7 +12,7 @@ export function HowItWorks({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="border-t border-ink-100 bg-white py-20 sm:py-28">
+    <section className="border-t border-ink-100 bg-surface py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-6">
         <div className="max-w-2xl">
           <h2 className="text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">{t.howItWorksTitle}</h2>
@@ -23,7 +23,7 @@ export function HowItWorks({ locale }: { locale: Locale }) {
           <div className="absolute top-6 hidden h-px w-full bg-ink-100 sm:block" />
           {steps.map((s) => (
             <div key={s.n} className="relative">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-ink-900 text-sm font-semibold text-white">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#12151e] text-sm font-semibold text-white">
                 {s.n}
               </div>
               <h3 className="mt-5 text-lg font-semibold text-ink-900">{s.title}</h3>

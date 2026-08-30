@@ -12,22 +12,34 @@ const config: Config = {
         arabic: ["var(--font-arabic)", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       colors: {
+        // ink, and the -50/-100 tint of brand/mint/amber, are CSS-variable
+        // backed (see globals.css :root / .dark) so every existing
+        // text-ink-*/border-ink-*/bg-ink-{50,100,200}/bg-brand-50 etc. call
+        // site automatically flips for dark mode with no per-component
+        // changes. Mid/high saturation shades (brand-500+, mint-500+, ...)
+        // stay literal — they're saturated enough to read on both themes.
+        // A handful of call sites intentionally use *fixed*, non-reactive
+        // dark surfaces (buttons, code blocks, scrims, decorative dark
+        // panels) — those use literal hex (e.g. bg-[#12151e]) instead of
+        // this token, on purpose, so they don't invert.
         ink: {
-          50: "#f7f8fa",
-          100: "#eef0f4",
-          200: "#dde1e8",
-          300: "#c3c9d4",
-          400: "#9aa3b2",
-          500: "#717c8f",
-          600: "#525c70",
-          700: "#3b4356",
-          800: "#242a38",
-          900: "#12151e",
-          950: "#0a0c12",
+          50: "rgb(var(--ink-50) / <alpha-value>)",
+          100: "rgb(var(--ink-100) / <alpha-value>)",
+          200: "rgb(var(--ink-200) / <alpha-value>)",
+          300: "rgb(var(--ink-300) / <alpha-value>)",
+          400: "rgb(var(--ink-400) / <alpha-value>)",
+          500: "rgb(var(--ink-500) / <alpha-value>)",
+          600: "rgb(var(--ink-600) / <alpha-value>)",
+          700: "rgb(var(--ink-700) / <alpha-value>)",
+          800: "rgb(var(--ink-800) / <alpha-value>)",
+          900: "rgb(var(--ink-900) / <alpha-value>)",
+          950: "rgb(var(--ink-950) / <alpha-value>)",
         },
+        surface: "rgb(var(--surface) / <alpha-value>)",
+        page: "rgb(var(--page) / <alpha-value>)",
         brand: {
-          50: "#f1f0ff",
-          100: "#e4e1ff",
+          50: "rgb(var(--brand-50) / <alpha-value>)",
+          100: "rgb(var(--brand-100) / <alpha-value>)",
           200: "#ccc6ff",
           300: "#a89dff",
           400: "#8a7bff",
@@ -39,8 +51,8 @@ const config: Config = {
           950: "#211653",
         },
         mint: {
-          50: "#eefdf5",
-          100: "#d6fae6",
+          50: "rgb(var(--mint-50) / <alpha-value>)",
+          100: "rgb(var(--mint-100) / <alpha-value>)",
           200: "#b0f2cf",
           300: "#78e5b0",
           400: "#3ecf8e",
@@ -51,7 +63,7 @@ const config: Config = {
           900: "#124c36",
         },
         amber: {
-          50: "#fffbeb",
+          50: "rgb(var(--amber-50) / <alpha-value>)",
           400: "#fbbf35",
           500: "#f2a70d",
           600: "#d6870a",

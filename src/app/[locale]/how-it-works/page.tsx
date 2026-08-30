@@ -33,7 +33,7 @@ export default function HowItWorksPage({ params }: { params: { locale: Locale } 
           </div>
         </section>
 
-        <section className="bg-white py-20">
+        <section className="bg-surface py-20">
           <div className="mx-auto max-w-3xl px-6">
             <ol className="space-y-10 border-s-2 border-ink-100 ps-8">
               {steps.map((s, i) => (

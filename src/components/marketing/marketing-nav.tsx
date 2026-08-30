@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { useI18n } from "@/lib/i18n/provider";
 import { buttonClasses } from "@/components/ui/button";
 import { MenuIcon, XIcon } from "@/components/icons";
@@ -20,7 +21,7 @@ export function MarketingNav() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-ink-100/80 bg-white/85 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-ink-100/80 bg-surface/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <Link href={`/${locale}`}>
           <Logo />
@@ -35,6 +36,7 @@ export function MarketingNav() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
+          <ThemeToggle />
           <LanguageSwitcher />
           <Link href={`/${locale}/login`} className="text-sm font-medium text-ink-600 hover:text-ink-900">
             {t("nav.login")}
@@ -54,7 +56,7 @@ export function MarketingNav() {
       </div>
 
       {open && (
-        <div className="border-t border-ink-100 bg-white px-6 py-4 lg:hidden">
+        <div className="border-t border-ink-100 bg-surface px-6 py-4 lg:hidden">
           <nav className="flex flex-col gap-3">
             {links.map((l) => (
               <Link key={l.href} href={l.href} className="py-1 text-sm font-medium text-ink-700">
@@ -63,6 +65,7 @@ export function MarketingNav() {
             ))}
           </nav>
           <div className="mt-4 flex items-center gap-3">
+            <ThemeToggle />
             <LanguageSwitcher />
           </div>
           <div className="mt-4 flex flex-col gap-2">

@@ -21,7 +21,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "inline-flex items-center rounded-full border border-ink-200 bg-white p-0.5 text-xs font-medium shadow-soft",
+        "inline-flex items-center rounded-full border border-ink-200 bg-surface p-0.5 text-xs font-medium shadow-soft",
         className
       )}
     >
@@ -32,7 +32,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
           onClick={() => switchTo(l)}
           className={cn(
             "rounded-full px-2.5 py-1 transition-colors",
-            l === locale ? "bg-ink-900 text-white" : "text-ink-500 hover:text-ink-900"
+            l === locale ? "bg-[#12151e] text-white" : "text-ink-500 hover:text-ink-900"
           )}
         >
           {l === "en" ? "EN" : "العربية"}

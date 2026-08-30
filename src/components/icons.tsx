@@ -188,6 +188,13 @@ export const ListIcon = base(
     <circle cx="4.5" cy="18" r="1.1" fill="currentColor" stroke="none" />
   </>
 );
+export const SunIcon = base(
+  <>
+    <circle cx="12" cy="12" r="4.2" />
+    <path d="M12 2.5v2.3M12 19.2v2.3M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2.5 12h2.3M19.2 12h2.3M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6" />
+  </>
+);
+export const MoonIcon = base(<path d="M20.5 14.5A8.5 8.5 0 019.5 3.5a8.5 8.5 0 1011 11z" />);
 export const InboxIcon = base(
   <>
     <path d="M3 12h4.5l1.5 3h6l1.5-3H21" />

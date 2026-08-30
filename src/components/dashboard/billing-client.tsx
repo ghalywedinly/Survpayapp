@@ -116,7 +116,7 @@ export function BillingClient({
         <CardContent>
           <div className="flex items-center justify-between rounded-xl border border-ink-200 p-4">
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-12 items-center justify-center rounded-md bg-ink-900 text-[10px] font-bold text-white">VISA</div>
+              <div className="flex h-9 w-12 items-center justify-center rounded-md bg-[#12151e] text-[10px] font-bold text-white">VISA</div>
               <div>
                 <p className="text-sm font-medium text-ink-800">•••• •••• •••• 4242</p>
                 <p className="text-xs text-ink-400">Expires 08/29</p>

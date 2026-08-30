@@ -19,13 +19,13 @@ export default function ResourcesPage({ params }: { params: { locale: Locale } }
           </div>
         </section>
 
-        <section className="bg-white py-16 sm:py-20">
+        <section className="bg-surface py-16 sm:py-20">
           <div className="mx-auto grid max-w-6xl grid-cols-1 gap-5 px-6 sm:grid-cols-2 lg:grid-cols-3">
             {content.guides.map((g) => (
               <Link
                 key={g.title}
                 href={`/${params.locale}${g.href}`}
-                className="group flex flex-col rounded-2xl border border-ink-200/70 bg-white p-6 shadow-soft transition-shadow hover:shadow-card"
+                className="group flex flex-col rounded-2xl border border-ink-200/70 bg-surface p-6 shadow-soft transition-shadow hover:shadow-card"
               >
                 <span className="w-fit rounded-full bg-brand-50 px-2.5 py-1 text-[11px] font-medium text-brand-700">{g.tag}</span>
                 <h3 className="mt-4 text-base font-semibold text-ink-900">{g.title}</h3>

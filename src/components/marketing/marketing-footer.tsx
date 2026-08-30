@@ -8,7 +8,7 @@ export function MarketingFooter({ locale }: { locale: Locale }) {
   const t = dict.marketing;
 
   return (
-    <footer className="border-t border-ink-100 bg-white">
+    <footer className="border-t border-ink-100 bg-surface">
       <div className="mx-auto max-w-7xl px-6 py-14">
         <div className="grid grid-cols-2 gap-10 sm:grid-cols-4">
           <div className="col-span-2 sm:col-span-1">

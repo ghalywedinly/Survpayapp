@@ -6,6 +6,7 @@ import { localeMeta, localeCookieName, isLocale, defaultLocale, type Locale } fr
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { I18nProvider } from "@/lib/i18n/provider";
 import { ToastProvider } from "@/components/ui/toast";
+import { ThemeProvider, ThemeScript } from "@/lib/theme/provider";
 import "../../globals.css";
 
 export const metadata: Metadata = {
@@ -39,11 +40,14 @@ export default async function PublicSurveyLayout({ children, params }: { childre
   const dir = localeMeta[locale].dir;
 
   return (
-    <html lang={locale} dir={dir} className={`${inter.variable} ${arabic.variable}`}>
+    <html lang={locale} dir={dir} className={`${inter.variable} ${arabic.variable}`} suppressHydrationWarning>
       <body className={dir === "rtl" ? "font-arabic" : "font-sans"}>
-        <I18nProvider locale={locale} dict={dict}>
-          <ToastProvider>{children}</ToastProvider>
-        </I18nProvider>
+        <ThemeScript />
+        <ThemeProvider>
+          <I18nProvider locale={locale} dict={dict}>
+            <ToastProvider>{children}</ToastProvider>
+          </I18nProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

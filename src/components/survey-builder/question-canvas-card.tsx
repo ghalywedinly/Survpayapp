@@ -68,7 +68,7 @@ export function QuestionCanvasCard({
     <div
       onClick={onSelect}
       className={cn(
-        "cursor-pointer rounded-xl border bg-white p-4 transition-shadow",
+        "cursor-pointer rounded-xl border bg-surface p-4 transition-shadow",
         selected ? "border-brand-400 shadow-card ring-2 ring-brand-500/15" : "border-ink-200/70 hover:border-ink-300"
       )}
     >

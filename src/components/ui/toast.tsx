@@ -25,7 +25,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <div
             key={t.id}
             className={cn(
-              "pointer-events-auto w-full max-w-sm rounded-xl border bg-white p-3.5 shadow-pop animate-slide-up",
+              "pointer-events-auto w-full max-w-sm rounded-xl border bg-surface p-3.5 shadow-pop animate-slide-up",
               t.tone === "success" && "border-mint-200",
               t.tone === "error" && "border-red-200",
               (!t.tone || t.tone === "default") && "border-ink-200"

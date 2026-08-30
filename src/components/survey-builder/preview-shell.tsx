@@ -39,13 +39,13 @@ export function PreviewShell({
         <div className="inline-flex items-center gap-1 rounded-xl bg-ink-100 p-1">
           <button
             onClick={() => setDevice("desktop")}
-            className={cn("rounded-lg px-3 py-1.5 text-sm font-medium", device === "desktop" ? "bg-white shadow-soft" : "text-ink-500")}
+            className={cn("rounded-lg px-3 py-1.5 text-sm font-medium", device === "desktop" ? "bg-surface shadow-soft" : "text-ink-500")}
           >
             {t("preview.desktopView")}
           </button>
           <button
             onClick={() => setDevice("mobile")}
-            className={cn("rounded-lg px-3 py-1.5 text-sm font-medium", device === "mobile" ? "bg-white shadow-soft" : "text-ink-500")}
+            className={cn("rounded-lg px-3 py-1.5 text-sm font-medium", device === "mobile" ? "bg-surface shadow-soft" : "text-ink-500")}
           >
             {t("preview.mobileView")}
           </button>
@@ -56,7 +56,7 @@ export function PreviewShell({
       </div>
 
       <div className="flex justify-center rounded-2xl bg-ink-100/60 p-6 sm:p-10">
-        <div className={cn("w-full rounded-2xl border border-ink-200 bg-white shadow-pop transition-all", device === "mobile" ? "max-w-sm" : "max-w-2xl")}>
+        <div className={cn("w-full rounded-2xl border border-ink-200 bg-surface shadow-pop transition-all", device === "mobile" ? "max-w-sm" : "max-w-2xl")}>
           <div className="border-b border-ink-100 p-6">
             <Logo size={20} />
             <h1 className="mt-4 text-xl font-semibold text-ink-900">{displayTitle}</h1>

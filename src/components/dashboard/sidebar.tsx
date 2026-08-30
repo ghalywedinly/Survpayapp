@@ -42,7 +42,7 @@ export function DashboardSidebar({
   ];
 
   return (
-    <div className="flex h-full w-64 shrink-0 flex-col border-e border-ink-100 bg-white">
+    <div className="flex h-full w-64 shrink-0 flex-col border-e border-ink-100 bg-surface">
       <div className="flex h-16 items-center px-5">
         <Link href={`/${locale}/dashboard`} onClick={onClose}>
           <Logo />
