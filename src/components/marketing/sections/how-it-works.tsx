@@ -23,7 +23,7 @@ export function HowItWorks({ locale }: { locale: Locale }) {
           <div className="absolute top-6 hidden h-px w-full bg-ink-100 sm:block" />
           {steps.map((s) => (
             <div key={s.n} className="relative">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#12151e] text-sm font-semibold text-white">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-600 text-sm font-semibold text-white dark:bg-white dark:text-[#12151e]">
                 {s.n}
               </div>
               <h3 className="mt-5 text-lg font-semibold text-ink-900">{s.title}</h3>
