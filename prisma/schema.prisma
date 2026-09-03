@@ -241,6 +241,13 @@ model RewardTransaction {
   status         String       @default("completed") // pending | processing | completed | failed | expired
   provider       String       @default("mock") // which RewardProvider issued this
   note           String?
+  // Redeemable code shown to the respondent for coupon-type rewards (e.g. a
+  // restaurant discount code) — set only when provider === "coupon". The
+  // in-app coupon-check tool looks transactions up by this code and, once,
+  // flips redeemedAt so the same code can't be redeemed twice.
+  code           String?      @unique
+  redeemedAt     DateTime?
+  redeemedNote   String?
   createdAt      DateTime     @default(now())
 }
 

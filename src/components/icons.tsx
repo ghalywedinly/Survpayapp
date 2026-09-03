@@ -195,6 +195,12 @@ export const SunIcon = base(
   </>
 );
 export const MoonIcon = base(<path d="M20.5 14.5A8.5 8.5 0 019.5 3.5a8.5 8.5 0 1011 11z" />);
+export const TicketIcon = base(
+  <>
+    <path d="M3 8a2 2 0 012-2h14a2 2 0 012 2v2a2 2 0 000 4v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2a2 2 0 000-4V8z" />
+    <path d="M9.5 6v12" strokeDasharray="2.5 2.5" />
+  </>
+);
 export const InboxIcon = base(
   <>
     <path d="M3 12h4.5l1.5 3h6l1.5-3H21" />

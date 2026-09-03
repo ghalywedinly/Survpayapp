@@ -22,6 +22,14 @@ export interface RewardIssueResult {
   providerRef: string;
   /** Respondent-facing redemption instructions, safe to render in the UI. */
   redemptionNote: string;
+  /**
+   * The machine-checkable code, set only by providers whose reward is
+   * redeemed by presenting a code (coupon today). Persisted to
+   * RewardTransaction.code, which the coupon-check tool looks up and marks
+   * redeemed exactly once. Cash/gift-card payouts leave this undefined —
+   * there's nothing for a merchant to validate in person.
+   */
+  redemptionCode?: string;
 }
 
 export interface RewardProvider {

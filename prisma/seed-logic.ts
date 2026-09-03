@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { generateCouponCode } from "../src/lib/services/reward/providers";
 
 export const seedDb = new PrismaClient();
 const db = seedDb;
@@ -758,7 +759,19 @@ export async function runSeed() {
 
     let distributed = 0;
     let rewardedCount = 0;
-    const rewardTxBatch: { budgetId: string; responseId: string; type: string; amount: number; status: string; provider: string; note: string | null; createdAt: Date }[] = [];
+    const rewardTxBatch: {
+      budgetId: string;
+      responseId: string;
+      type: string;
+      amount: number;
+      status: string;
+      provider: string;
+      note: string | null;
+      code: string | null;
+      redeemedAt: Date | null;
+      redeemedNote: string | null;
+      createdAt: Date;
+    }[] = [];
     const responseRows: {
       id: string;
       surveyId: string;
@@ -789,6 +802,12 @@ export async function runSeed() {
         distributed += def.rewardAmount;
         rewardedCount += 1;
         rewardStatus = "completed";
+        const isCoupon = def.rewardType === "coupon";
+        const code = isCoupon ? generateCouponCode() : null;
+        // Redeem a realistic slice of coupons up front so the coupon-check
+        // tool has both states to show right after seeding, not just a
+        // list of untouched codes.
+        const redeemed = isCoupon && Math.random() < 0.4;
         rewardTxBatch.push({
           budgetId: budget.id,
           responseId: respId,
@@ -796,7 +815,18 @@ export async function runSeed() {
           amount: def.rewardAmount,
           status: "completed",
           provider: def.rewardType,
-          note: def.rewardType === "cash" ? "demo-cash-payout" : `DEMO-${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
+          note: def.rewardType === "cash" ? "demo-cash-payout" : isCoupon ? code : `DEMO-GC-${Math.random().toString(36).slice(2, 10).toUpperCase()}`,
+          code,
+          // Redeemed sometime after it was issued (a customer doesn't
+          // redeem a coupon before they earn it), never in the future.
+          redeemedAt: redeemed ? new Date(Math.min(submittedAt.getTime() + randomInt(1, 72) * 3600_000, Date.now())) : null,
+          redeemedNote: redeemed
+            ? weightedPick([
+                { value: "Front counter", weight: 3 },
+                { value: "Drive-thru", weight: 1 },
+                { value: "Cashier #2", weight: 1 },
+              ])
+            : null,
           createdAt: submittedAt,
         });
       } else if (status === "valid") {
