@@ -1,0 +1,43 @@
+{
+  "name": "survpay",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "prisma generate",
+    "dev": "next dev",
+    "build": "node scripts/prebuild.mjs && NEXT_IGNORE_INCORRECT_LOCKFILE=1 next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:reset": "prisma db push --force-reset && tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.20.0",
+    "bcryptjs": "2.4.3",
+    "clsx": "2.1.1",
+    "exceljs": "4.4.0",
+    "next": "14.2.35",
+    "pdf-lib": "^1.17.1",
+    "prisma": "5.20.0",
+    "qrcode": "1.5.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "recharts": "2.12.7",
+    "tailwind-merge": "2.5.2",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "2.4.6",
+    "@types/node": "20.16.10",
+    "@types/qrcode": "1.5.5",
+    "@types/react": "18.3.11",
+    "@types/react-dom": "18.3.0",
+    "autoprefixer": "10.4.20",
+    "postcss": "8.5.26",
+    "tailwindcss": "3.4.13",
+    "tsx": "4.23.12",
+    "typescript": "5.6.2"
+  }
+}

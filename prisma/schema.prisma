@@ -1,0 +1,418 @@
+// SurvPay — Phase 1 data model
+// Designed so a future participant marketplace (Phase 2) can be layered on
+// without reshaping these core tables. Phase-2-only entities are marked below
+// and are not referenced by any Phase 1 UI or service.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Identity & organization
+// ---------------------------------------------------------------------------
+
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  passwordHash      String
+  name              String
+  phone             String?
+  locale            String    @default("en") // "en" | "ar" — persisted UI language
+  role              String    @default("researcher") // researcher | marketing | product | academic | consultant | other
+  emailVerified     Boolean   @default(false)
+  emailVerifiedAt   DateTime?
+  resetToken        String?   @unique
+  resetTokenExpiresAt DateTime?
+  notificationPrefs String?   // JSON-encoded per-type booleans; absent = all on
+  // Structured so OAuth providers can be attached later without a migration.
+  accounts          Account[]
+  sessions          Session[]
+  memberships       OrganizationMember[]
+  auditLogs         AuditLog[]
+  notifications     Notification[]
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+// Reserved for future OAuth sign-in (Google, Microsoft, etc). Unused in Phase 1
+// credentials-only auth, kept so adding a provider is additive, not a rewrite.
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider          String
+  providerAccountId String
+  createdAt         DateTime @default(now())
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  userAgent String?
+  ipAddress String?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Organization {
+  id            String   @id @default(cuid())
+  name          String
+  slug          String   @unique
+  logoUrl       String?
+  industry      String?
+  country       String   @default("SA")
+  plan          String   @default("free") // free | pro | business
+  members       OrganizationMember[]
+  surveys       Survey[]
+  rewardBudgets RewardBudget[]
+  paymentTx     PaymentTransaction[]
+  invoices      Invoice[]
+  auditLogs     AuditLog[]
+  notifications Notification[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model OrganizationMember {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           String       @default("owner") // owner | admin | editor | viewer
+  invitedEmail   String?
+  status         String       @default("active") // active | invited
+  createdAt      DateTime     @default(now())
+
+  @@unique([organizationId, userId])
+}
+
+// ---------------------------------------------------------------------------
+// Survey structure
+// ---------------------------------------------------------------------------
+
+model Survey {
+  id                 String   @id @default(cuid())
+  organizationId     String
+  organization       Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  code               String   @unique // public share code, e.g. 7H3K9X
+  title              String
+  titleAr            String?
+  description        String?
+  descriptionAr      String?
+  objective          String?
+  estimatedMinutes   Int      @default(5)
+  status             String   @default("draft") // draft | scheduled | active | paused | completed | closed | archived
+  logoUrl            String?
+  brandColor         String?
+
+  pages              SurveyPage[]
+  questions          Question[]
+  responses          SurveyResponse[]
+  settings           SurveySettings?
+  rewardConfig       RewardConfig?
+  rewardBudget       RewardBudget?
+  events             SurveyEvent[]
+  reports            Report[]
+  aiInsights         AIInsight[]
+
+  startDate          DateTime?
+  endDate            DateTime?
+  publishedAt        DateTime?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([organizationId])
+}
+
+model SurveyPage {
+  id        String     @id @default(cuid())
+  surveyId  String
+  survey    Survey     @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  title     String
+  order     Int
+  questions Question[]
+
+  @@index([surveyId])
+}
+
+model Question {
+  id             String          @id @default(cuid())
+  surveyId       String
+  survey         Survey          @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  pageId         String?
+  page           SurveyPage?     @relation(fields: [pageId], references: [id], onDelete: SetNull)
+  type           String          // single_choice | multiple_choice | dropdown | short_text | long_text | rating | likert | number | date | yes_no | nps | matrix | ranking
+  text           String
+  textAr         String?
+  description    String?
+  descriptionAr  String?
+  required       Boolean         @default(true)
+  order          Int
+  isAttentionCheck Boolean       @default(false)
+  isDemographic  Boolean         @default(false)
+  validation     String?         // JSON-encoded validation rules
+  matrixRows     String?         // JSON-encoded array, for matrix questions
+  // Conditional logic: show this question only if `conditionQuestionId`'s
+  // answer matches `conditionValue` (JSON-encoded).
+  conditionQuestionId String?
+  conditionOperator   String?    // equals | not_equals | any_of
+  conditionValue      String?
+  options        QuestionOption[]
+  answers        ResponseAnswer[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([surveyId])
+}
+
+model QuestionOption {
+  id         String   @id @default(cuid())
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  label      String
+  labelAr    String?
+  value      String
+  order      Int
+}
+
+model SurveySettings {
+  id                      String   @id @default(cuid())
+  surveyId                String   @unique
+  survey                  Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  responseLimit           Int?
+  anonymousResponses      Boolean  @default(true)
+  requireEmail            Boolean  @default(false)
+  preventDuplicates       Boolean  @default(true)
+  captchaEnabled          Boolean  @default(true)
+  collectFutureConsent    Boolean  @default(false) // separate, explicit opt-in — never inferred
+  language                String   @default("both") // en | ar | both
+}
+
+// ---------------------------------------------------------------------------
+// Rewards & payments
+// ---------------------------------------------------------------------------
+
+model RewardConfig {
+  id              String   @id @default(cuid())
+  surveyId        String   @unique
+  survey          Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  enabled         Boolean  @default(true)
+  amount          Float    @default(0) // per valid response, in SAR
+  currency        String   @default("SAR")
+  rewardType      String   @default("cash") // cash | gift_card | coupon
+  maxResponses    Int      @default(100)
+  platformFeePct  Float    @default(0.08) // platform/service fee, fraction of budget
+}
+
+model RewardBudget {
+  id                String   @id @default(cuid())
+  surveyId          String   @unique
+  survey            Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  organizationId    String
+  organization      Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  fundedAmount      Float    @default(0)
+  distributedAmount Float    @default(0)
+  currency          String   @default("SAR")
+  transactions      RewardTransaction[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model RewardTransaction {
+  id             String       @id @default(cuid())
+  budgetId       String
+  budget         RewardBudget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  responseId     String?      @unique
+  response       SurveyResponse? @relation(fields: [responseId], references: [id], onDelete: SetNull)
+  type           String       // funding | reward | refund
+  amount         Float
+  respondents    Int          @default(1)
+  status         String       @default("completed") // pending | processing | completed | failed | expired
+  provider       String       @default("mock") // which RewardProvider issued this
+  note           String?
+  // Redeemable code shown to the respondent for coupon-type rewards (e.g. a
+  // restaurant discount code) — set only when provider === "coupon". The
+  // in-app coupon-check tool looks transactions up by this code and, once,
+  // flips redeemedAt so the same code can't be redeemed twice.
+  code           String?      @unique
+  redeemedAt     DateTime?
+  redeemedNote   String?
+  createdAt      DateTime     @default(now())
+}
+
+// Researcher billing & incentive funding are modeled as distinct concepts.
+// PaymentTransaction funds the org's incentive budget or pays a subscription
+// invoice; RewardTransaction pays out to respondents from a funded budget.
+model PaymentTransaction {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  purpose        String       // subscription | incentive_funding | refund
+  amount         Float
+  currency       String       @default("SAR")
+  status         String       @default("completed") // pending | processing | completed | failed | refunded
+  provider       String       @default("mock") // which PaymentProvider processed this
+  providerRef    String?
+  relatedSurveyId String?
+  description    String?
+  createdAt      DateTime     @default(now())
+}
+
+model Invoice {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  number         String       @unique
+  amount         Float
+  currency       String       @default("SAR")
+  status         String       @default("paid") // paid | open | void
+  periodStart    DateTime
+  periodEnd      DateTime
+  issuedAt       DateTime     @default(now())
+}
+
+// ---------------------------------------------------------------------------
+// Responses
+// ---------------------------------------------------------------------------
+
+model SurveyResponse {
+  id               String   @id @default(cuid())
+  surveyId         String
+  survey           Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  status           String   @default("pending") // pending | valid | rejected | flagged
+  rewardStatus     String   @default("not_applicable") // not_applicable | pending | processing | completed | failed | expired
+  respondentEmail  String?
+  respondentHash   String?  // fingerprint for duplicate-prevention, never PII by itself
+  country          String?
+  device           String?  // mobile | desktop | tablet
+  source           String?  // share_link | email | website | social_media
+  completionSeconds Int?
+  failedAttentionCheck Boolean @default(false)
+  ipCountryCode    String?
+  answers          ResponseAnswer[]
+  rewardTx         RewardTransaction?
+  futureConsent    Boolean? // explicit opt-in only, stored separately from answers
+  startedAt        DateTime @default(now())
+  submittedAt      DateTime?
+  createdAt        DateTime @default(now())
+
+  @@index([surveyId])
+}
+
+model ResponseAnswer {
+  id         String         @id @default(cuid())
+  responseId String
+  response   SurveyResponse @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  questionId String
+  question   Question       @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  value      String         // JSON-encoded answer value (string, array, or matrix map)
+
+  @@index([responseId])
+  @@index([questionId])
+}
+
+model SurveyEvent {
+  id        String   @id @default(cuid())
+  surveyId  String
+  survey    Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  type      String   // published | paused | resumed | closed | milestone_100 | budget_low | report_ready
+  message   String?
+  createdAt DateTime @default(now())
+
+  @@index([surveyId])
+}
+
+// ---------------------------------------------------------------------------
+// Analytics, AI, reporting
+// ---------------------------------------------------------------------------
+
+model AIInsight {
+  id         String   @id @default(cuid())
+  surveyId   String
+  survey     Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  summary    String   // JSON-encoded structured insight payload
+  isDemo     Boolean  @default(true)
+  provider   String   @default("mock") // which AIProvider generated this
+  createdAt  DateTime @default(now())
+}
+
+model Report {
+  id         String   @id @default(cuid())
+  surveyId   String
+  survey     Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  title      String
+  sections   String   // JSON-encoded list of included sections
+  status     String   @default("ready") // generating | ready
+  createdAt  DateTime @default(now())
+}
+
+model AuditLog {
+  id             String   @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String?
+  user           User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action         String
+  targetType     String?
+  targetId       String?
+  metadata       String?
+  createdAt      DateTime @default(now())
+}
+
+model Notification {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String?
+  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  type           String       // survey_milestone | budget_low | survey_completed | reward_issue | report_ready | weekly_report
+  title          String
+  titleAr        String?
+  body           String
+  bodyAr         String?
+  read           Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+}
+
+// ---------------------------------------------------------------------------
+// Phase 2 (future) — participant network. Not wired to any Phase 1 UI or
+// service. Present only so the schema does not need reshaping later.
+// ---------------------------------------------------------------------------
+
+model Participant {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  createdAt   DateTime @default(now())
+}
+
+model ParticipantProfile {
+  id            String   @id @default(cuid())
+  participantId String   @unique
+  attributes    String? // JSON-encoded demographic/profile attributes
+}
+
+model ParticipantConsent {
+  id            String   @id @default(cuid())
+  participantId String
+  scope         String   // e.g. "future_study_invitations"
+  granted       Boolean  @default(false)
+  grantedAt     DateTime?
+}
+
+model ParticipantStudyEligibility {
+  id            String   @id @default(cuid())
+  participantId String
+  surveyId      String
+  eligible      Boolean  @default(false)
+}

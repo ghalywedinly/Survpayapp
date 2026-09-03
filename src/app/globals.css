@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Theme tokens — "R G B" triplets so Tailwind's rgb(var(--x) / <alpha-value>)
+   colors (see tailwind.config.ts) support opacity modifiers like bg-ink-200/50.
+   Light values match the original hand-picked palette exactly; dark values
+   are a separately hand-tuned scale (not a mechanical inversion) so each
+   shade keeps its intended contrast role — e.g. ink-200 stays "a subtle
+   border", just a subtle border against a dark surface instead of a light
+   one, rather than becoming a bright, high-contrast line. */
+:root {
+  color-scheme: light;
+
+  --page: 251 251 252; /* #fbfbfc */
+  --surface: 255 255 255; /* #ffffff — card/dropdown/input backgrounds */
+
+  --ink-50: 247 248 250;
+  --ink-100: 238 240 244;
+  --ink-200: 221 225 232;
+  --ink-300: 195 201 212;
+  --ink-400: 154 163 178;
+  --ink-500: 113 124 143;
+  --ink-600: 82 92 112;
+  --ink-700: 59 67 86;
+  --ink-800: 36 42 56;
+  --ink-900: 18 21 30;
+  --ink-950: 10 12 18;
+
+  --brand-50: 241 240 255;
+  --brand-100: 228 225 255;
+  --mint-50: 238 253 245;
+  --mint-100: 214 250 230;
+  --amber-50: 255 251 235;
+
+  --brand-content: 76 47 214; /* brand-700 */
+  --mint-content: 18 116 76; /* mint-700 */
+  --amber-content: 214 135 10; /* amber-600 */
+  --danger-tint: 254 242 242; /* red-50 */
+  --danger-content: 220 38 38; /* red-600 */
+  --info-tint: 240 249 255; /* sky-50 */
+  --info-content: 3 105 161; /* sky-700 */
+}
+
+.dark {
+  color-scheme: dark;
+
+  --page: 10 12 18; /* same as light's ink-950 */
+  --surface: 18 21 30; /* same as light's ink-900 — one step lighter than page for layering */
+
+  --ink-50: 23 26 35;
+  --ink-100: 28 32 41;
+  --ink-200: 38 43 56;
+  --ink-300: 58 65 80;
+  --ink-400: 107 115 131;
+  --ink-500: 136 144 160;
+  --ink-600: 154 163 178;
+  --ink-700: 184 190 201;
+  --ink-800: 215 218 224;
+  --ink-900: 243 244 246;
+  --ink-950: 250 250 251;
+
+  --brand-50: 36 31 61;
+  --brand-100: 47 39 85;
+  --mint-50: 18 39 30;
+  --mint-100: 22 52 42;
+  --amber-50: 46 34 16;
+
+  --brand-content: 196 181 253; /* bright lavender, reads on a dark chip */
+  --mint-content: 120 229 176; /* mint-300 */
+  --amber-content: 251 191 53; /* amber-400 */
+  --danger-tint: 58 26 26;
+  --danger-content: 248 113 113; /* red-400 */
+  --info-tint: 20 36 51;
+  --info-content: 56 189 248; /* sky-400 */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: rgb(var(--page));
+  color: rgb(var(--ink-900));
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+[dir="rtl"] .flip-rtl {
+  transform: scaleX(-1);
+}
+
+::selection {
+  background-color: #e4e1ff;
+  color: #211653;
+}
+
+/* Thin, unobtrusive scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--ink-400) / 0.35) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(var(--ink-400) / 0.3);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, rgb(var(--ink-900) / 0.06) 25%, rgb(var(--ink-900) / 0.1) 37%, rgb(var(--ink-900) / 0.06) 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.8s ease infinite;
+}
+
+/* Soft brand-gradient wash — three low-opacity blooms in the exact logo
+   colors (teal/purple/blue), replacing a flat gray dot grid so marketing
+   section backgrounds actually read as SurvPay rather than generic SaaS.
+   Opacities are bumped in dark mode — the same alpha reads much fainter
+   against a near-black page than against off-white. */
+.bg-brand-wash {
+  background-image:
+    radial-gradient(38% 55% at 12% 0%, rgb(170 84 255 / 0.14), transparent 70%),
+    radial-gradient(34% 50% at 92% 12%, rgb(1 231 228 / 0.16), transparent 70%),
+    radial-gradient(42% 55% at 50% 105%, rgb(1 78 252 / 0.08), transparent 70%);
+  background-repeat: no-repeat;
+  background-color: rgb(var(--page));
+}
+.dark .bg-brand-wash {
+  background-image:
+    radial-gradient(38% 55% at 12% 0%, rgb(170 84 255 / 0.22), transparent 70%),
+    radial-gradient(34% 50% at 92% 12%, rgb(1 231 228 / 0.22), transparent 70%),
+    radial-gradient(42% 55% at 50% 105%, rgb(1 78 252 / 0.16), transparent 70%);
+}
