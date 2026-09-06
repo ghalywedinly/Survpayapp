@@ -629,6 +629,21 @@ export async function runSeed() {
     },
   });
 
+  // SurvPay's own platform-owner account — no organization membership.
+  // requirePlatformAdmin() gates /admin on role === "platform_admin";
+  // nothing in the researcher-facing UI can ever set this value.
+  await db.user.create({
+    data: {
+      email: "owner@survpay.com",
+      passwordHash: await bcrypt.hash("Owner1234!", 10),
+      name: "SurvPay Admin",
+      locale: "en",
+      role: "platform_admin",
+      emailVerified: true,
+      emailVerifiedAt: daysAgo(120),
+    },
+  });
+
   const org = await db.organization.create({
     data: {
       name: "Al Faisal Research Group",
@@ -952,6 +967,7 @@ export async function runSeed() {
 
   console.log(`\nSeed complete: ${totalResponses} responses across ${surveyDefs.length} surveys (${totalValid} valid).`);
   console.log("Demo login → email: demo@survpay.com · password: Demo1234!");
+  console.log("Platform admin login → email: owner@survpay.com · password: Owner1234!");
 
   return { surveys: surveyDefs.length, totalResponses, totalValid };
 }

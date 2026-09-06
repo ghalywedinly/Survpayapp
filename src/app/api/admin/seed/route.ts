@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       ok: true,
       ...result,
-      message: `Seeded ${result.surveys} surveys, ${result.totalResponses} responses. Demo login: demo@survpay.com / Demo1234!`,
+      message: `Seeded ${result.surveys} surveys, ${result.totalResponses} responses. Demo login: demo@survpay.com / Demo1234! · Platform admin: owner@survpay.com / Owner1234!`,
     });
   } catch (e) {
     return NextResponse.json({ ok: false, error: e instanceof Error ? e.message : "Unknown error" }, { status: 500 });

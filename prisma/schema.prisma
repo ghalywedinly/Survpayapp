@@ -24,7 +24,7 @@ model User {
   name              String
   phone             String?
   locale            String    @default("en") // "en" | "ar" — persisted UI language
-  role              String    @default("researcher") // researcher | marketing | product | academic | consultant | other
+  role              String    @default("researcher") // researcher | marketing | product | academic | consultant | other | platform_admin (SurvPay's own staff — see requirePlatformAdmin(); never assignable through any researcher-facing UI)
   emailVerified     Boolean   @default(false)
   emailVerifiedAt   DateTime?
   resetToken        String?   @unique

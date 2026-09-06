@@ -201,6 +201,19 @@ export const TicketIcon = base(
     <path d="M9.5 6v12" strokeDasharray="2.5 2.5" />
   </>
 );
+export const BuildingIcon = base(
+  <>
+    <rect x="4" y="3" width="12" height="18" rx="1" />
+    <path d="M8 7h4M8 10.5h4M8 14h4M16 21v-8h4v8" />
+  </>
+);
+export const UserPlusIcon = base(
+  <>
+    <circle cx="9" cy="8" r="3.2" />
+    <path d="M2.5 20c0-3.6 2.9-6.2 6.5-6.2S15.5 16.4 15.5 20" />
+    <path d="M19 8v6M22 11h-6" />
+  </>
+);
 export const InboxIcon = base(
   <>
     <path d="M3 12h4.5l1.5 3h6l1.5-3H21" />

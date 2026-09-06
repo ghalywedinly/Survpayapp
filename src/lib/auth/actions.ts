@@ -65,6 +65,8 @@ export async function loginAction(_prev: ActionState, formData: FormData): Promi
 
   await createSession(user.id);
 
+  if (user.role === "platform_admin") redirect(`/${locale}/admin`);
+
   const membership = await db.organizationMember.findFirst({ where: { userId: user.id } });
   redirect(`/${locale}/${membership ? "dashboard" : "onboarding"}`);
 }
