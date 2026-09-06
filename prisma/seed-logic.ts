@@ -545,6 +545,15 @@ const surveyDefs = [
 // Main seed
 // ---------------------------------------------------------------------------
 
+// Guards against two overlapping invocations on the same warm server
+// instance (e.g. a double-click on the seed link, or a client retry firing
+// before the first request finished): without this, one call's wipe phase
+// can delete rows the other call is mid-way through building on top of,
+// surfacing as a confusing foreign-key-violation error. This only protects
+// requests landing on the same process — it's cheap insurance, not a
+// distributed lock — but that's the overwhelmingly common real-world case.
+let seedRunning = false;
+
 /**
  * Wipes and re-seeds the database with demo data. Exported so it can be
  * invoked either from the CLI (prisma/seed.ts, for local/dev use) or from
@@ -553,6 +562,18 @@ const surveyDefs = [
  * available to run the CLI directly against the database.
  */
 export async function runSeed() {
+  if (seedRunning) {
+    throw new Error("A reseed is already running — wait for it to finish (check the page you triggered it from) before trying again.");
+  }
+  seedRunning = true;
+  try {
+    return await runSeedInner();
+  } finally {
+    seedRunning = false;
+  }
+}
+
+async function runSeedInner() {
   console.log("Seeding SurvPay demo data…");
 
   // Clean slate (dependency order, children first)
