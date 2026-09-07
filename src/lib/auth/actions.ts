@@ -9,6 +9,7 @@ import { createSession, destroySession, getCurrentUserAndOrg } from "./session";
 import { slugify } from "@/lib/utils";
 import { isLocale, defaultLocale } from "@/lib/i18n/config";
 import { entryPlanId } from "@/lib/pricing";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 export type ActionState = { error?: string; success?: boolean; devLink?: string } | undefined;
 
@@ -26,6 +27,9 @@ const signupSchema = z.object({
 
 export async function signupAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
   const locale = loc(formData);
+  if (!checkRateLimit(`signup:${getClientIp()}`, 8, 15 * 60_000).ok) {
+    return { error: "errorTooManyAttempts" };
+  }
   const parsed = signupSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
@@ -55,6 +59,9 @@ const loginSchema = z.object({ email: z.string().email(), password: z.string().m
 
 export async function loginAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
   const locale = loc(formData);
+  if (!checkRateLimit(`login:${getClientIp()}`, 10, 5 * 60_000).ok) {
+    return { error: "errorTooManyAttempts" };
+  }
   const parsed = loginSchema.safeParse({ email: formData.get("email"), password: formData.get("password") });
   if (!parsed.success) return { error: "errorInvalidCredentials" };
 
@@ -82,6 +89,9 @@ const forgotSchema = z.object({ email: z.string().email() });
 
 export async function forgotPasswordAction(_prev: ActionState, formData: FormData): Promise<ActionState> {
   const locale = loc(formData);
+  // Same silent-success shape as an unknown email below — a rate-limited
+  // requester learns nothing an attacker could use to enumerate accounts.
+  if (!checkRateLimit(`forgot:${getClientIp()}`, 5, 15 * 60_000).ok) return { success: true };
   const parsed = forgotSchema.safeParse({ email: formData.get("email") });
   if (!parsed.success) return { success: true };
 

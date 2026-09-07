@@ -252,6 +252,7 @@ const en = {
     errorWeakPassword: "Password must be at least 8 characters.",
     errorPasswordMismatch: "Passwords do not match.",
     errorGeneric: "Something went wrong. Please try again.",
+    errorTooManyAttempts: "Too many attempts. Please wait a few minutes and try again.",
   },
   onboarding: {
     title: "Tell us about your research",

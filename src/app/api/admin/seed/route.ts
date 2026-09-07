@@ -9,9 +9,23 @@ import { runSeed } from "../../../../../prisma/seed-logic";
 // touches demo data, never anything a real user created) unless a
 // deployment sets its own SEED_SECRET env var. Not linked from anywhere in
 // the UI — visit it directly once.
+//
+// This wipes the ENTIRE database, so the default key is refused outright on
+// a real production deployment (Vercel's `VERCEL_ENV === "production"`) —
+// it only works there once you've set your own SEED_SECRET in that
+// environment's config. Preview/dev deployments keep working with the
+// default key for convenience, since only demo data ever lives there.
 const DEFAULT_SEED_KEY = "survpay-demo-seed";
 
 export async function GET(req: NextRequest) {
+  const hasCustomSecret = Boolean(process.env.SEED_SECRET);
+  if (process.env.VERCEL_ENV === "production" && !hasCustomSecret) {
+    return NextResponse.json(
+      { ok: false, error: "Seeding is disabled on production until a SEED_SECRET environment variable is set for this environment." },
+      { status: 403 }
+    );
+  }
+
   const secret = process.env.SEED_SECRET || DEFAULT_SEED_KEY;
   const key = req.nextUrl.searchParams.get("key");
   if (key !== secret) {

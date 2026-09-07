@@ -1,7 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ResponseService } from "@/lib/services/response-service";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest, { params }: { params: { code: string } }) {
+  // Burst guard against a scripted flood hitting one survey's reward budget.
+  // Generous on purpose — genuine respondents behind one shared office/venue
+  // IP (an in-person intercept survey, say) should never trip this.
+  const limit = checkRateLimit(`submit:${getClientIp()}`, 20, 60_000);
+  if (!limit.ok) {
+    return NextResponse.json(
+      { ok: false, error: "RATE_LIMITED" },
+      { status: 429, headers: { "Retry-After": Math.ceil(limit.retryAfterMs / 1000).toString() } }
+    );
+  }
+
   let body: unknown;
   try {
     body = await req.json();

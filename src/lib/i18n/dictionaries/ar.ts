@@ -254,6 +254,7 @@ const ar: Dictionary = {
     errorWeakPassword: "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.",
     errorPasswordMismatch: "كلمتا المرور غير متطابقتين.",
     errorGeneric: "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+    errorTooManyAttempts: "محاولات كثيرة جدًا. يرجى الانتظار بضع دقائق ثم المحاولة مرة أخرى.",
   },
   onboarding: {
     title: "أخبرنا عن بحثك",
