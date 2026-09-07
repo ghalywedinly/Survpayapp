@@ -71,7 +71,7 @@ model Organization {
   logoUrl       String?
   industry      String?
   country       String   @default("SA")
-  plan          String   @default("free") // free | pro | business
+  plan          String   @default("free") // market_research | customer_experience | business — always set explicitly on organization creation (see auth/actions.ts); the DB default is legacy and no longer a valid, sellable plan
   members       OrganizationMember[]
   surveys       Survey[]
   rewardBudgets RewardBudget[]

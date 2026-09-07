@@ -8,6 +8,7 @@ import { hashPassword, verifyPassword } from "./password";
 import { createSession, destroySession, getCurrentUserAndOrg } from "./session";
 import { slugify } from "@/lib/utils";
 import { isLocale, defaultLocale } from "@/lib/i18n/config";
+import { entryPlanId } from "@/lib/pricing";
 
 export type ActionState = { error?: string; success?: boolean; devLink?: string } | undefined;
 
@@ -166,7 +167,7 @@ export async function onboardingAction(_prev: ActionState, formData: FormData): 
   }
 
   const org = await db.organization.create({
-    data: { name: parsed.data.companyName, slug, country: "SA" },
+    data: { name: parsed.data.companyName, slug, country: "SA", plan: entryPlanId },
   });
 
   await db.organizationMember.create({

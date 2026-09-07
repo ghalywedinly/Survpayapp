@@ -671,7 +671,7 @@ async function runSeedInner() {
       slug: "al-faisal-research",
       industry: "Market Research",
       country: "SA",
-      plan: "pro",
+      plan: "customer_experience",
       createdAt: daysAgo(120),
     },
   });
@@ -693,7 +693,7 @@ async function runSeedInner() {
       data: {
         organizationId: org.id,
         number: `INV-2026-${(1000 + i).toString()}`,
-        amount: 249,
+        amount: 169,
         currency: "SAR",
         status: "paid",
         periodStart,
@@ -705,11 +705,11 @@ async function runSeedInner() {
       data: {
         organizationId: org.id,
         purpose: "subscription",
-        amount: 249,
+        amount: 169,
         currency: "SAR",
         status: "completed",
         provider: "mock",
-        description: `Pro plan — invoice ${invoice.number}`,
+        description: `Customer Experience plan — invoice ${invoice.number}`,
         createdAt: periodStart,
       },
     });

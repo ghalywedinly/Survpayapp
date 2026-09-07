@@ -8,8 +8,13 @@ import { Table, THead, TBody, TR, TH, TD } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import { BuildingIcon } from "@/components/icons";
+import { getPlanLabel } from "@/lib/pricing";
 
-const planTone: Record<string, "neutral" | "brand" | "success"> = { free: "neutral", pro: "brand", business: "success" };
+const planTone: Record<string, "neutral" | "brand" | "success"> = {
+  market_research: "neutral",
+  customer_experience: "brand",
+  business: "success",
+};
 
 export default async function AdminClientsPage({ params }: { params: { locale: Locale } }) {
   const dict = getDictionary(params.locale);
@@ -45,9 +50,7 @@ export default async function AdminClientsPage({ params }: { params: { locale: L
                       {org.industry && <p className="text-xs text-ink-400">{org.industry}</p>}
                     </TD>
                     <TD>
-                      <Badge tone={planTone[org.plan] ?? "neutral"} className="capitalize">
-                        {org.plan}
-                      </Badge>
+                      <Badge tone={planTone[org.plan] ?? "neutral"}>{getPlanLabel(org.plan)}</Badge>
                     </TD>
                     <TD>{org.country}</TD>
                     <TD>{org.memberCount}</TD>

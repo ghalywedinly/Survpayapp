@@ -18,6 +18,7 @@ import {
 } from "@/components/icons";
 import { Avatar } from "@/components/ui/avatar";
 import { ChevronDownIcon } from "@/components/icons";
+import { entryPlanId } from "@/lib/pricing";
 
 export function DashboardSidebar({
   orgName,
@@ -71,7 +72,7 @@ export function DashboardSidebar({
         })}
       </nav>
 
-      {plan === "free" && (
+      {plan === entryPlanId && (
         <div className="mx-3 mb-3 rounded-xl border border-brand-100 bg-brand-50/60 p-4">
           <p className="text-sm font-semibold text-ink-900">{t("common.upgradeToPro")}</p>
           <p className="mt-1 text-xs leading-relaxed text-ink-500">{t("common.upgradeDesc")}</p>

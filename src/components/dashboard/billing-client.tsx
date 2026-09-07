@@ -15,9 +15,9 @@ import { useToast } from "@/components/ui/toast";
 import { CreditCardIcon, WalletIcon, PlusIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
-const planNameKey: Record<PlanId, "planFreeName" | "planProName" | "planBusinessName"> = {
-  free: "planFreeName",
-  pro: "planProName",
+const planNameKey: Record<PlanId, "planMarketName" | "planCxName" | "planBusinessName"> = {
+  market_research: "planMarketName",
+  customer_experience: "planCxName",
   business: "planBusinessName",
 };
 
@@ -69,7 +69,7 @@ export function BillingClient({
               <p className="text-xs text-ink-400">{t("billing.currentPlan")}</p>
               <p className="mt-1 flex items-center gap-2 text-lg font-semibold text-ink-900">
                 {dict.pricingPage[planNameKey[plan.id]]}
-                {plan.id !== "free" && <Badge tone="brand">{formatCurrency(plan.monthlyPrice, locale)}/mo</Badge>}
+                <Badge tone="brand">{plan.custom ? t("pricingPage.contactSales") : `${formatCurrency(plan.monthlyPrice as number, locale)}/mo`}</Badge>
               </p>
               <p className="mt-1 text-xs text-ink-400">
                 {t("billing.nextBillingDate")}: {formatDate(nextMonth(), locale)}
@@ -229,7 +229,9 @@ export function BillingClient({
               )}
             >
               <span className="text-sm font-medium text-ink-900">{dict.pricingPage[planNameKey[p.id]]}</span>
-              <span className="text-sm text-ink-500">{p.monthlyPrice === 0 ? t("pricingPage.ctaFree") : formatCurrency(p.monthlyPrice, locale) + "/mo"}</span>
+              <span className="text-sm text-ink-500">
+                {p.custom ? t("pricingPage.contactSales") : formatCurrency(p.monthlyPrice as number, locale) + "/mo"}
+              </span>
             </button>
           ))}
         </div>

@@ -8,8 +8,13 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import { BuildingIcon, UsersIcon, ListIcon, WalletIcon, CreditCardIcon, PlayIcon } from "@/components/icons";
+import { getPlanLabel } from "@/lib/pricing";
 
-const planTone: Record<string, "neutral" | "brand" | "success"> = { free: "neutral", pro: "brand", business: "success" };
+const planTone: Record<string, "neutral" | "brand" | "success"> = {
+  market_research: "neutral",
+  customer_experience: "brand",
+  business: "success",
+};
 const activityIcon = { signup: BuildingIcon, survey_published: PlayIcon, subscription: CreditCardIcon };
 
 export default async function AdminOverviewPage({ params }: { params: { locale: Locale } }) {
@@ -72,9 +77,7 @@ export default async function AdminOverviewPage({ params }: { params: { locale: 
           <CardContent className="space-y-3">
             {Object.entries(overview.planBreakdown).map(([plan, count]) => (
               <div key={plan} className="flex items-center justify-between">
-                <Badge tone={planTone[plan] ?? "neutral"} className="capitalize">
-                  {plan}
-                </Badge>
+                <Badge tone={planTone[plan] ?? "neutral"}>{getPlanLabel(plan)}</Badge>
                 <span className="text-sm font-semibold text-ink-900">{formatNumber(count, params.locale)}</span>
               </div>
             ))}

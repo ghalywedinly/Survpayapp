@@ -9,19 +9,19 @@ import { buttonClasses } from "@/components/ui/button";
 import { CheckIcon, ChevronDownIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
-const planNameKey: Record<string, "planFreeName" | "planProName" | "planBusinessName"> = {
-  free: "planFreeName",
-  pro: "planProName",
+const planNameKey: Record<string, "planMarketName" | "planCxName" | "planBusinessName"> = {
+  market_research: "planMarketName",
+  customer_experience: "planCxName",
   business: "planBusinessName",
 };
-const planFeaturesKey: Record<string, "planFreeFeatures" | "planProFeatures" | "planBusinessFeatures"> = {
-  free: "planFreeFeatures",
-  pro: "planProFeatures",
+const planFeaturesKey: Record<string, "planMarketFeatures" | "planCxFeatures" | "planBusinessFeatures"> = {
+  market_research: "planMarketFeatures",
+  customer_experience: "planCxFeatures",
   business: "planBusinessFeatures",
 };
-const planCtaKey: Record<string, "ctaFree" | "ctaPro" | "ctaBusiness"> = {
-  free: "ctaFree",
-  pro: "ctaPro",
+const planCtaKey: Record<string, "ctaMarket" | "ctaCx" | "ctaBusiness"> = {
+  market_research: "ctaMarket",
+  customer_experience: "ctaCx",
   business: "ctaBusiness",
 };
 
@@ -71,9 +71,9 @@ export function PricingTable() {
               <h3 className="text-lg font-semibold text-ink-900">{dict.pricingPage[planNameKey[plan.id]]}</h3>
               <div className="mt-4 flex items-baseline gap-1.5">
                 <span className="text-3xl font-semibold tracking-tight text-ink-900">
-                  {price === 0 ? formatCurrency(0, locale) : formatCurrency(price, locale)}
+                  {plan.custom ? t("pricingPage.contactSales") : formatCurrency(price as number, locale)}
                 </span>
-                {price > 0 && (
+                {!plan.custom && (
                   <span className="text-sm text-ink-400">{yearly ? t("pricingPage.perYear") : t("pricingPage.perMonth")}</span>
                 )}
               </div>
@@ -86,7 +86,7 @@ export function PricingTable() {
                 ))}
               </ul>
               <Link
-                href={`/${locale}/signup`}
+                href={plan.custom ? "mailto:sales@survpay.com?subject=SurvPay%20Business%20plan" : `/${locale}/signup`}
                 className={buttonClasses({
                   variant: plan.highlighted ? "primary" : "outline",
                   size: "lg",
