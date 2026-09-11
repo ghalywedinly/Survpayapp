@@ -1,15 +1,14 @@
 // RewardProvider abstraction — fulfills the incentive owed to a respondent
-// once their response is validated. Each reward type (cash, gift card,
-// coupon) is a separate provider implementation so a real regional payout
-// integration (e.g. mada, STC Pay, a gift-card aggregator) can be dropped in
-// per type without touching RewardService or the survey completion flow.
+// once their response is validated. SurvPay only ever rewards respondents
+// with a discount coupon code (never cash or a gift card) — kept as a
+// provider interface rather than inlined logic so a real coupon/voucher
+// aggregator integration can be dropped in without touching RewardService
+// or the survey completion flow.
 //
 //   RewardProvider
-//   ├── CashProvider
-//   ├── GiftCardProvider
 //   └── CouponProvider
 
-export type RewardType = "cash" | "gift_card" | "coupon";
+export type RewardType = "coupon";
 
 export interface RewardIssueRequest {
   amount: number;
@@ -23,11 +22,8 @@ export interface RewardIssueResult {
   /** Respondent-facing redemption instructions, safe to render in the UI. */
   redemptionNote: string;
   /**
-   * The machine-checkable code, set only by providers whose reward is
-   * redeemed by presenting a code (coupon today). Persisted to
-   * RewardTransaction.code, which the coupon-check tool looks up and marks
-   * redeemed exactly once. Cash/gift-card payouts leave this undefined —
-   * there's nothing for a merchant to validate in person.
+   * The machine-checkable coupon code. Persisted to RewardTransaction.code,
+   * which the coupon-check tool looks up and marks redeemed exactly once.
    */
   redemptionCode?: string;
 }

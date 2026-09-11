@@ -63,7 +63,7 @@ export default async function PublicSurveyPage({ params }: { params: { code: str
         enabled: survey.rewardConfig?.enabled ?? false,
         amount: survey.rewardConfig?.amount ?? 0,
         currency: survey.rewardConfig?.currency ?? "SAR",
-        rewardType: (survey.rewardConfig?.rewardType as "cash" | "gift_card" | "coupon") ?? "cash",
+        rewardType: "coupon" as const,
       }}
       questions={survey.questions.map((q) => ({
         id: q.id,

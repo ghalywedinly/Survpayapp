@@ -18,7 +18,7 @@ interface RewardConfigInfo {
   enabled: boolean;
   amount: number;
   currency: string;
-  rewardType: "cash" | "gift_card" | "coupon";
+  rewardType: "coupon";
 }
 
 export function PublicSurveyClient({
@@ -202,11 +202,7 @@ export function PublicSurveyClient({
                   <p className="mt-3 text-sm font-medium text-mint-content">
                     {rewardResult?.status === "completed" ? t("publicSurvey.rewardReady") : t("publicSurvey.rewardPending")}
                   </p>
-                  <p className="mt-1 text-xs text-mint-content">
-                    {reward.rewardType === "cash" && t("publicSurvey.redemptionCash")}
-                    {reward.rewardType === "gift_card" && t("publicSurvey.redemptionGiftCard")}
-                    {reward.rewardType === "coupon" && t("publicSurvey.redemptionCoupon")}
-                  </p>
+                  <p className="mt-1 text-xs text-mint-content">{t("publicSurvey.redemptionCoupon")}</p>
                   {rewardResult?.redemptionNote && (
                     <p className="mt-2 rounded-lg bg-surface px-3 py-2 font-mono text-xs text-ink-600">{rewardResult.redemptionNote}</p>
                   )}

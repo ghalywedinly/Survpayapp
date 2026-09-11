@@ -210,7 +210,7 @@ model RewardConfig {
   enabled         Boolean  @default(true)
   amount          Float    @default(0) // per valid response, in SAR
   currency        String   @default("SAR")
-  rewardType      String   @default("cash") // cash | gift_card | coupon
+  rewardType      String   @default("cash") // coupon — the only reward type SurvPay issues; always set explicitly on creation (see actions/surveys.ts), the DB default is legacy and no longer valid
   maxResponses    Int      @default(100)
   platformFeePct  Float    @default(0.08) // platform/service fee, fraction of budget
 }

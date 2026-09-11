@@ -31,7 +31,7 @@ export const plans: PlanDefinition[] = [
     features: [
       "Unlimited surveys",
       "All 12 question types & conditional logic",
-      "Cash & gift-card respondent rewards",
+      "Discount-coupon respondent rewards",
       "Response analytics & AI insights",
       "Research reports (PDF & Excel)",
       "Bilingual (Arabic RTL) by default",
@@ -46,7 +46,7 @@ export const plans: PlanDefinition[] = [
     responseLimit: "unlimited",
     features: [
       "Everything in Market Research and Surveys",
-      "Coupon & discount-code rewards + redemption tool",
+      "In-person coupon redemption & verification tool",
       "Team collaboration & roles",
       "Custom branding",
       "Budget tracking & automatic payout",

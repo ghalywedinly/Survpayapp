@@ -21,7 +21,7 @@ export interface WizardPayload {
     enabled: boolean;
     amount: number;
     currency: string;
-    rewardType: "cash" | "gift_card" | "coupon";
+    rewardType: "coupon";
     maxResponses: number;
   };
   settings: {
@@ -253,7 +253,7 @@ export async function updateSurveyQuestionsAction(locale: Locale, surveyId: stri
 export async function updateSurveyRewardAction(
   locale: Locale,
   surveyId: string,
-  reward: { enabled: boolean; amount: number; currency: string; rewardType: "cash" | "gift_card" | "coupon"; maxResponses: number }
+  reward: { enabled: boolean; amount: number; currency: string; rewardType: "coupon"; maxResponses: number }
 ) {
   const ctx = await requireOrgContext(locale);
   const survey = await db.survey.findFirst({ where: { id: surveyId, organizationId: ctx.organization.id } });

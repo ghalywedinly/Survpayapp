@@ -204,7 +204,7 @@ const surveyDefs = [
     estimatedMinutes: 6,
     status: "active",
     rewardAmount: 8,
-    rewardType: "cash",
+    rewardType: "coupon",
     maxResponses: 760,
     validTarget: 700,
     daysActive: 34,
@@ -289,7 +289,7 @@ const surveyDefs = [
     estimatedMinutes: 5,
     status: "active",
     rewardAmount: 12,
-    rewardType: "cash",
+    rewardType: "coupon",
     maxResponses: 610,
     validTarget: 560,
     daysActive: 21,
@@ -448,7 +448,7 @@ const surveyDefs = [
     estimatedMinutes: 7,
     status: "draft",
     rewardAmount: 15,
-    rewardType: "gift_card",
+    rewardType: "coupon",
     maxResponses: 300,
     validTarget: 0,
     daysActive: 0,
@@ -485,7 +485,7 @@ const surveyDefs = [
     estimatedMinutes: 5,
     status: "paused",
     rewardAmount: 5,
-    rewardType: "gift_card",
+    rewardType: "coupon",
     maxResponses: 460,
     validTarget: 270,
     daysActive: 15,
@@ -737,7 +737,7 @@ async function runSeedInner() {
           create: {
             responseLimit: null,
             anonymousResponses: true,
-            requireEmail: def.rewardType !== "cash" ? true : false,
+            requireEmail: true,
             preventDuplicates: true,
             captchaEnabled: true,
             collectFutureConsent: Math.random() > 0.5,
@@ -838,20 +838,19 @@ async function runSeedInner() {
         distributed += def.rewardAmount;
         rewardedCount += 1;
         rewardStatus = "completed";
-        const isCoupon = def.rewardType === "coupon";
-        const code = isCoupon ? generateCouponCode() : null;
+        const code = generateCouponCode();
         // Redeem a realistic slice of coupons up front so the coupon-check
         // tool has both states to show right after seeding, not just a
         // list of untouched codes.
-        const redeemed = isCoupon && Math.random() < 0.4;
+        const redeemed = Math.random() < 0.4;
         rewardTxBatch.push({
           budgetId: budget.id,
           responseId: respId,
           type: "reward",
           amount: def.rewardAmount,
           status: "completed",
-          provider: def.rewardType,
-          note: def.rewardType === "cash" ? "demo-cash-payout" : isCoupon ? code : `DEMO-GC-${Math.random().toString(36).slice(2, 10).toUpperCase()}`,
+          provider: "coupon",
+          note: code,
           code,
           // Redeemed sometime after it was issued (a customer doesn't
           // redeem a coupon before they earn it), never in the future.

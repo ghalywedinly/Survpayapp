@@ -8,7 +8,7 @@ import type { ClientQuestion } from "@/lib/question-types";
 import { createBlankQuestion, newId } from "@/lib/question-types";
 import { createSurveyAction, type WizardPayload } from "@/lib/actions/surveys";
 import { Card } from "@/components/ui/card";
-import { Input, Label, Textarea, Select } from "@/components/ui/input";
+import { Input, Label, Textarea } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { WizardStepper } from "./wizard-stepper";
@@ -28,7 +28,7 @@ const initialState: WizardState = {
   objective: "",
   estimatedMinutes: 5,
   questions: [],
-  reward: { enabled: true, amount: 10, currency: "SAR", rewardType: "cash", maxResponses: 200 },
+  reward: { enabled: true, amount: 10, currency: "SAR", rewardType: "coupon", maxResponses: 200 },
   settings: {
     responseLimit: null,
     startDate: null,
@@ -214,14 +214,7 @@ export function SurveyWizard() {
                   </div>
                   <div>
                     <Label>{t("wizard.rewardType")}</Label>
-                    <Select
-                      value={state.reward.rewardType}
-                      onChange={(e) => setState((s) => ({ ...s, reward: { ...s.reward, rewardType: e.target.value as typeof s.reward.rewardType } }))}
-                    >
-                      <option value="cash">{t("wizard.rewardTypeCash")}</option>
-                      <option value="gift_card">{t("wizard.rewardTypeGiftCard")}</option>
-                      <option value="coupon">{t("wizard.rewardTypeCoupon")}</option>
-                    </Select>
+                    <p className="mt-2 text-sm text-ink-600">{t("wizard.rewardTypeCoupon")}</p>
                   </div>
                   <div>
                     <Label>{t("wizard.maxResponses")}</Label>

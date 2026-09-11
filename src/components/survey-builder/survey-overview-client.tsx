@@ -13,7 +13,7 @@ import {
   setSurveyStatusAction,
 } from "@/lib/actions/surveys";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input, Label, Textarea, Select } from "@/components/ui/input";
+import { Input, Label, Textarea } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
@@ -22,7 +22,7 @@ interface Props {
   surveyId: string;
   status: string;
   basics: { title: string; titleAr: string; description: string; descriptionAr: string; objective: string; estimatedMinutes: number };
-  reward: { enabled: boolean; amount: number; currency: string; rewardType: "cash" | "gift_card" | "coupon"; maxResponses: number };
+  reward: { enabled: boolean; amount: number; currency: string; rewardType: "coupon"; maxResponses: number };
   settings: {
     responseLimit: number | null;
     startDate: string | null;
@@ -167,11 +167,7 @@ export function SurveyOverviewClient({ surveyId, status, basics: initBasics, rew
               </div>
               <div>
                 <Label>{t("wizard.rewardType")}</Label>
-                <Select value={reward.rewardType} onChange={(e) => setReward((r) => ({ ...r, rewardType: e.target.value as typeof r.rewardType }))}>
-                  <option value="cash">{t("wizard.rewardTypeCash")}</option>
-                  <option value="gift_card">{t("wizard.rewardTypeGiftCard")}</option>
-                  <option value="coupon">{t("wizard.rewardTypeCoupon")}</option>
-                </Select>
+                <p className="mt-2 text-sm text-ink-600">{t("wizard.rewardTypeCoupon")}</p>
               </div>
               <div>
                 <Label>{t("wizard.maxResponses")}</Label>

@@ -4,33 +4,9 @@ function ref(prefix: string) {
   return `${prefix}_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
 }
 
-// Demo/mock implementations. In production these call a licensed payout
-// provider; today they simulate the same async, provider-ref-bearing shape
-// so the rest of the app never needs to change when a real one is wired in.
-
-export class CashProvider implements RewardProvider {
-  readonly type = "cash" as const;
-  async issue(req: RewardIssueRequest): Promise<RewardIssueResult> {
-    await delay();
-    return {
-      status: "completed",
-      providerRef: ref("cash"),
-      redemptionNote: "demo-cash-payout",
-    };
-  }
-}
-
-export class GiftCardProvider implements RewardProvider {
-  readonly type = "gift_card" as const;
-  async issue(req: RewardIssueRequest): Promise<RewardIssueResult> {
-    await delay();
-    return {
-      status: "completed",
-      providerRef: ref("gc"),
-      redemptionNote: `DEMO-GC-${Math.random().toString(36).slice(2, 10).toUpperCase()}`,
-    };
-  }
-}
+// Demo implementation. In production this would call a real coupon/voucher
+// issuing integration; today it generates the same shape of code so the
+// rest of the app never needs to change when a real one is wired in.
 
 // Alphabet with visually-ambiguous characters (0/O, 1/I/L) removed — these
 // codes get read aloud or typed in by hand at a checkout counter.
@@ -61,7 +37,5 @@ function delay() {
 }
 
 export const rewardProviders: Record<string, RewardProvider> = {
-  cash: new CashProvider(),
-  gift_card: new GiftCardProvider(),
   coupon: new CouponProvider(),
 };

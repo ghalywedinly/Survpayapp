@@ -34,7 +34,7 @@ export const RewardService = {
 
     await db.surveyResponse.update({ where: { id: responseId }, data: { rewardStatus: "processing" } });
 
-    const provider = rewardProviders[rewardConfig.rewardType] ?? rewardProviders.cash;
+    const provider = rewardProviders[rewardConfig.rewardType] ?? rewardProviders.coupon;
     const result = await provider.issue({
       amount: rewardConfig.amount,
       currency: rewardConfig.currency,

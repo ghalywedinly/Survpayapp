@@ -52,7 +52,7 @@ export default async function SurveyOverviewPage({ params }: { params: { locale:
               enabled: survey.rewardConfig?.enabled ?? false,
               amount: survey.rewardConfig?.amount ?? 10,
               currency: survey.rewardConfig?.currency ?? "SAR",
-              rewardType: (survey.rewardConfig?.rewardType as "cash" | "gift_card" | "coupon") ?? "cash",
+              rewardType: "coupon" as const,
               maxResponses: survey.rewardConfig?.maxResponses ?? 100,
             }}
             settings={{
