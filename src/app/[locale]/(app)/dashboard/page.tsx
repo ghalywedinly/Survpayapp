@@ -3,7 +3,7 @@ import { requireOrgContext } from "@/lib/auth/guards";
 import { AnalyticsService } from "@/lib/services/analytics-service";
 import { SurveyService } from "@/lib/services/survey-service";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
-import { formatCurrency, formatDate, formatPercent } from "@/lib/format";
+import { formatCurrency, formatDate, formatPercent, formatNumber } from "@/lib/format";
 import type { Locale } from "@/lib/i18n/config";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { StatCard } from "@/components/ui/stat-card";
@@ -70,7 +70,7 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
             <StatCard
               icon={<UsersIcon className="h-[18px] w-[18px]" />}
               label={dict.dashboard.metricTotalResponses}
-              value={metrics.totalResponses.toLocaleString(params.locale === "ar" ? "ar-SA" : "en-US")}
+              value={formatNumber(metrics.totalResponses, params.locale)}
             />
             <StatCard
               icon={<WalletIcon className="h-[18px] w-[18px]" />}

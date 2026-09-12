@@ -1,11 +1,15 @@
 import type { Locale } from "./i18n/config";
 
-// "ar-SA" alone defaults to the Hijri (Umm al-Qura) calendar in ICU/CLDR —
-// the "-u-ca-gregory" extension pins every date-related Intl call below to
-// the Gregorian calendar (survey/reward dates throughout the app are always
-// Gregorian). No effect on the number/currency/percent formatters, which
-// don't use a calendar.
-const intlLocale: Record<Locale, string> = { en: "en-US", ar: "ar-SA-u-ca-gregory" };
+// "ar-SA" alone defaults to two things this app doesn't want:
+//   -u-ca-gregory — pins the calendar to Gregorian; plain "ar-SA" defaults to
+//     Hijri (Umm al-Qura), so every date would otherwise render in the
+//     Islamic calendar (survey/reward dates here are always Gregorian).
+//   -u-nu-latn — pins the numbering system to Western/decimal digits
+//     (0-9); plain "ar-SA" defaults to Eastern Arabic-Indic digits (٠-٩),
+//     which this app doesn't use anywhere in its Arabic UI.
+// Neither extension affects the other kind of formatting, so both are safe
+// to apply across formatCurrency/formatNumber/formatPercent/formatDate.
+const intlLocale: Record<Locale, string> = { en: "en-US", ar: "ar-SA-u-ca-gregory-nu-latn" };
 
 export function formatCurrency(amount: number, locale: Locale, currency = "SAR") {
   return new Intl.NumberFormat(intlLocale[locale], {

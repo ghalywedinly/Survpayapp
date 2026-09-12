@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useI18n } from "@/lib/i18n/provider";
-import { formatCurrency } from "@/lib/format";
+import { formatCurrency, formatNumber } from "@/lib/format";
 import { platformFeePct } from "@/lib/pricing";
 import { WalletIcon } from "@/components/icons";
 
@@ -54,7 +54,7 @@ export function RewardShowcase() {
             <div>
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-[#c3c9d4] dark:text-[#3b4356]">{t("marketing.rewardLabelMax")}</label>
-                <span className="text-sm font-semibold text-white dark:text-[#12151e]">{maxResponses.toLocaleString(locale === "ar" ? "ar-SA" : "en-US")}</span>
+                <span className="text-sm font-semibold text-white dark:text-[#12151e]">{formatNumber(maxResponses, locale)}</span>
               </div>
               <input
                 type="range"
