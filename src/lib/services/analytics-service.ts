@@ -114,6 +114,68 @@ export const AnalyticsService = {
     };
   },
 
+  async getResponseQuality(surveyId: string) {
+    const rows = await db.surveyResponse.groupBy({ by: ["status"], where: { surveyId }, _count: { _all: true } });
+    const byStatus = Object.fromEntries(rows.map((r) => [r.status, r._count._all])) as Record<string, number>;
+    const total = rows.reduce((sum, r) => sum + r._count._all, 0);
+    return {
+      total,
+      valid: byStatus.valid ?? 0,
+      flagged: byStatus.flagged ?? 0,
+      rejected: byStatus.rejected ?? 0,
+      pending: byStatus.pending ?? 0,
+    };
+  },
+
+  async getSurveyBreakdowns(surveyId: string, topCountriesLimit = 5) {
+    const [deviceRows, sourceRows, countryRows] = await Promise.all([
+      db.surveyResponse.groupBy({ by: ["device"], where: { surveyId }, _count: { _all: true } }),
+      db.surveyResponse.groupBy({ by: ["source"], where: { surveyId }, _count: { _all: true } }),
+      db.surveyResponse.groupBy({ by: ["country"], where: { surveyId, country: { not: null } }, _count: { _all: true } }),
+    ]);
+    const toRows = <T extends { _count: { _all: number } }>(rows: T[], keyOf: (r: T) => string | null) => {
+      const total = rows.reduce((s, r) => s + r._count._all, 0) || 1;
+      return rows
+        .map((r) => ({ key: keyOf(r) ?? "unknown", count: r._count._all, pct: Math.round((r._count._all / total) * 1000) / 10 }))
+        .sort((a, b) => b.count - a.count);
+    };
+    return {
+      devices: toRows(deviceRows, (r) => r.device),
+      sources: toRows(sourceRows, (r) => r.source),
+      countries: toRows(countryRows, (r) => r.country).slice(0, topCountriesLimit),
+    };
+  },
+
+  /**
+   * Buckets response volume across the survey's own life span (published →
+   * now, or → its last response) rather than a fixed rolling calendar
+   * window — a closed survey from months ago still shows its real history
+   * instead of going empty once "now" drifts past a hardcoded last-N-days
+   * cutoff. Daily buckets up to 30 points; beyond that, buckets widen so the
+   * chart never renders more than ~30 points.
+   */
+  async responsesOverTimeForSurvey(surveyId: string) {
+    const survey = await db.survey.findUnique({ where: { id: surveyId }, select: { publishedAt: true, createdAt: true } });
+    const start = survey?.publishedAt ?? survey?.createdAt ?? new Date();
+    const responses = await db.surveyResponse.findMany({ where: { surveyId, createdAt: { gte: start } }, select: { createdAt: true } });
+
+    const now = new Date();
+    const totalDays = Math.max(1, Math.ceil((now.getTime() - start.getTime()) / 86_400_000) + 1);
+    const bucketDays = totalDays <= 30 ? 1 : Math.ceil(totalDays / 30);
+    const bucketMs = bucketDays * 86_400_000;
+    const bucketCount = Math.ceil(totalDays / bucketDays);
+
+    const counts = new Array<number>(bucketCount).fill(0);
+    for (const r of responses) {
+      const idx = Math.min(bucketCount - 1, Math.floor((r.createdAt.getTime() - start.getTime()) / bucketMs));
+      if (idx >= 0) counts[idx] += 1;
+    }
+    return Array.from({ length: bucketCount }, (_, i) => ({
+      date: new Date(start.getTime() + i * bucketMs).toISOString().slice(0, 10),
+      count: counts[i],
+    }));
+  },
+
   async getQuestionBreakdown(surveyId: string, filter?: { questionId: string; value: string }) {
     let allowedResponseIds: Set<string> | null = null;
     if (filter) {
@@ -165,7 +227,22 @@ export const AnalyticsService = {
         const distribution = Array.from(counts.entries())
           .sort((a, b) => a[0] - b[0])
           .map(([value, count]) => ({ label: String(value), labelAr: String(value), count, pct: nums.length ? Math.round((count / nums.length) * 1000) / 10 : 0 }));
-        return { question: q, kind: "numeric" as const, average: Math.round(avg * 100) / 100, distribution, responseCount: values.length };
+
+        // NPS reads as a bare 0-10 average tells a researcher almost nothing —
+        // the standard read is the promoter/passive/detractor split and the
+        // -100..+100 score derived from it.
+        let nps: { score: number; promoterPct: number; passivePct: number; detractorPct: number } | undefined;
+        if (q.type === "nps" && nums.length) {
+          const promoters = nums.filter((n) => n >= 9).length;
+          const detractors = nums.filter((n) => n <= 6).length;
+          const passives = nums.length - promoters - detractors;
+          const promoterPct = Math.round((promoters / nums.length) * 1000) / 10;
+          const detractorPct = Math.round((detractors / nums.length) * 1000) / 10;
+          const passivePct = Math.round((passives / nums.length) * 1000) / 10;
+          nps = { score: Math.round(promoterPct - detractorPct), promoterPct, passivePct, detractorPct };
+        }
+
+        return { question: q, kind: "numeric" as const, average: Math.round(avg * 100) / 100, distribution, nps, responseCount: values.length };
       }
 
       // text types

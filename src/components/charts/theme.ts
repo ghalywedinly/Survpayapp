@@ -33,6 +33,16 @@ export function getCategoricalPalette(isDark: boolean) {
   return ["#8a7bff", "#22d3ee", "#3ecf8e", "#fbbf35", "#f472b6", "#9aa3b2"];
 }
 
+// Reserved status hues (response quality, NPS segments) — kept separate from
+// the categorical palette above and pinned to the exact same RGB values as
+// Badge's success/warning/danger tones (see globals.css --mint-content /
+// --amber-content / --danger-content) so a chart segment and its matching
+// badge elsewhere on the page always read as the same color.
+export function getStatusColors(isDark: boolean) {
+  if (!isDark) return { good: "#12744c", warning: "#d6870a", critical: "#dc2626", neutral: "#94a3b8" };
+  return { good: "#78e5b0", warning: "#fbbf35", critical: "#f87171", neutral: "#8a93a6" };
+}
+
 export function getTooltipStyle(isDark: boolean) {
   return {
     borderRadius: 12,

@@ -3,6 +3,8 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { getCategoricalPalette, getTooltipStyle } from "./theme";
 import { useTheme } from "@/lib/theme/provider";
+import { useI18n } from "@/lib/i18n/provider";
+import { formatNumber } from "@/lib/format";
 
 export function DonutChart({
   data,
@@ -12,6 +14,7 @@ export function DonutChart({
   size?: number;
 }) {
   const { theme } = useTheme();
+  const { locale } = useI18n();
   const palette = getCategoricalPalette(theme === "dark");
   const total = data.reduce((s, d) => s + d.value, 0);
   return (
@@ -27,7 +30,7 @@ export function DonutChart({
         </PieChart>
       </ResponsiveContainer>
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-xl font-semibold text-ink-900">{total.toLocaleString()}</span>
+        <span className="text-xl font-semibold text-ink-900">{formatNumber(total, locale)}</span>
       </div>
     </div>
   );
