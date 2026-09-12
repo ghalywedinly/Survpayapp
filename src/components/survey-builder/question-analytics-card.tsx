@@ -49,19 +49,36 @@ export function QuestionAnalyticsCard({ item }: { item: QuestionBreakdownItem })
                     <span className="text-ink-400"> · {topAnswer.pct}%</span>
                   </p>
                 )}
-                <ResponsiveContainer width="100%" height={Math.max(120, item.distribution.length * 38)}>
-                  <BarChart
-                    data={item.distribution.map((d) => ({ label: locale === "ar" ? d.labelAr : d.label, value: d.count, pct: d.pct }))}
-                    layout="vertical"
-                    margin={{ left: 0, right: 28 }}
-                  >
-                    <CartesianGrid horizontal={false} stroke={chartColors.grid} />
-                    <XAxis type="number" hide />
-                    <YAxis type="category" dataKey="label" width={140} tick={{ fontSize: 12, fill: chartColors.ink }} axisLine={false} tickLine={false} />
-                    <Tooltip contentStyle={getTooltipStyle(isDark)} formatter={(v: number, _n, p) => [`${v} (${p.payload.pct}%)`, ""]} />
-                    <Bar dataKey="value" radius={[0, 6, 6, 0]} fill={categoricalPalette[0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+                {/* dir="ltr": Recharts assumes an LTR coordinate system internally and
+                    doesn't support RTL — inheriting the page's dir="rtl" flips the SVG
+                    text-anchor math for Arabic tick labels and renders them off-canvas
+                    (invisible). Forcing ltr here fixes that; the mirroring itself for
+                    Arabic reading direction (axis on the right, bars growing right→left)
+                    is done deliberately below via orientation/reversed/radius, not by
+                    inheritance. */}
+                <div dir="ltr">
+                  <ResponsiveContainer width="100%" height={Math.max(120, item.distribution.length * 38)}>
+                    <BarChart
+                      data={item.distribution.map((d) => ({ label: locale === "ar" ? d.labelAr : d.label, value: d.count, pct: d.pct }))}
+                      layout="vertical"
+                      margin={locale === "ar" ? { left: 28, right: 0 } : { left: 0, right: 28 }}
+                    >
+                      <CartesianGrid horizontal={false} stroke={chartColors.grid} />
+                      <XAxis type="number" hide reversed={locale === "ar"} />
+                      <YAxis
+                        type="category"
+                        dataKey="label"
+                        width={140}
+                        orientation={locale === "ar" ? "right" : "left"}
+                        tick={{ fontSize: 12, fill: chartColors.ink }}
+                        axisLine={false}
+                        tickLine={false}
+                      />
+                      <Tooltip contentStyle={getTooltipStyle(isDark)} formatter={(v: number, _n, p) => [`${v} (${p.payload.pct}%)`, ""]} />
+                      <Bar dataKey="value" radius={locale === "ar" ? [6, 0, 0, 6] : [0, 6, 6, 0]} fill={categoricalPalette[0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
             )}
 
@@ -100,11 +117,14 @@ export function QuestionAnalyticsCard({ item }: { item: QuestionBreakdownItem })
                   <span className="text-sm text-ink-400">{t("analyticsPage.average")}</span>
                 </div>
                 {item.distribution && item.distribution.length > 0 && (
-                  <div className="mt-3">
+                  <div className="mt-3" dir="ltr">
                     <ResponsiveContainer width="100%" height={110}>
-                      <BarChart data={item.distribution.map((d) => ({ label: d.label, value: d.count, pct: d.pct }))} margin={{ left: -20, right: 8 }}>
+                      <BarChart
+                        data={item.distribution.map((d) => ({ label: locale === "ar" ? d.labelAr : d.label, value: d.count, pct: d.pct }))}
+                        margin={{ left: -20, right: 8 }}
+                      >
                         <CartesianGrid vertical={false} stroke={chartColors.grid} />
-                        <XAxis dataKey="label" tick={{ fontSize: 11, fill: chartColors.ink }} axisLine={false} tickLine={false} />
+                        <XAxis dataKey="label" reversed={locale === "ar"} tick={{ fontSize: 11, fill: chartColors.ink }} axisLine={false} tickLine={false} />
                         <YAxis hide />
                         <Tooltip contentStyle={getTooltipStyle(isDark)} formatter={(v: number, _n, p) => [`${v} (${p.payload.pct}%)`, ""]} />
                         <Bar dataKey="value" radius={[4, 4, 0, 0]} fill={categoricalPalette[0]} />
