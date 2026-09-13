@@ -14,10 +14,10 @@ export function MarketingNav() {
   const [open, setOpen] = useState(false);
 
   const links = [
-    { href: `/${locale}/features`, label: t("nav.features") },
-    { href: `/${locale}/how-it-works`, label: t("nav.howItWorks") },
+    { href: `/${locale}#how-it-works`, label: t("nav.product") },
+    { href: `/${locale}#solutions`, label: t("nav.solutions") },
+    { href: `/${locale}#features`, label: t("nav.features") },
     { href: `/${locale}/pricing`, label: t("nav.pricing") },
-    { href: `/${locale}/resources`, label: t("nav.resources") },
   ];
 
   return (

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, IBM_Plex_Sans_Arabic } from "next/font/google";
+import { Inter, Tajawal } from "next/font/google";
 import { notFound } from "next/navigation";
 import { isLocale, localeMeta, locales, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
@@ -9,9 +9,9 @@ import { ThemeProvider, ThemeScript } from "@/lib/theme/provider";
 import "../globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const arabic = IBM_Plex_Sans_Arabic({
+const arabic = Tajawal({
   subsets: ["arabic"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500", "700", "800"],
   variable: "--font-arabic",
   display: "swap",
 });
@@ -20,12 +20,20 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-export const metadata: Metadata = {
-  title: "SurvPay — Create surveys. Reward responses. Get insights.",
-  description:
-    "SurvPay is the bilingual survey and respondent-rewards platform for researchers, universities and product teams across Saudi Arabia and the GCC.",
-  icons: { icon: "/favicon.svg", apple: "/apple-touch-icon.png" },
-};
+export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
+  const locale = isLocale(params.locale) ? params.locale : "en";
+  const title =
+    locale === "ar" ? "Survpay | منصة آراء العملاء والاستبيانات للشركات" : "Survpay | Customer Feedback & Survey Platform";
+  const description =
+    locale === "ar"
+      ? "يساعد Survpay الشركات السعودية — المطاعم والمقاهي والمتاجر والعيادات — على جمع آراء العملاء عبر الاستبيانات ورموز QR، وفهم عملائها، والتحسين."
+      : "Survpay helps Saudi businesses — restaurants, cafés, retail and clinics — collect customer feedback through surveys and QR codes, understand their customers, and improve.";
+  return {
+    title,
+    description,
+    icons: { icon: "/favicon.svg", apple: "/apple-touch-icon.png" },
+  };
+}
 
 export default function LocaleLayout({
   children,

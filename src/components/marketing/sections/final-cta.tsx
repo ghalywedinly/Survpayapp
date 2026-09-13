@@ -13,15 +13,13 @@ export function FinalCta({ locale }: { locale: Locale }) {
       <div className="mx-auto max-w-4xl px-6 text-center">
         <h2 className="text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">{t.finalCtaTitle}</h2>
         <p className="mt-4 text-lg text-ink-500">{t.finalCtaSubtitle}</p>
-        <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+        <div className="mt-8 flex justify-center">
           <Link href={`/${locale}/signup`} className={buttonClasses({ size: "lg", className: "gap-2" })}>
             {t.finalCtaPrimary}
             <ArrowRightIcon className="h-4 w-4 rtl:rotate-180" />
           </Link>
-          <Link href={`/${locale}/resources`} className={buttonClasses({ variant: "outline", size: "lg" })}>
-            {t.finalCtaSecondary}
-          </Link>
         </div>
+        <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-brand-content">{t.finalCtaClosing}</p>
       </div>
     </section>
   );

@@ -1,7 +1,7 @@
 import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { Features } from "@/components/marketing/sections/features";
-import { RewardShowcase } from "@/components/marketing/sections/reward-showcase";
+import { CouponShowcase } from "@/components/marketing/sections/coupon-showcase";
 import { AnalyticsShowcase } from "@/components/marketing/sections/analytics-showcase";
 import { FinalCta } from "@/components/marketing/sections/final-cta";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
@@ -10,7 +10,7 @@ import {
   LayersIcon,
   TargetIcon,
   FileTextIcon,
-  ShieldIcon,
+  SparklesIcon,
 } from "@/components/icons";
 
 const questionTypes = [
@@ -67,7 +67,7 @@ export default function FeaturesPage({ params }: { params: { locale: Locale } })
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-mint-50 text-mint-content">
                   <TargetIcon className="h-5 w-5" />
                 </div>
-                <h3 className="mt-4 text-lg font-semibold text-ink-900">{dict.marketing.feature5Title}</h3>
+                <h3 className="mt-4 text-lg font-semibold text-ink-900">{dict.wizard.step4Title}</h3>
                 <ul className="mt-4 space-y-2 text-sm text-ink-600">
                   <li>• {dict.wizard.responseLimit}</li>
                   <li>• {dict.wizard.preventDuplicates}</li>
@@ -86,7 +86,7 @@ export default function FeaturesPage({ params }: { params: { locale: Locale } })
 
               <div className="rounded-2xl border border-ink-200/70 p-8 shadow-soft">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-content">
-                  <ShieldIcon className="h-5 w-5" />
+                  <SparklesIcon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 text-lg font-semibold text-ink-900">{dict.marketing.trust1Title}</h3>
                 <p className="mt-3 text-sm text-ink-500">{dict.marketing.trust1Desc}</p>
@@ -95,7 +95,7 @@ export default function FeaturesPage({ params }: { params: { locale: Locale } })
           </div>
         </section>
 
-        <RewardShowcase />
+        <CouponShowcase locale={params.locale} />
         <AnalyticsShowcase locale={params.locale} />
         <FinalCta locale={params.locale} />
       </main>

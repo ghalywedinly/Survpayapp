@@ -2,7 +2,7 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/config";
 import { MiniAreaChart } from "@/components/charts/mini-area-chart";
 import { Logo } from "@/components/brand/logo";
-import { BarChartIcon, UsersIcon, WalletIcon, TrendingUpIcon } from "@/components/icons";
+import { BarChartIcon, UsersIcon, CheckCircleIcon, TrendingUpIcon, QrIcon, ArrowRightIcon } from "@/components/icons";
 
 const chartData = [
   { label: "20", value: 210 },
@@ -21,7 +21,7 @@ export function HeroMockup({ locale }: { locale: Locale }) {
   const tiles = [
     { icon: <BarChartIcon className="h-4 w-4" />, label: dict.dashboard.metricActiveSurveys, value: "6" },
     { icon: <UsersIcon className="h-4 w-4" />, label: dict.dashboard.metricTotalResponses, value: "4,152" },
-    { icon: <WalletIcon className="h-4 w-4" />, label: dict.dashboard.metricRewardsDistributed, value: "SAR 18,420" },
+    { icon: <CheckCircleIcon className="h-4 w-4" />, label: dict.marketing.analyticsMetric1Label, value: "87%" },
     { icon: <TrendingUpIcon className="h-4 w-4" />, label: dict.dashboard.metricCompletionRate, value: "78.4%" },
   ];
 
@@ -34,6 +34,19 @@ export function HeroMockup({ locale }: { locale: Locale }) {
           <div className="h-2 w-2 rounded-full bg-amber-400" />
           <div className="h-2 w-2 rounded-full bg-mint-400" />
         </div>
+      </div>
+
+      <div className="mt-4 flex items-center justify-between gap-2 rounded-xl border border-ink-100 bg-ink-50/50 p-3 text-[11px] font-medium text-ink-500">
+        <span className="flex items-center gap-1.5">
+          <QrIcon className="h-3.5 w-3.5 text-brand-content" />
+          {dict.marketing.qrStep1}
+        </span>
+        <ArrowRightIcon className="h-3 w-3 shrink-0 text-ink-300 rtl:rotate-180" />
+        <span>{dict.marketing.qrStep2}</span>
+        <ArrowRightIcon className="h-3 w-3 shrink-0 text-ink-300 rtl:rotate-180" />
+        <span>{dict.dashboard.metricTotalResponses}</span>
+        <ArrowRightIcon className="h-3 w-3 shrink-0 text-ink-300 rtl:rotate-180" />
+        <span className="text-ink-900">{dict.nav.dashboard}</span>
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">

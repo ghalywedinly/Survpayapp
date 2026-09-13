@@ -1,13 +1,13 @@
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/config";
-import { ShieldIcon, EyeIcon, CheckCircleIcon, GlobeIcon } from "@/components/icons";
+import { SparklesIcon, EyeIcon, CheckCircleIcon, GlobeIcon } from "@/components/icons";
 
 export function Trust({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale);
   const t = dict.marketing;
 
   const items = [
-    { icon: ShieldIcon, title: t.trust1Title, desc: t.trust1Desc },
+    { icon: SparklesIcon, title: t.trust1Title, desc: t.trust1Desc },
     { icon: EyeIcon, title: t.trust2Title, desc: t.trust2Desc },
     { icon: CheckCircleIcon, title: t.trust3Title, desc: t.trust3Desc },
     { icon: GlobeIcon, title: t.trust4Title, desc: t.trust4Desc },

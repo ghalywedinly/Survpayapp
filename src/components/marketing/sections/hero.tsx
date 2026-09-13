@@ -27,7 +27,7 @@ export function Hero({ locale }: { locale: Locale }) {
               {t.heroCtaPrimary}
               <ArrowRightIcon className="h-4 w-4 rtl:rotate-180" />
             </Link>
-            <Link href={`/${locale}/how-it-works`} className={buttonClasses({ variant: "outline", size: "lg" })}>
+            <Link href={`/${locale}#how-it-works`} className={buttonClasses({ variant: "outline", size: "lg" })}>
               {t.heroCtaSecondary}
             </Link>
           </div>
