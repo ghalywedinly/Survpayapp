@@ -10,7 +10,7 @@ export function QrFeedback({ locale }: { locale: Locale }) {
   const descs = [t.qrStep1Desc, t.qrStep2Desc, t.qrStep3Desc];
 
   return (
-    <section className="border-t border-ink-100 bg-ink-50/40 py-20 sm:py-28">
+    <section className="bg-ink-50/40 py-20 sm:py-28">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
         <div>
           <p className="text-sm font-semibold uppercase tracking-wide text-brand-content">{t.qrEyebrow}</p>

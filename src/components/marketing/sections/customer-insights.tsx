@@ -96,7 +96,7 @@ export function CustomerInsightsSection({ locale }: { locale: Locale }) {
   };
 
   return (
-    <section className="relative overflow-hidden border-t border-ink-100 bg-surface py-20 sm:py-28 lg:py-32">
+    <section className="relative overflow-hidden bg-surface py-20 sm:py-28 lg:py-32">
       {/* Decorative brand motif: a faint flowing "S" curve echoing the logo's
           geometry, plus a soft radial wash in the brand hues — purely
           ambient, never a literal redraw of the mark. */}

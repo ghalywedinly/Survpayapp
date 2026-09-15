@@ -16,7 +16,7 @@ export function Features({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section id="features" className="border-t border-ink-100 bg-ink-50/40 py-20 sm:py-28">
+    <section id="features" className="bg-ink-50/40 py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-6">
         <p className="text-sm font-semibold uppercase tracking-wide text-brand-content">{t.featuresEyebrow}</p>
         <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">{t.featuresTitle}</h2>

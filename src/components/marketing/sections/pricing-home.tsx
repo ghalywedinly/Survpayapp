@@ -17,7 +17,7 @@ export function PricingHome({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="border-t border-ink-100 bg-surface py-20 sm:py-28">
+    <section className="bg-surface py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-semibold uppercase tracking-wide text-brand-content">{t.pricingHomeEyebrow}</p>

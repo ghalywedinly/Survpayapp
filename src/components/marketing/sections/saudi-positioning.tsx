@@ -14,7 +14,7 @@ export function SaudiPositioning({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="border-t border-ink-100 bg-brand-wash py-20 sm:py-28">
+    <section className="bg-brand-wash py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-6 text-center">
         <p className="text-sm font-semibold uppercase tracking-wide text-brand-content">{t.saudiEyebrow}</p>
         <h2 className="mx-auto mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">{t.saudiTitle}</h2>

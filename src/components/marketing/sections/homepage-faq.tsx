@@ -10,7 +10,7 @@ export function HomepageFaq() {
   const keys = ["homepageFaq1", "homepageFaq2", "homepageFaq3", "homepageFaq4", "homepageFaq5", "homepageFaq6", "homepageFaq7", "homepageFaq8"];
 
   return (
-    <section id="faq" className="border-t border-ink-100 bg-ink-50/40 py-20 sm:py-28">
+    <section id="faq" className="bg-ink-50/40 py-20 sm:py-28">
       <div className="mx-auto max-w-3xl px-6">
         <h2 className="text-center text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">
           {t("marketing.homepageFaqTitle")}

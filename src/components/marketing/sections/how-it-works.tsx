@@ -14,7 +14,7 @@ export function HowItWorks({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section id="how-it-works" className="border-t border-ink-100 bg-surface py-20 sm:py-28">
+    <section id="how-it-works" className="bg-surface py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-6">
         <div className="max-w-2xl">
           <h2 className="text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">{t.howItWorksTitle}</h2>
