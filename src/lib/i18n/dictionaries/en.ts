@@ -82,6 +82,7 @@ const en = {
     heroCtaPrimary: "Get started",
     heroCtaSecondary: "See how it works",
     heroNote: "🇸🇦 Built for Saudi businesses · Arabic & English",
+    heroImageAlt: "A café team member handing a customer their order, with a Survpay QR feedback code on the counter",
     trustedBy: "Trusted by businesses across Saudi Arabia",
 
     problemEyebrow: "The problem",

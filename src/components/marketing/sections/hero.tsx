@@ -2,8 +2,7 @@ import Link from "next/link";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/config";
 import { buttonClasses } from "@/components/ui/button";
-import { ArrowRightIcon, SparklesIcon } from "@/components/icons";
-import { HeroMockup } from "./hero-mockup";
+import { ArrowRightIcon, SparklesIcon, CheckCircleIcon } from "@/components/icons";
 
 export function Hero({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale);
@@ -34,8 +33,21 @@ export function Hero({ locale }: { locale: Locale }) {
           <p className="mt-4 text-xs text-ink-400">{t.heroNote}</p>
         </div>
 
-        <div className="animate-fade-in lg:pl-6">
-          <HeroMockup locale={locale} />
+        <div className="relative animate-fade-in pb-8 lg:pb-0 lg:pl-6">
+          <img
+            src="/images/hero-cafe.webp"
+            alt={t.heroImageAlt}
+            className="aspect-[16/9] w-full rounded-2xl border border-ink-200/70 object-cover shadow-pop"
+          />
+          <div className="absolute -bottom-2 start-6 flex items-center gap-3 rounded-2xl border border-ink-200/70 bg-surface px-4 py-3 shadow-card lg:-bottom-6">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-mint-50 text-mint-content">
+              <CheckCircleIcon className="h-[18px] w-[18px]" />
+            </div>
+            <div>
+              <p className="text-lg font-semibold leading-none text-ink-900">87%</p>
+              <p className="mt-1 text-xs text-ink-500">{t.analyticsMetric1Label}</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

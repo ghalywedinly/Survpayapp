@@ -84,6 +84,7 @@ const ar: Dictionary = {
     heroCtaPrimary: "ابدأ الآن",
     heroCtaSecondary: "شاهد كيف يعمل",
     heroNote: "🇸🇦 مصمم للأعمال السعودية · عربي وإنجليزي",
+    heroImageAlt: "موظف في مقهى يسلّم طلب عميل، مع رمز QR لتقييم Survpay على الطاولة",
     trustedBy: "موثوق من أعمال في جميع أنحاء السعودية",
 
     problemEyebrow: "المشكلة",
