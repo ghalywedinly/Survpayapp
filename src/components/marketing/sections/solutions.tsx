@@ -31,7 +31,7 @@ export function Solutions({ locale }: { locale: Locale }) {
     <section id="solutions" className="bg-ink-50/40 py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-6">
         <p className="text-sm font-semibold uppercase tracking-wide text-brand-content">{t.solutionsEyebrow}</p>
-        <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">{t.solutionsTitle}</h2>
+        <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl">{t.solutionsTitle}</h2>
 
         <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2">
           {cards.map((c) => (

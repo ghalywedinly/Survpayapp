@@ -2,7 +2,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 type Variant = "primary" | "secondary" | "outline" | "ghost" | "destructive" | "success";
-type Size = "sm" | "md" | "lg" | "icon";
+type Size = "sm" | "md" | "lg" | "xl" | "icon";
 
 const variantClasses: Record<Variant, string> = {
   primary:
@@ -23,6 +23,9 @@ const sizeClasses: Record<Size, string> = {
   sm: "h-8 px-3 text-xs gap-1.5 rounded-lg",
   md: "h-10 px-4 text-sm gap-2 rounded-lg",
   lg: "h-11 px-5 text-sm gap-2 rounded-xl",
+  // Reserved for a page's single most important CTA (Hero, Final CTA) —
+  // deliberately bigger than lg, not a general-purpose size.
+  xl: "h-14 px-8 text-base gap-2.5 rounded-xl",
   icon: "h-9 w-9 rounded-lg",
 };
 

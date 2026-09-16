@@ -16,7 +16,7 @@ export function Problem({ locale }: { locale: Locale }) {
     <section className="bg-surface py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-6">
         <p className="text-sm font-semibold uppercase tracking-wide text-brand-content">{t.problemEyebrow}</p>
-        <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">{t.problemTitle}</h2>
+        <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl">{t.problemTitle}</h2>
         <p className="mt-4 max-w-2xl text-lg text-ink-500">{t.problemSubtitle}</p>
 
         <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3">

@@ -21,7 +21,7 @@ export function Trust({ locale }: { locale: Locale }) {
       />
       <div className="relative mx-auto max-w-7xl px-6">
         <p className="text-sm font-semibold uppercase tracking-wide text-brand-300">{t.trustEyebrow}</p>
-        <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">{t.trustTitle}</h2>
+        <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">{t.trustTitle}</h2>
         <p className="mt-4 max-w-2xl text-lg text-white/60">{t.trustSubtitle}</p>
 
         <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

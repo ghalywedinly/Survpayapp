@@ -18,7 +18,7 @@ export function MultiBranch({ locale }: { locale: Locale }) {
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
         <div>
           <p className="text-sm font-semibold uppercase tracking-wide text-brand-content">{t.branchEyebrow}</p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">{t.branchTitle}</h2>
+          <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl">{t.branchTitle}</h2>
           <p className="mt-4 text-lg leading-relaxed text-ink-500">{t.branchDesc}</p>
         </div>
 

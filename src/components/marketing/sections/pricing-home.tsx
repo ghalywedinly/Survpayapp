@@ -21,7 +21,7 @@ export function PricingHome({ locale }: { locale: Locale }) {
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-semibold uppercase tracking-wide text-brand-content">{t.pricingHomeEyebrow}</p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">{t.pricingHomeTitle}</h2>
+          <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl">{t.pricingHomeTitle}</h2>
           <p className="mt-4 text-lg text-ink-500">{t.pricingHomeSubtitle}</p>
         </div>
 

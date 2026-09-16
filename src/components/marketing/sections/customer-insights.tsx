@@ -124,7 +124,7 @@ export function CustomerInsightsSection({ locale }: { locale: Locale }) {
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-semibold uppercase tracking-wide text-brand-content">{t.insightsEyebrow}</p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink-900 sm:text-4xl">{t.insightsTitle}</h2>
+          <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl">{t.insightsTitle}</h2>
           <p className="mt-4 text-lg leading-relaxed text-ink-500">{t.insightsSubtitle}</p>
           <span className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-medium text-brand-content">
             {t.insightsTagline}

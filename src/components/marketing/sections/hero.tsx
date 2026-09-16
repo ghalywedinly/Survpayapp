@@ -17,16 +17,16 @@ export function Hero({ locale }: { locale: Locale }) {
             <SparklesIcon className="h-3.5 w-3.5" />
             {t.heroBadge}
           </span>
-          <h1 className="mt-5 text-4xl font-semibold leading-[1.1] tracking-tight text-ink-900 sm:text-5xl">
+          <h1 className="mt-5 text-5xl font-semibold leading-[1.05] tracking-tight text-ink-900 sm:text-6xl">
             {t.heroTitle}
           </h1>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-ink-500">{t.heroSubtitle}</p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link href={`/${locale}/signup`} className={buttonClasses({ size: "lg", className: "gap-2" })}>
+            <Link href={`/${locale}/signup`} className={buttonClasses({ size: "xl", className: "gap-2.5" })}>
               {t.heroCtaPrimary}
-              <ArrowRightIcon className="h-4 w-4 rtl:rotate-180" />
+              <ArrowRightIcon className="h-5 w-5 rtl:rotate-180" />
             </Link>
-            <Link href={`/${locale}#how-it-works`} className={buttonClasses({ variant: "outline", size: "lg" })}>
+            <Link href={`/${locale}#how-it-works`} className={buttonClasses({ variant: "outline", size: "xl" })}>
               {t.heroCtaSecondary}
             </Link>
           </div>
