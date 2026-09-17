@@ -20,8 +20,8 @@ export function PricingHome({ locale }: { locale: Locale }) {
     <section className="bg-surface py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-wide text-brand-content">{t.pricingHomeEyebrow}</p>
-          <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl">{t.pricingHomeTitle}</h2>
+          <p className="text-base font-semibold uppercase tracking-wide text-brand-content sm:text-lg">{t.pricingHomeEyebrow}</p>
+          <h2 className="mt-3 text-4xl font-semibold leading-[1.15] tracking-tight text-ink-900 sm:text-5xl">{t.pricingHomeTitle}</h2>
           <p className="mt-4 text-lg text-ink-500">{t.pricingHomeSubtitle}</p>
         </div>
 

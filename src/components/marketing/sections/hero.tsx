@@ -17,7 +17,7 @@ export function Hero({ locale }: { locale: Locale }) {
             <SparklesIcon className="h-3.5 w-3.5" />
             {t.heroBadge}
           </span>
-          <h1 className="mt-5 text-5xl font-semibold leading-[1.05] tracking-tight text-ink-900 sm:text-6xl">
+          <h1 className="mt-5 text-5xl font-semibold leading-[1.15] tracking-tight text-ink-900 sm:text-6xl">
             {t.heroTitle}
           </h1>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-ink-500">{t.heroSubtitle}</p>

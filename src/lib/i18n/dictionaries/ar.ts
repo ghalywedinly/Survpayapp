@@ -98,6 +98,10 @@ const ar: Dictionary = {
     problem3Title: "يصعب فهمها",
     problem3Desc: "بدون تحليلات، يصعب ملاحظة الأنماط، أو رصد المشاكل المتكررة، أو معرفة ما يجب إصلاحه أولًا.",
     problemClosing: "يجمع Survpay كل ذلك في مكان واحد — لتتمكن فعلًا من الاستماع.",
+    problemImageAlt: "صاحب عمل يحيط به عدد من الملاحظات المتفرقة، يحاول تجميع آراء العملاء",
+    problemBadge1: "بطاقات الملاحظات",
+    problemBadge2: "رسائل واتساب",
+    problemBadge3: "مكالمات هاتفية",
 
     howItWorksEyebrow: "كيف يعمل Survpay؟",
     howItWorksTitle: "من إنشاء الاستبيان إلى اتخاذ القرار",

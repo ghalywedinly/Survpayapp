@@ -12,7 +12,7 @@ export function HomepageFaq() {
   return (
     <section id="faq" className="bg-ink-50/40 py-20 sm:py-28">
       <div className="mx-auto max-w-3xl px-6">
-        <h2 className="text-center text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl">
+        <h2 className="text-center text-4xl font-semibold leading-[1.15] tracking-tight text-ink-900 sm:text-5xl">
           {t("marketing.homepageFaqTitle")}
         </h2>
         <div className="mt-10 space-y-3">

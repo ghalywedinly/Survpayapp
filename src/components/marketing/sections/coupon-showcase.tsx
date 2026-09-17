@@ -15,8 +15,8 @@ export function CouponShowcase({ locale }: { locale: Locale }) {
   return (
     <section className="bg-surface py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-6">
-        <p className="text-sm font-semibold uppercase tracking-wide text-brand-content">{t.couponEyebrow}</p>
-        <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl">{t.couponTitle}</h2>
+        <p className="text-base font-semibold uppercase tracking-wide text-brand-content sm:text-lg">{t.couponEyebrow}</p>
+        <h2 className="mt-3 max-w-2xl text-4xl font-semibold leading-[1.15] tracking-tight text-ink-900 sm:text-5xl">{t.couponTitle}</h2>
         <p className="mt-4 max-w-2xl text-lg text-ink-500">{t.couponSubtitle}</p>
 
         {/* This panel is a deliberate inversion, not the usual reactive

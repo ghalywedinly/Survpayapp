@@ -67,7 +67,7 @@ export function HowItWorks({ locale }: { locale: Locale }) {
           <SparklesIcon className="h-3.5 w-3.5" />
           {t.howItWorksEyebrow}
         </span>
-        <h2 className="mt-4 text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl">{t.howItWorksTitle}</h2>
+        <h2 className="mt-4 text-4xl font-semibold leading-[1.15] tracking-tight text-ink-900 sm:text-5xl">{t.howItWorksTitle}</h2>
         <p className="mt-4 text-lg text-ink-500">{t.howItWorksSubtitle}</p>
       </div>
 
@@ -81,7 +81,7 @@ export function HowItWorks({ locale }: { locale: Locale }) {
                 {s.n}
               </span>
             </div>
-            <h3 className="mt-5 text-2xl font-semibold tracking-tight text-ink-900 sm:text-3xl">{s.title}</h3>
+            <h3 className="mt-5 text-2xl font-semibold leading-[1.15] tracking-tight text-ink-900 sm:text-3xl">{s.title}</h3>
             <p className="mt-3 max-w-md text-base leading-relaxed text-ink-500">{s.desc}</p>
             <ul className="mt-6 space-y-2.5">
               {s.checks.map((c) => (

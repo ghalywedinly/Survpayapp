@@ -96,6 +96,10 @@ const en = {
     problem3Title: "Hard to understand",
     problem3Desc: "Without analytics, it's hard to spot patterns, catch recurring issues, or know what to fix first.",
     problemClosing: "Survpay brings it all into one place — so you can actually listen.",
+    problemImageAlt: "A business owner surrounded by scattered sticky notes, trying to piece together customer feedback",
+    problemBadge1: "Comment cards",
+    problemBadge2: "WhatsApp messages",
+    problemBadge3: "Phone calls",
 
     howItWorksEyebrow: "How Survpay Works",
     howItWorksTitle: "From creating your survey to making the decision",

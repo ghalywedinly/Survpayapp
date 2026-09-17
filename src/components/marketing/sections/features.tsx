@@ -18,8 +18,8 @@ export function Features({ locale }: { locale: Locale }) {
   return (
     <section id="features" className="bg-ink-50/40 py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-6">
-        <p className="text-sm font-semibold uppercase tracking-wide text-brand-content">{t.featuresEyebrow}</p>
-        <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl">{t.featuresTitle}</h2>
+        <p className="text-base font-semibold uppercase tracking-wide text-brand-content sm:text-lg">{t.featuresEyebrow}</p>
+        <h2 className="mt-3 max-w-2xl text-4xl font-semibold leading-[1.15] tracking-tight text-ink-900 sm:text-5xl">{t.featuresTitle}</h2>
         <p className="mt-4 max-w-2xl text-lg text-ink-500">{t.featuresSubtitle}</p>
 
         <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">

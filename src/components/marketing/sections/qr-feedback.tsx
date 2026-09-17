@@ -13,8 +13,8 @@ export function QrFeedback({ locale }: { locale: Locale }) {
     <section className="bg-ink-50/40 py-20 sm:py-28">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-brand-content">{t.qrEyebrow}</p>
-          <h2 className="mt-3 text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl">{t.qrTitle}</h2>
+          <p className="text-base font-semibold uppercase tracking-wide text-brand-content sm:text-lg">{t.qrEyebrow}</p>
+          <h2 className="mt-3 text-4xl font-semibold leading-[1.15] tracking-tight text-ink-900 sm:text-5xl">{t.qrTitle}</h2>
           <p className="mt-4 text-lg leading-relaxed text-ink-500">{t.qrDesc}</p>
         </div>
 

@@ -11,7 +11,7 @@ export function FinalCta({ locale }: { locale: Locale }) {
   return (
     <section className="bg-surface py-20 sm:py-28">
       <div className="mx-auto max-w-4xl px-6 text-center">
-        <h2 className="text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl">{t.finalCtaTitle}</h2>
+        <h2 className="text-4xl font-semibold leading-[1.15] tracking-tight text-ink-900 sm:text-5xl">{t.finalCtaTitle}</h2>
         <p className="mt-4 text-lg text-ink-500">{t.finalCtaSubtitle}</p>
         <div className="mt-8 flex justify-center">
           <Link href={`/${locale}/signup`} className={buttonClasses({ size: "xl", className: "gap-2.5" })}>
@@ -19,7 +19,7 @@ export function FinalCta({ locale }: { locale: Locale }) {
             <ArrowRightIcon className="h-5 w-5 rtl:rotate-180" />
           </Link>
         </div>
-        <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-brand-content">{t.finalCtaClosing}</p>
+        <p className="mt-8 text-base font-semibold uppercase tracking-wide text-brand-content sm:text-lg">{t.finalCtaClosing}</p>
       </div>
     </section>
   );

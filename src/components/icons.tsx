@@ -220,3 +220,9 @@ export const InboxIcon = base(
     <path d="M5.5 5h13L21 12v6a1.5 1.5 0 01-1.5 1.5h-15A1.5 1.5 0 013 18v-6L5.5 5z" />
   </>
 );
+export const PhoneIcon = base(
+  <path d="M6.5 3.5l2.5 1 -.8 2.8a12 12 0 006.5 6.5l2.8-.8 1 2.5-2 2.2c-4.5.5-11-6-11.5-11.5l2-2.2z" />
+);
+export const MessageIcon = base(
+  <path d="M3.5 5.5h17v10.5h-9L7 19v-3H3.5V5.5z" />
+);
