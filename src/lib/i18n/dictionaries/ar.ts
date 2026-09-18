@@ -104,6 +104,17 @@ const ar: Dictionary = {
     problemBadge2: "رسائل واتساب",
     problemBadge3: "مكالمات هاتفية",
 
+    solutionEyebrow: "الحل",
+    solutionTitle: "من آراء متفرقة إلى إجابات واضحة",
+    solutionSubtitle: "يحوّل Survpay كل نقطة تواصل مع العميل إلى صورة واحدة واضحة لما يفكر فيه عملاؤك.",
+    solutionCollectTitle: "اجمع من كل مكان",
+    solutionCollectDesc: "رموز QR والروابط وواتساب، كلها تصب مباشرة في Survpay.",
+    solutionOrganizeTitle: "تنظيم تلقائي",
+    solutionOrganizeDesc: "كل إجابة تصل إلى لوحة تحكم واحدة فور إرسالها.",
+    solutionUnderstandTitle: "افهم فورًا",
+    solutionUnderstandDesc: "الذكاء الاصطناعي يبرز أهم ما يهم — دون جداول بيانات.",
+    solutionStat: "92% إيجابي",
+
     howItWorksEyebrow: "كيف يعمل Survpay؟",
     howItWorksTitle: "من إنشاء الاستبيان إلى اتخاذ القرار",
     howItWorksSubtitle:

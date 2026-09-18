@@ -2,6 +2,7 @@ import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { MarketingFooter } from "@/components/marketing/marketing-footer";
 import { Hero } from "@/components/marketing/sections/hero";
 import { Problem } from "@/components/marketing/sections/problem";
+import { Solution } from "@/components/marketing/sections/solution";
 import { HowItWorks } from "@/components/marketing/sections/how-it-works";
 import { CustomerInsightsSection } from "@/components/marketing/sections/customer-insights";
 import { Features } from "@/components/marketing/sections/features";
@@ -24,6 +25,7 @@ export default function LandingPage({ params }: { params: { locale: Locale } }) 
       <main>
         <Hero locale={locale} />
         <Problem locale={locale} />
+        <Solution locale={locale} />
         <HowItWorks locale={locale} />
         <CustomerInsightsSection locale={locale} />
         <Features locale={locale} />

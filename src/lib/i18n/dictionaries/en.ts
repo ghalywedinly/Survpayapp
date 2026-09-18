@@ -102,6 +102,17 @@ const en = {
     problemBadge2: "WhatsApp messages",
     problemBadge3: "Phone calls",
 
+    solutionEyebrow: "The solution",
+    solutionTitle: "From scattered feedback to clear answers",
+    solutionSubtitle: "Survpay turns every touchpoint into one clear picture of what your customers think.",
+    solutionCollectTitle: "Collect from everywhere",
+    solutionCollectDesc: "QR codes, links and WhatsApp all feed straight into Survpay.",
+    solutionOrganizeTitle: "Organized automatically",
+    solutionOrganizeDesc: "Every response lands in one dashboard the moment it's submitted.",
+    solutionUnderstandTitle: "Understand instantly",
+    solutionUnderstandDesc: "AI surfaces what matters most — no spreadsheets required.",
+    solutionStat: "92% positive",
+
     howItWorksEyebrow: "How Survpay Works",
     howItWorksTitle: "From creating your survey to making the decision",
     howItWorksSubtitle:
