@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DashboardSidebar } from "./sidebar";
 import { NotificationsBell, type NotificationItem } from "./notifications-bell";
 import { UserMenu } from "./user-menu";
@@ -26,11 +26,27 @@ export function DashboardShell({
   children: React.ReactNode;
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  // Icons-only is the default: only override it once we've checked for a
+  // stored preference, so SSR and first paint stay consistent (collapsed).
+  const [collapsed, setCollapsed] = useState(true);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("survpay:sidebar-collapsed");
+    if (stored !== null) setCollapsed(stored === "true");
+  }, []);
+
+  const toggleCollapsed = () => {
+    setCollapsed((v) => {
+      const next = !v;
+      localStorage.setItem("survpay:sidebar-collapsed", String(next));
+      return next;
+    });
+  };
 
   return (
     <div className="flex min-h-screen bg-ink-50/40">
       <div className="hidden lg:block">
-        <DashboardSidebar orgName={orgName} plan={plan} />
+        <DashboardSidebar orgName={orgName} plan={plan} collapsed={collapsed} onToggleCollapsed={toggleCollapsed} />
       </div>
 
       {mobileOpen && (

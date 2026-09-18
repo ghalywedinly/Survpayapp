@@ -3,7 +3,7 @@ import { requireOrgContext } from "@/lib/auth/guards";
 import { AnalyticsService } from "@/lib/services/analytics-service";
 import { SurveyService } from "@/lib/services/survey-service";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
-import { formatCurrency, formatDate, formatPercent, formatNumber } from "@/lib/format";
+import { formatDate, formatPercent, formatNumber } from "@/lib/format";
 import type { Locale } from "@/lib/i18n/config";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { StatCard } from "@/components/ui/stat-card";
@@ -13,7 +13,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { buttonClasses } from "@/components/ui/button";
 import { ResponsesOverTimeCard, ResponsesByChannelCard } from "@/components/dashboard/dashboard-charts";
 import { SurveyStatusBadge } from "@/components/dashboard/survey-status-badge";
-import { BarChartIcon, UsersIcon, WalletIcon, TrendingUpIcon, PlusIcon, ListIcon } from "@/components/icons";
+import { UsersIcon, TrendingUpIcon, PlusIcon, ListIcon } from "@/components/icons";
 
 export default async function DashboardPage({ params }: { params: { locale: Locale } }) {
   const ctx = await requireOrgContext(params.locale);
@@ -61,7 +61,7 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
         />
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <StatCard
               icon={<ListIcon className="h-[18px] w-[18px]" />}
               label={dict.dashboard.metricActiveSurveys}
@@ -71,16 +71,6 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
               icon={<UsersIcon className="h-[18px] w-[18px]" />}
               label={dict.dashboard.metricTotalResponses}
               value={formatNumber(metrics.totalResponses, params.locale)}
-            />
-            <StatCard
-              icon={<WalletIcon className="h-[18px] w-[18px]" />}
-              label={dict.dashboard.metricRewardsDistributed}
-              value={formatCurrency(metrics.rewardsDistributed, params.locale)}
-            />
-            <StatCard
-              icon={<BarChartIcon className="h-[18px] w-[18px]" />}
-              label={dict.dashboard.metricResearchSpend}
-              value={formatCurrency(metrics.researchSpend, params.locale)}
             />
             <StatCard
               icon={<TrendingUpIcon className="h-[18px] w-[18px]" />}

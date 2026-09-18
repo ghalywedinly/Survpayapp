@@ -226,3 +226,9 @@ export const PhoneIcon = base(
 export const MessageIcon = base(
   <path d="M3.5 5.5h17v10.5h-9L7 19v-3H3.5V5.5z" />
 );
+export const PanelLeftIcon = base(
+  <>
+    <rect x="3.5" y="4.5" width="17" height="15" rx="2.5" />
+    <path d="M9.5 4.5v15" />
+  </>
+);

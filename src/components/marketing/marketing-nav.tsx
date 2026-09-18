@@ -72,7 +72,7 @@ export function MarketingNav() {
             <Link href={`/${locale}/login`} className="w-full rounded-lg border border-ink-200 py-2.5 text-center text-sm font-medium">
               {t("nav.login")}
             </Link>
-            <Link href={`/${locale}/signup`} className="w-full rounded-lg bg-brand-600 py-2.5 text-center text-sm font-medium text-white">
+            <Link href={`/${locale}/signup`} className="w-full rounded-lg bg-brand-600 py-2.5 text-center text-sm font-bold text-white">
               {t("nav.signup")}
             </Link>
           </div>

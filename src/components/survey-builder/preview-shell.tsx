@@ -78,7 +78,7 @@ export function PreviewShell({
             ) : !started ? (
               <button
                 onClick={() => setStarted(true)}
-                className="w-full rounded-xl bg-brand-600 py-3 text-sm font-semibold text-white hover:bg-brand-700"
+                className="w-full rounded-xl bg-brand-600 py-3 text-sm font-bold text-white hover:bg-brand-700"
               >
                 {t("publicSurvey.startSurvey")}
               </button>
