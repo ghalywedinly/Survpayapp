@@ -1,6 +1,7 @@
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/config";
 import { PlusIcon, TicketIcon, CheckCircleIcon, ArrowRightIcon } from "@/components/icons";
+import { BrandGradientBlobs } from "@/components/marketing/brand-blobs";
 
 export function CouponShowcase({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale);
@@ -13,8 +14,9 @@ export function CouponShowcase({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="bg-surface py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-6">
+    <section className="relative overflow-hidden bg-surface py-20 sm:py-28">
+      <BrandGradientBlobs variant="bottom-start" className="h-72 w-72 opacity-70" />
+      <div className="relative mx-auto max-w-7xl px-6">
         <p className="text-base font-semibold uppercase tracking-wide text-brand-content sm:text-lg">{t.couponEyebrow}</p>
         <h2 className="mt-3 max-w-2xl text-4xl font-semibold leading-[1.15] tracking-tight text-ink-900 sm:text-5xl">{t.couponTitle}</h2>
         <p className="mt-4 max-w-2xl text-lg text-ink-500">{t.couponSubtitle}</p>

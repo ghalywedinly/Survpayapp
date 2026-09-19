@@ -1,6 +1,7 @@
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/config";
 import { GlobeIcon, QrIcon, CreditCardIcon } from "@/components/icons";
+import { BrandGradientBlobs } from "@/components/marketing/brand-blobs";
 
 export function SaudiPositioning({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale);
@@ -14,8 +15,9 @@ export function SaudiPositioning({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="bg-brand-wash py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-6 text-center">
+    <section className="relative overflow-hidden bg-brand-wash py-20 sm:py-28">
+      <BrandGradientBlobs variant="center" className="opacity-60" />
+      <div className="relative mx-auto max-w-7xl px-6 text-center">
         <p className="text-base font-semibold uppercase tracking-wide text-brand-content sm:text-lg">{t.saudiEyebrow}</p>
         <h2 className="mx-auto mt-3 max-w-2xl text-4xl font-semibold leading-[1.15] tracking-tight text-ink-900 sm:text-5xl">{t.saudiTitle}</h2>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-ink-500">{t.saudiDesc}</p>

@@ -1,6 +1,7 @@
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/config";
 import { BuildingIcon } from "@/components/icons";
+import { BrandGradientBlobs } from "@/components/marketing/brand-blobs";
 
 export function MultiBranch({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale);
@@ -14,8 +15,9 @@ export function MultiBranch({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="bg-surface py-20 sm:py-28">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
+    <section className="relative overflow-hidden bg-surface py-20 sm:py-28">
+      <BrandGradientBlobs variant="center" className="opacity-70" />
+      <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
         <div>
           <p className="text-base font-semibold uppercase tracking-wide text-brand-content sm:text-lg">{t.branchEyebrow}</p>
           <h2 className="mt-3 text-4xl font-semibold leading-[1.15] tracking-tight text-ink-900 sm:text-5xl">{t.branchTitle}</h2>

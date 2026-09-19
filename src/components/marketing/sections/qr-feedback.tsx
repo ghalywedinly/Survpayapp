@@ -1,6 +1,7 @@
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/config";
 import { QrIcon, ArrowRightIcon } from "@/components/icons";
+import { BrandGradientBlobs } from "@/components/marketing/brand-blobs";
 
 export function QrFeedback({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale);
@@ -10,8 +11,9 @@ export function QrFeedback({ locale }: { locale: Locale }) {
   const descs = [t.qrStep1Desc, t.qrStep2Desc, t.qrStep3Desc];
 
   return (
-    <section className="bg-ink-50/40 py-20 sm:py-28">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
+    <section className="relative overflow-hidden bg-ink-50/40 py-20 sm:py-28">
+      <BrandGradientBlobs variant="bottom-start" />
+      <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
         <div>
           <p className="text-base font-semibold uppercase tracking-wide text-brand-content sm:text-lg">{t.qrEyebrow}</p>
           <h2 className="mt-3 text-4xl font-semibold leading-[1.15] tracking-tight text-ink-900 sm:text-5xl">{t.qrTitle}</h2>

@@ -1,6 +1,7 @@
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/config";
 import { SparklesIcon, EyeIcon, CheckCircleIcon, GlobeIcon } from "@/components/icons";
+import { TrustBadgeIllustration } from "@/components/marketing/trust-badge-illustration";
 
 export function Trust({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale);
@@ -20,9 +21,14 @@ export function Trust({ locale }: { locale: Locale }) {
         style={{ background: "radial-gradient(50% 40% at 15% 10%, rgba(139,92,246,0.28), transparent)" }}
       />
       <div className="relative mx-auto max-w-7xl px-6">
-        <p className="text-base font-semibold uppercase tracking-wide text-brand-300 sm:text-lg">{t.trustEyebrow}</p>
-        <h2 className="mt-3 max-w-2xl text-4xl font-semibold leading-[1.15] tracking-tight sm:text-5xl">{t.trustTitle}</h2>
-        <p className="mt-4 max-w-2xl text-lg text-white/60">{t.trustSubtitle}</p>
+        <div className="flex items-start justify-between gap-8">
+          <div>
+            <p className="text-base font-semibold uppercase tracking-wide text-brand-300 sm:text-lg">{t.trustEyebrow}</p>
+            <h2 className="mt-3 max-w-2xl text-4xl font-semibold leading-[1.15] tracking-tight sm:text-5xl">{t.trustTitle}</h2>
+            <p className="mt-4 max-w-2xl text-lg text-white/60">{t.trustSubtitle}</p>
+          </div>
+          <TrustBadgeIllustration className="hidden h-48 w-48 shrink-0 lg:block" />
+        </div>
 
         <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {items.map((it) => (
