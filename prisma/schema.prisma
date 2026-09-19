@@ -74,6 +74,7 @@ model Organization {
   plan          String   @default("free") // market_research | customer_experience | business — always set explicitly on organization creation (see auth/actions.ts); the DB default is legacy and no longer a valid, sellable plan
   members       OrganizationMember[]
   surveys       Survey[]
+  branches      Branch[]
   rewardBudgets RewardBudget[]
   paymentTx     PaymentTransaction[]
   invoices      Invoice[]
@@ -81,6 +82,32 @@ model Organization {
   notifications Notification[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+// A physical location of the business (a restaurant's branch, a clinic's
+// site). Surveys stay brand-wide — a branch is attached to each *response*
+// instead, resolved from the branch code carried by the QR code or link
+// that was used to open the survey. That keeps one questionnaire comparable
+// across every location, which is what the branch/brand scores rely on.
+model Branch {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  nameAr         String?
+  // Short, human-readable code embedded in the branch's QR/link
+  // (/s/<surveyCode>?b=<code>). Unique per organization, not globally, so
+  // two businesses can both have an "OLAYA".
+  code           String
+  city           String?
+  address        String?
+  active         Boolean      @default(true)
+  responses      SurveyResponse[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([organizationId, code])
+  @@index([organizationId])
 }
 
 model OrganizationMember {
@@ -290,6 +317,11 @@ model SurveyResponse {
   id               String   @id @default(cuid())
   surveyId         String
   survey           Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  // Which location this response came from, resolved from the branch code in
+  // the QR/link used to open the survey. Null for responses collected through
+  // a generic link, or before the business set any branches up.
+  branchId         String?
+  branch           Branch?  @relation(fields: [branchId], references: [id], onDelete: SetNull)
   status           String   @default("pending") // pending | valid | rejected | flagged
   rewardStatus     String   @default("not_applicable") // not_applicable | pending | processing | completed | failed | expired
   respondentEmail  String?
@@ -308,6 +340,7 @@ model SurveyResponse {
   createdAt        DateTime @default(now())
 
   @@index([surveyId])
+  @@index([branchId])
 }
 
 model ResponseAnswer {

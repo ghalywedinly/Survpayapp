@@ -6,6 +6,10 @@ import { AIService } from "./ai-service";
 import { SURVPAY_ICON_PNG_BASE64 } from "./report-assets";
 import { categoricalPalette } from "@/components/charts/theme";
 import { formatCurrency, formatDuration } from "@/lib/format";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
+import type { Locale } from "@/lib/i18n/config";
+import { surveyStatusLabel } from "@/components/dashboard/survey-status-badge";
+import { buildReportPdfArabic } from "./report-pdf-arabic";
 
 async function loadReportData(surveyId: string) {
   const survey = await db.survey.findUnique({ where: { id: surveyId } });
@@ -46,8 +50,14 @@ const palette = {
 // a bar in this PDF and a bar on the dashboard mean the same color.
 const chartPalette = categoricalPalette.map(hex);
 
-export async function buildReportPdf(surveyId: string): Promise<Uint8Array> {
-  return buildReportPdfFromData(await loadReportData(surveyId));
+export async function buildReportPdf(surveyId: string, locale: Locale = "en"): Promise<Uint8Array> {
+  const data = await loadReportData(surveyId);
+  // pdf-lib (below) draws glyphs one at a time with no text shaping, so
+  // Arabic never joins into correct letterforms — the Arabic report is
+  // rendered from real HTML via headless Chromium instead, which shapes
+  // and lays out RTL text correctly (see report-pdf-arabic.ts).
+  if (locale === "ar") return buildReportPdfArabic(data);
+  return buildReportPdfFromData(data);
 }
 
 export async function buildReportPdfFromData(data: ReportData): Promise<Uint8Array> {
@@ -335,12 +345,18 @@ export async function buildReportPdfFromData(data: ReportData): Promise<Uint8Arr
   return doc.save();
 }
 
-export async function buildReportExcel(surveyId: string): Promise<Buffer> {
-  return buildReportExcelFromData(await loadReportData(surveyId));
+export async function buildReportExcel(surveyId: string, locale: Locale = "en"): Promise<Buffer> {
+  return buildReportExcelFromData(await loadReportData(surveyId), locale);
 }
 
-export async function buildReportExcelFromData(data: ReportData): Promise<Buffer> {
+export async function buildReportExcelFromData(data: ReportData, locale: Locale = "en"): Promise<Buffer> {
   const { survey, overview, breakdown, insights } = data;
+  const dict = getDictionary(locale);
+  const t = dict.reportExport;
+  const rtl = locale === "ar";
+  const title = rtl ? survey.titleAr ?? survey.title : survey.title;
+  const statusText = surveyStatusLabel(survey.status, locale);
+
   const wb = new ExcelJS.Workbook();
   wb.creator = "Survpay";
   wb.created = new Date();
@@ -354,12 +370,12 @@ export async function buildReportExcelFromData(data: ReportData): Promise<Buffer
   const thinBorder = { style: "thin" as const, color: { argb: BORDER } };
 
   // ---------------- Summary sheet ----------------
-  const summary = wb.addWorksheet("Summary", { views: [{ showGridLines: false }] });
+  const summary = wb.addWorksheet(t.summarySheet, { views: [{ showGridLines: false, rightToLeft: rtl }] });
   summary.columns = [{ width: 30 }, { width: 26 }];
 
   summary.mergeCells("A1:B1");
   const titleCell = summary.getCell("A1");
-  titleCell.value = `Survpay Report — ${survey.title}`;
+  titleCell.value = `${t.reportTitlePrefix} ${title}`;
   titleCell.font = { bold: true, size: 14, color: { argb: "FFFFFFFF" } };
   titleCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: BRAND } };
   titleCell.alignment = { vertical: "middle", indent: 1 };
@@ -367,19 +383,19 @@ export async function buildReportExcelFromData(data: ReportData): Promise<Buffer
 
   summary.mergeCells("A2:B2");
   const subCell = summary.getCell("A2");
-  subCell.value = `Generated ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })} · Status: ${survey.status}`;
+  subCell.value = `${t.generated} ${new Date().toLocaleDateString(rtl ? "ar-SA-u-ca-gregory-nu-latn" : "en-US", { year: "numeric", month: "short", day: "numeric" })} · ${t.status}: ${statusText}`;
   subCell.font = { italic: true, size: 9.5, color: { argb: INK500 } };
   subCell.alignment = { indent: 1 };
 
   const validCount = Math.round((overview.totalResponses * overview.completionRate) / 100);
   const statRows: { label: string; value: number | string; numFmt?: string }[] = [
-    { label: "Total responses", value: overview.totalResponses },
-    { label: "Valid responses", value: validCount },
-    { label: "Excluded responses", value: Math.max(overview.totalResponses - validCount, 0) },
-    { label: "Completion rate", value: overview.completionRate / 100, numFmt: "0.0%" },
-    { label: "Avg. completion time", value: formatDuration(overview.avgCompletionSeconds, "en") },
-    { label: "Reward spend (SAR)", value: overview.rewardSpend, numFmt: '"SAR" #,##0.00' },
-    { label: "Cost per response (SAR)", value: Number(overview.costPerResponse.toFixed(2)), numFmt: '"SAR" #,##0.00' },
+    { label: t.kpiTotalResponses, value: overview.totalResponses },
+    { label: t.statValidResponses, value: validCount },
+    { label: t.statExcludedResponses, value: Math.max(overview.totalResponses - validCount, 0) },
+    { label: t.kpiCompletionRate, value: overview.completionRate / 100, numFmt: "0.0%" },
+    { label: t.statAvgCompletionTime, value: formatDuration(overview.avgCompletionSeconds, locale) },
+    { label: t.statRewardSpendSar, value: overview.rewardSpend, numFmt: '"SAR" #,##0.00' },
+    { label: t.statCostPerResponseSar, value: Number(overview.costPerResponse.toFixed(2)), numFmt: '"SAR" #,##0.00' },
   ];
 
   let r = 4;
@@ -402,12 +418,12 @@ export async function buildReportExcelFromData(data: ReportData): Promise<Buffer
   });
 
   // ---------------- Question results sheet ----------------
-  const qSheet = wb.addWorksheet("Question results", { views: [{ state: "frozen", ySplit: 1 }] });
+  const qSheet = wb.addWorksheet(t.questionResults, { views: [{ state: "frozen", ySplit: 1, rightToLeft: rtl }] });
   qSheet.columns = [
-    { header: "Question", key: "question", width: 42 },
-    { header: "Answer", key: "answer", width: 30 },
-    { header: "Count", key: "count", width: 12 },
-    { header: "Percent", key: "pct", width: 14 },
+    { header: t.columnQuestion, key: "question", width: 42 },
+    { header: t.columnAnswer, key: "answer", width: 30 },
+    { header: t.columnCount, key: "count", width: 12 },
+    { header: t.columnPercent, key: "pct", width: 14 },
   ];
   const headerRow = qSheet.getRow(1);
   headerRow.eachCell((cell) => {
@@ -418,22 +434,23 @@ export async function buildReportExcelFromData(data: ReportData): Promise<Buffer
   headerRow.height = 20;
 
   for (const q of breakdown) {
+    const qText = rtl ? q.question.textAr ?? q.question.text : q.question.text;
     if (q.kind === "categorical" || q.kind === "numeric") {
       const rows = q.kind === "categorical" ? q.distribution : q.distribution;
       if (!rows.length) {
-        qSheet.addRow({ question: q.question.text, answer: "No responses yet", count: 0, pct: 0 });
+        qSheet.addRow({ question: qText, answer: t.noResponsesYet, count: 0, pct: 0 });
         continue;
       }
       for (const d of rows) {
-        qSheet.addRow({ question: q.question.text, answer: d.label, count: d.count, pct: d.pct / 100 });
+        qSheet.addRow({ question: qText, answer: rtl ? d.labelAr ?? d.label : d.label, count: d.count, pct: d.pct / 100 });
       }
     } else {
       if (!q.samples.length) {
-        qSheet.addRow({ question: q.question.text, answer: "No text responses yet", count: 0, pct: "" });
+        qSheet.addRow({ question: qText, answer: t.noTextResponsesYet, count: 0, pct: "" });
         continue;
       }
       for (const s of q.samples) {
-        qSheet.addRow({ question: q.question.text, answer: s, count: "", pct: "" });
+        qSheet.addRow({ question: qText, answer: s, count: "", pct: "" });
       }
     }
   }
@@ -468,27 +485,27 @@ export async function buildReportExcelFromData(data: ReportData): Promise<Buffer
   }
 
   // ---------------- Key findings sheet ----------------
-  const findings = wb.addWorksheet("Key findings", { views: [{ showGridLines: false }] });
+  const findings = wb.addWorksheet(t.keyFindings, { views: [{ showGridLines: false, rightToLeft: rtl }] });
   findings.columns = [{ width: 42 }];
   if (insights?.hasData && insights.insights.length) {
     let fr = 1;
     for (const item of insights.insights) {
       const titleCell2 = findings.getCell(`A${fr}`);
-      titleCell2.value = item.title;
+      titleCell2.value = rtl ? item.titleAr || item.title : item.title;
       titleCell2.font = { bold: true, size: 11, color: { argb: INK900 } };
       titleCell2.fill = { type: "pattern", pattern: "solid", fgColor: { argb: BRAND_TINT } };
       titleCell2.alignment = { indent: 1, vertical: "middle" };
       findings.getRow(fr).height = 20;
       fr += 1;
       const bodyCell = findings.getCell(`A${fr}`);
-      bodyCell.value = item.body;
+      bodyCell.value = rtl ? item.bodyAr || item.body : item.body;
       bodyCell.font = { size: 10, color: { argb: "FF3B4356" } };
       bodyCell.alignment = { wrapText: true, vertical: "top", indent: 1 };
       findings.getRow(fr).height = 34;
       fr += 2;
     }
   } else {
-    findings.getCell("A1").value = "Not enough response data was available to generate AI-assisted findings at the time this report was created.";
+    findings.getCell("A1").value = t.noAiFindings;
     findings.getCell("A1").font = { italic: true, color: { argb: INK500 } };
     findings.getCell("A1").alignment = { wrapText: true };
   }

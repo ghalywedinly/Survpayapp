@@ -2,6 +2,8 @@ import Link from "next/link";
 import { requireOrgContext } from "@/lib/auth/guards";
 import { AnalyticsService } from "@/lib/services/analytics-service";
 import { SurveyService } from "@/lib/services/survey-service";
+import { SatisfactionService } from "@/lib/services/satisfaction-service";
+import { BranchService } from "@/lib/services/branch-service";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { formatDate, formatPercent, formatNumber } from "@/lib/format";
 import type { Locale } from "@/lib/i18n/config";
@@ -12,6 +14,7 @@ import { Table, THead, TBody, TR, TH, TD } from "@/components/ui/table";
 import { EmptyState } from "@/components/ui/empty-state";
 import { buttonClasses } from "@/components/ui/button";
 import { ResponsesOverTimeCard, ResponsesByChannelCard } from "@/components/dashboard/dashboard-charts";
+import { BrandSatisfactionHero } from "@/components/dashboard/brand-satisfaction-hero";
 import { SurveyStatusBadge } from "@/components/dashboard/survey-status-badge";
 import { UsersIcon, TrendingUpIcon, PlusIcon, ListIcon } from "@/components/icons";
 
@@ -20,12 +23,14 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
   const dict = getDictionary(params.locale);
   const orgId = ctx.organization.id;
 
-  const [metrics, trend, channels, topSurveys, topCountries] = await Promise.all([
+  const [metrics, trend, channels, topSurveys, topCountries, brandScore, branches] = await Promise.all([
     AnalyticsService.getDashboardMetrics(orgId),
     AnalyticsService.responsesOverTime(orgId, 30),
     AnalyticsService.responsesByChannel(orgId),
     AnalyticsService.topSurveys(orgId, 5),
     AnalyticsService.topCountries(orgId, 5),
+    SatisfactionService.brandScore(orgId),
+    BranchService.listWithStats(orgId),
   ]);
 
   const hasSurveys = topSurveys.length > 0;
@@ -61,6 +66,23 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
         />
       ) : (
         <>
+          <div className="mb-6">
+            <BrandSatisfactionHero
+              locale={params.locale}
+              score={brandScore.score}
+              delta={brandScore.delta}
+              answerCount={brandScore.answerCount}
+              responseCount={brandScore.responseCount}
+              branches={branches.map((b) => ({
+                id: b.id,
+                name: b.name,
+                nameAr: b.nameAr,
+                score: b.score,
+                totalResponses: b.totalResponses,
+              }))}
+            />
+          </div>
+
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <StatCard
               icon={<ListIcon className="h-[18px] w-[18px]" />}

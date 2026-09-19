@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { RewardService } from "./reward-service";
 import { SurveyService } from "./survey-service";
+import { BranchService } from "./branch-service";
 
 // Very small in-memory rate limiter: keyed by respondent fingerprint, allows
 // at most one submission every 5 seconds. Fine for a single-instance demo;
@@ -17,6 +18,8 @@ export type SubmitResponseInput = {
   device?: string;
   country?: string;
   source?: string;
+  /** Branch code from the QR/link the respondent used, resolved to a branch on save. */
+  branchCode?: string;
   futureConsent?: boolean;
 };
 
@@ -96,9 +99,15 @@ export const ResponseService = {
 
     const status = failedAttentionCheck || tooFast ? "flagged" : "valid";
 
+    // An unknown or inactive branch code is ignored rather than rejected —
+    // a mistyped or retired QR should still collect the response, just
+    // without attributing it to a location.
+    const branch = input.branchCode ? await BranchService.resolveCodeForSurvey(survey.id, input.branchCode) : null;
+
     const response = await db.surveyResponse.create({
       data: {
         surveyId: survey.id,
+        branchId: branch?.id ?? null,
         status,
         rewardStatus: survey.rewardConfig?.enabled ? "pending" : "not_applicable",
         respondentEmail: input.respondentEmail,

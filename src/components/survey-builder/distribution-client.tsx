@@ -6,18 +6,28 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
-import { CopyIcon, DownloadIcon, CodeIcon, QrIcon } from "@/components/icons";
+import { CopyIcon, DownloadIcon, CodeIcon, QrIcon, BuildingIcon } from "@/components/icons";
+
+export interface BranchLink {
+  id: string;
+  name: string;
+  code: string;
+  link: string;
+  qrDataUrl: string;
+}
 
 export function DistributionClient({
   link,
   qrDataUrl,
   embedCode,
   responsesSoFar,
+  branchLinks = [],
 }: {
   link: string;
   qrDataUrl: string;
   embedCode: string;
   responsesSoFar: number;
+  branchLinks?: BranchLink[];
 }) {
   const { t } = useI18n();
   const { push } = useToast();
@@ -104,6 +114,51 @@ export function DistributionClient({
           </a>
         </CardContent>
       </Card>
+
+      {branchLinks.length > 0 && (
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-1.5">
+              <BuildingIcon className="h-4 w-4" /> {t("branches.branchLinks")}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-xs text-ink-400">{t("branches.branchLinksHelp")}</p>
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {branchLinks.map((b) => (
+                <div key={b.id} className="rounded-2xl border border-ink-200/70 bg-ink-50/40 p-4">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold text-ink-900">{b.name}</p>
+                      <p className="mt-0.5 text-xs text-ink-400">{b.code}</p>
+                    </div>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={b.qrDataUrl}
+                      alt={`${b.name} QR code`}
+                      className="h-16 w-16 shrink-0 rounded-lg border border-ink-200 bg-surface"
+                    />
+                  </div>
+                  <div className="mt-3 flex items-center gap-1.5">
+                    <Button variant="outline" size="sm" className="gap-1.5" onClick={() => copy(b.link, "link")}>
+                      <CopyIcon className="h-3.5 w-3.5" />
+                      {t("branches.copyLink")}
+                    </Button>
+                    <a
+                      href={b.qrDataUrl}
+                      download={`survpay-qr-${b.code.toLowerCase()}.png`}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-ink-200 px-3 py-1.5 text-xs font-medium text-ink-700 hover:bg-ink-50"
+                    >
+                      <DownloadIcon className="h-3.5 w-3.5" />
+                      {t("branches.downloadQr")}
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

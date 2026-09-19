@@ -34,6 +34,7 @@ export function PublicSurveyClient({
   collectFutureConsent,
   reward,
   initiallyClosed,
+  branchCode,
 }: {
   code: string;
   title: string;
@@ -47,6 +48,8 @@ export function PublicSurveyClient({
   collectFutureConsent: boolean;
   reward: RewardConfigInfo;
   initiallyClosed: boolean;
+  /** Location this QR/link belongs to, carried through to the saved response. */
+  branchCode?: string;
 }) {
   const { t, locale } = useI18n();
   const [phase, setPhase] = useState<Phase>(initiallyClosed ? "closed" : "intro");
@@ -73,6 +76,7 @@ export function PublicSurveyClient({
           respondentEmail: email || undefined,
           device: detectDevice(),
           source: typeof document !== "undefined" && document.referrer ? "website" : "share_link",
+          branchCode,
           futureConsent: collectFutureConsent ? consent : undefined,
         }),
       });

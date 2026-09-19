@@ -15,7 +15,15 @@ async function resolveLocale(language?: string | null): Promise<Locale> {
   return defaultLocale;
 }
 
-export default async function PublicSurveyPage({ params }: { params: { code: string } }) {
+export default async function PublicSurveyPage({
+  params,
+  searchParams,
+}: {
+  params: { code: string };
+  // `?b=<branchCode>` — set by the QR code or link for a specific location,
+  // so the response can be attributed to that branch.
+  searchParams?: { b?: string };
+}) {
   const survey = await db.survey.findUnique({
     where: { code: params.code },
     include: {
@@ -59,6 +67,7 @@ export default async function PublicSurveyPage({ params }: { params: { code: str
       requireEmail={survey.settings?.requireEmail ?? false}
       collectFutureConsent={survey.settings?.collectFutureConsent ?? false}
       initiallyClosed={isClosed}
+      branchCode={searchParams?.b}
       reward={{
         enabled: survey.rewardConfig?.enabled ?? false,
         amount: survey.rewardConfig?.amount ?? 0,

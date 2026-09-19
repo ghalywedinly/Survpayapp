@@ -35,6 +35,7 @@ export async function POST(req: NextRequest, { params }: { params: { code: strin
       device: typeof b.device === "string" ? b.device : undefined,
       country: typeof b.country === "string" ? b.country : undefined,
       source: typeof b.source === "string" ? b.source : undefined,
+      branchCode: typeof b.branchCode === "string" ? b.branchCode : undefined,
       futureConsent: typeof b.futureConsent === "boolean" ? b.futureConsent : undefined,
     });
 

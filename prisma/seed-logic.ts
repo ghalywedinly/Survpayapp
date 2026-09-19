@@ -125,29 +125,56 @@ async function createSurveyStructure(surveyId: string, questions: QDef[]) {
   return created;
 }
 
-function generateAnswerValue(q: { type: string; options: { value: string; weight: number }[]; matrixRows: string[] }) {
+/**
+ * Tilts a scale's weights toward the top (positive bias) or the bottom
+ * (negative bias) of the range, so different branches end up with visibly
+ * different satisfaction scores instead of all converging on the same mean.
+ * `items` must be ordered lowest scale point first.
+ */
+function applySatisfactionBias<T>(items: { value: T; weight: number }[], bias: number) {
+  if (!bias || items.length < 2) return items;
+  return items.map((item, i) => {
+    const position = (i / (items.length - 1)) * 2 - 1; // −1 at the bottom, +1 at the top
+    return { value: item.value, weight: Math.max(0.01, item.weight * (1 + bias * position)) };
+  });
+}
+
+function generateAnswerValue(
+  q: { type: string; options: { value: string; weight: number }[]; matrixRows: string[] },
+  bias = 0
+) {
   switch (q.type) {
     case "single_choice":
     case "dropdown":
     case "yes_no":
-    case "likert":
       return weightedPick(q.options.map((o) => ({ value: o.value, weight: o.weight })));
+    case "likert":
+      // Options are stored lowest-to-highest, so the bias applies directly.
+      return weightedPick(applySatisfactionBias(q.options.map((o) => ({ value: o.value, weight: o.weight })), bias));
     case "multiple_choice": {
       const count = randomInt(1, Math.min(3, q.options.length));
       const shuffled = [...q.options].sort(() => Math.random() - 0.5);
       return shuffled.slice(0, count).map((o) => o.value);
     }
     case "rating":
-      return weightedPick([
-        { value: 5, weight: 30 },
-        { value: 4, weight: 32 },
-        { value: 3, weight: 20 },
-        { value: 2, weight: 11 },
-        { value: 1, weight: 7 },
-      ]);
+      return weightedPick(
+        applySatisfactionBias(
+          [
+            { value: 1, weight: 7 },
+            { value: 2, weight: 11 },
+            { value: 3, weight: 20 },
+            { value: 4, weight: 32 },
+            { value: 5, weight: 30 },
+          ],
+          bias
+        )
+      );
     case "nps":
       return weightedPick(
-        Array.from({ length: 11 }, (_, n) => ({ value: n, weight: n >= 9 ? 14 : n >= 7 ? 10 : n >= 4 ? 4 : 2 }))
+        applySatisfactionBias(
+          Array.from({ length: 11 }, (_, n) => ({ value: n, weight: n >= 9 ? 14 : n >= 7 ? 10 : n >= 4 ? 4 : 2 })),
+          bias
+        )
       );
     case "number":
       return randomInt(1, 12);
@@ -594,6 +621,8 @@ async function runSeedInner() {
   await db.invoice.deleteMany();
   await db.notification.deleteMany();
   await db.auditLog.deleteMany();
+  // After responses (their branchId references these) and before the org.
+  await db.branch.deleteMany();
   await db.organizationMember.deleteMany();
   await db.session.deleteMany();
   await db.account.deleteMany();
@@ -675,6 +704,43 @@ async function runSeedInner() {
       createdAt: daysAgo(120),
     },
   });
+
+  // Five locations, each with its own satisfaction profile, so the brand
+  // score has a real spread behind it: Al Olaya leads, North Jeddah is the
+  // one that needs attention (the same story the AI insight copy tells).
+  const branchDefs = [
+    { name: "Al Olaya", nameAr: "العليا", code: "OLAYA", city: "Riyadh", address: "King Fahd Road, Al Olaya District", bias: 0.95, share: 28 },
+    { name: "Riyadh Park", nameAr: "الرياض بارك", code: "RIYADHPARK", city: "Riyadh", address: "Riyadh Park Mall, Northern Ring Branch Rd", bias: 0.5, share: 24 },
+    { name: "Al Khobar Corniche", nameAr: "كورنيش الخبر", code: "KHOBAR", city: "Al Khobar", address: "Corniche Road, Al Khobar", bias: 0.0, share: 18 },
+    { name: "Jeddah Tahlia", nameAr: "التحلية جدة", code: "TAHLIA", city: "Jeddah", address: "Prince Mohammed Bin Abdulaziz St", bias: -0.35, share: 17 },
+    { name: "North Jeddah", nameAr: "شمال جدة", code: "NJEDDAH", city: "Jeddah", address: "Al Shatie District, North Jeddah", bias: -0.8, share: 13 },
+  ];
+
+  const branches = await Promise.all(
+    branchDefs.map(async (b) => ({
+      ...b,
+      id: (
+        await db.branch.create({
+          data: {
+            organizationId: org.id,
+            name: b.name,
+            nameAr: b.nameAr,
+            code: b.code,
+            city: b.city,
+            address: b.address,
+            createdAt: daysAgo(110),
+          },
+        })
+      ).id,
+    }))
+  );
+
+  // A slice of responses stays untagged, standing in for the generic survey
+  // link that isn't tied to any one location.
+  const branchPicker = [
+    ...branches.map((b) => ({ value: b as (typeof branches)[number] | null, weight: b.share })),
+    { value: null, weight: 6 },
+  ];
 
   await db.organizationMember.createMany({
     data: [
@@ -811,6 +877,7 @@ async function runSeedInner() {
     const responseRows: {
       id: string;
       surveyId: string;
+      branchId: string | null;
       status: string;
       rewardStatus: string;
       respondentEmail: string | null;
@@ -868,9 +935,12 @@ async function runSeedInner() {
         rewardStatus = "pending";
       }
 
+      const branch = weightedPick(branchPicker);
+
       responseRows.push({
         id: respId,
         surveyId: survey.id,
+        branchId: branch?.id ?? null,
         status,
         rewardStatus,
         respondentEmail: Math.random() > 0.4 ? `respondent${totalResponses + i}@example.com` : null,
@@ -886,7 +956,8 @@ async function runSeedInner() {
 
       for (const q of questions) {
         // Attention-check questions should mostly reflect the flagged outcome.
-        const value = generateAnswerValue(q);
+        // Scale answers lean up or down with the branch's own profile.
+        const value = generateAnswerValue(q, branch?.bias ?? 0);
         answerRows.push({ id: id("ans"), responseId: respId, questionId: q.id, value: JSON.stringify(value) });
       }
     }

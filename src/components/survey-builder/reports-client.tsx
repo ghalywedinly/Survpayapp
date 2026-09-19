@@ -6,10 +6,11 @@ import { useI18n } from "@/lib/i18n/provider";
 import { formatDate } from "@/lib/format";
 import { generateReportAction } from "@/lib/actions/insights";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Button, buttonClasses } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { useToast } from "@/components/ui/toast";
-import { FileTextIcon, DownloadIcon } from "@/components/icons";
+import { FileTextIcon, DownloadIcon, ChevronDownIcon } from "@/components/icons";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 const sectionKeys = [
   "sectionExecSummary",
@@ -73,18 +74,8 @@ export function ReportsClient({ surveyId, reports }: { surveyId: string; reports
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <a href={`/api/surveys/${surveyId}/report/pdf`} className="inline-flex">
-                    <Button size="sm" variant="outline" className="gap-1.5">
-                      <DownloadIcon className="h-3.5 w-3.5" />
-                      {t("reports.exportPdf")}
-                    </Button>
-                  </a>
-                  <a href={`/api/surveys/${surveyId}/report/excel`} className="inline-flex">
-                    <Button size="sm" variant="outline" className="gap-1.5">
-                      <DownloadIcon className="h-3.5 w-3.5" />
-                      {t("reports.exportExcel")}
-                    </Button>
-                  </a>
+                  <ExportMenu surveyId={surveyId} format="pdf" label={t("reports.exportPdf")} />
+                  <ExportMenu surveyId={surveyId} format="excel" label={t("reports.exportExcel")} />
                   <Button
                     size="sm"
                     variant="outline"
@@ -99,5 +90,28 @@ export function ReportsClient({ surveyId, reports }: { surveyId: string; reports
         </div>
       )}
     </div>
+  );
+}
+
+function ExportMenu({ surveyId, format, label }: { surveyId: string; format: "pdf" | "excel"; label: string }) {
+  const { t } = useI18n();
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <button className={buttonClasses({ variant: "outline", size: "sm", className: "gap-1.5" })}>
+          <DownloadIcon className="h-3.5 w-3.5" />
+          {label}
+          <ChevronDownIcon className="h-3.5 w-3.5" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem onClick={() => (window.location.href = `/api/surveys/${surveyId}/report/${format}?locale=en`)}>
+          {t("reports.exportInEnglish")}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => (window.location.href = `/api/surveys/${surveyId}/report/${format}?locale=ar`)}>
+          {t("reports.exportInArabic")}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
