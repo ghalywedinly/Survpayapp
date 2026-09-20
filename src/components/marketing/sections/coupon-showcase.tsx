@@ -1,7 +1,7 @@
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/config";
 import { PlusIcon, TicketIcon, CheckCircleIcon, ArrowRightIcon } from "@/components/icons";
-import { BrandGradientBlobs } from "@/components/marketing/brand-blobs";
+import { BrandGradientBlobs } from "@/components/brand-blobs";
 
 export function CouponShowcase({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale);

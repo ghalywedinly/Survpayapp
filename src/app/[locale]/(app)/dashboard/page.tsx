@@ -7,8 +7,8 @@ import { BranchService } from "@/lib/services/branch-service";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { formatDate, formatPercent, formatNumber } from "@/lib/format";
 import type { Locale } from "@/lib/i18n/config";
-import { PageHeader } from "@/components/dashboard/page-header";
 import { StatCard } from "@/components/ui/stat-card";
+import { BrandGradientBlobs } from "@/components/brand-blobs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, THead, TBody, TR, TH, TD } from "@/components/ui/table";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -34,14 +34,19 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
   ]);
 
   const hasSurveys = topSurveys.length > 0;
+  const firstName = ctx.user.name.split(" ")[0];
 
   return (
     <div>
-      <PageHeader
-        title={`${dict.dashboard.welcome}, ${ctx.organization.name.split(" ")[0]}`}
-        subtitle={dict.dashboard.subtitle}
-        actions={
-          <>
+      <div className="relative mb-6 overflow-hidden rounded-3xl border border-ink-100 bg-surface px-6 py-7 sm:px-8">
+        <BrandGradientBlobs variant="center" className="opacity-70" />
+        <div className="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-sm font-medium text-ink-500">{dict.dashboard.welcome}</p>
+            <h1 className="mt-1 text-4xl font-bold tracking-tight text-ink-900 sm:text-5xl">{firstName}</h1>
+            <p className="mt-2 text-sm text-ink-500">{dict.dashboard.subtitle}</p>
+          </div>
+          <div className="flex shrink-0 items-center gap-2">
             <Link href={`/${params.locale}/reports`} className={buttonClasses({ variant: "outline" })}>
               {dict.dashboard.viewReports}
             </Link>
@@ -49,9 +54,9 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
               <PlusIcon className="h-4 w-4" />
               {dict.dashboard.newSurvey}
             </Link>
-          </>
-        }
-      />
+          </div>
+        </div>
+      </div>
 
       {!hasSurveys ? (
         <EmptyState

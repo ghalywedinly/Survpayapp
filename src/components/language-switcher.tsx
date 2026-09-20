@@ -5,7 +5,7 @@ import { locales, localeCookieName, type Locale } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/provider";
 import { cn } from "@/lib/utils";
 
-export function LanguageSwitcher({ className }: { className?: string }) {
+export function LanguageSwitcher({ className, compact = false }: { className?: string; compact?: boolean }) {
   const { locale } = useI18n();
   const pathname = usePathname();
   const router = useRouter();
@@ -16,6 +16,23 @@ export function LanguageSwitcher({ className }: { className?: string }) {
     const rest = pathname?.split("/").slice(2).join("/") ?? "";
     router.push(`/${next}${rest ? `/${rest}` : ""}`);
     router.refresh();
+  }
+
+  if (compact) {
+    const other = locales.find((l) => l !== locale) ?? locale;
+    return (
+      <button
+        type="button"
+        onClick={() => switchTo(other)}
+        title={other === "en" ? "Switch to English" : "التبديل إلى العربية"}
+        className={cn(
+          "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-xs font-semibold text-ink-500 transition-colors hover:bg-ink-100 hover:text-ink-900",
+          className
+        )}
+      >
+        {locale === "en" ? "EN" : "ع"}
+      </button>
+    );
   }
 
   return (

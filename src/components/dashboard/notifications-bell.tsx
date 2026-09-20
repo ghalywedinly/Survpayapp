@@ -19,7 +19,15 @@ export interface NotificationItem {
   createdAt: string | Date;
 }
 
-export function NotificationsBell({ notifications, unreadCount }: { notifications: NotificationItem[]; unreadCount: number }) {
+export function NotificationsBell({
+  notifications,
+  unreadCount,
+  align = "start",
+}: {
+  notifications: NotificationItem[];
+  unreadCount: number;
+  align?: "start" | "end";
+}) {
   const { t, locale } = useI18n();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -36,7 +44,7 @@ export function NotificationsBell({ notifications, unreadCount }: { notification
           )}
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-80 p-0">
+      <DropdownMenuContent align={align} className="w-80 p-0">
         <div className="flex items-center justify-between border-b border-ink-100 px-4 py-3">
           <p className="text-sm font-semibold text-ink-900">{t("notifications.title")}</p>
           {unreadCount > 0 && (

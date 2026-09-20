@@ -15,6 +15,29 @@ export interface BrandHeroBranch {
   totalResponses: number;
 }
 
+function ScoreRing({ score, ringClass, size = 116 }: { score: number; ringClass: string; size?: number }) {
+  const stroke = 9;
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const offset = c * (1 - Math.min(100, Math.max(0, score)) / 100);
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="-rotate-90">
+      <circle cx={size / 2} cy={size / 2} r={r} strokeWidth={stroke} className="stroke-ink-100" fill="none" />
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={r}
+        strokeWidth={stroke}
+        strokeDasharray={c}
+        strokeDashoffset={offset}
+        strokeLinecap="round"
+        className={cn(ringClass, "transition-[stroke-dashoffset] duration-700 ease-out")}
+        fill="none"
+      />
+    </svg>
+  );
+}
+
 export function BrandSatisfactionHero({
   locale,
   score,
@@ -40,71 +63,63 @@ export function BrandSatisfactionHero({
     ? { excellent: tb.scoreExcellent, good: tb.scoreGood, fair: tb.scoreFair, poor: tb.scorePoor }[tone]
     : null;
 
-  const scoredBranches = branches.filter((b) => b.score !== null);
+  const scoredBranches = branches.filter((b) => b.score !== null).sort((a, b) => (b.score as number) - (a.score as number));
   const displayName = (b: BrandHeroBranch) => (locale === "ar" && b.nameAr ? b.nameAr : b.name);
 
   return (
     <Card className="overflow-hidden">
-      <CardContent className="grid grid-cols-1 gap-8 p-6 lg:grid-cols-[minmax(0,320px)_1fr] lg:p-8">
+      <CardContent className="grid grid-cols-1 gap-6 p-5 lg:grid-cols-[minmax(0,300px)_1fr] lg:p-6">
         {/* ---- The score itself ---- */}
         <div>
           <div className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-50 text-brand-content">
-              <SparklesIcon className="h-4 w-4" />
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-content">
+              <SparklesIcon className="h-3.5 w-3.5" />
             </span>
             <p className="text-sm font-semibold text-ink-900">{t.brandScoreTitle}</p>
           </div>
 
-          {score === null ? (
-            <div className="mt-5">
-              <p className="text-lg font-semibold text-ink-900">{t.brandScoreEmpty}</p>
+          {score === null || !tone || !toneClass ? (
+            <div className="mt-4">
+              <p className="text-base font-semibold text-ink-900">{t.brandScoreEmpty}</p>
               <p className="mt-1.5 text-sm leading-relaxed text-ink-500">{t.brandScoreEmptyBody}</p>
             </div>
           ) : (
-            <>
-              <div className="mt-5 flex items-end gap-3">
-                <span className={cn("text-6xl font-semibold leading-none tracking-tight", toneClass?.text)}>
-                  {score}
-                </span>
-                <span className="pb-1.5 text-lg text-ink-400">/100</span>
+            <div className="mt-4 flex items-center gap-4">
+              <div className="relative shrink-0">
+                <ScoreRing score={score} ringClass={toneClass.ring} />
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className={cn("text-[1.7rem] font-bold leading-none tracking-tight", toneClass.text)}>{score}</span>
+                  <span className="mt-0.5 text-[10px] font-medium text-ink-400">/100</span>
+                </div>
               </div>
 
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                {toneLabel && toneClass && (
-                  <span className={cn("rounded-full px-2.5 py-1 text-xs font-semibold", toneClass.chip)}>
-                    {toneLabel}
-                  </span>
-                )}
+              <div className="min-w-0 flex-1">
+                <span className={cn("inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold", toneClass.chip)}>
+                  {toneLabel}
+                </span>
                 {delta !== null && (
                   <span
                     className={cn(
-                      "inline-flex items-center gap-1 text-xs font-medium",
+                      "ms-2 inline-flex items-center gap-1 text-xs font-medium",
                       delta >= 0 ? "text-mint-content" : "text-danger-content"
                     )}
                   >
                     <TrendingUpIcon className={cn("h-3.5 w-3.5", delta < 0 && "rotate-180")} />
                     {delta >= 0 ? "+" : ""}
-                    {delta} {t.brandScoreVsPrevious}
+                    {delta}
                   </span>
                 )}
+                <p className="mt-2 text-xs leading-relaxed text-ink-400">
+                  {formatNumber(answerCount, locale)} {t.brandScoreBasedOn} {formatNumber(responseCount, locale)} {t.brandScoreResponses}
+                  {branches.length > 0 && ` · ${branches.length} ${t.brandScoreBranches}`}
+                </p>
               </div>
-
-              <div className="mt-5 h-2 w-full overflow-hidden rounded-full bg-ink-100">
-                <div className={cn("h-full rounded-full", toneClass?.bar)} style={{ width: `${score}%` }} />
-              </div>
-
-              <p className="mt-4 text-xs leading-relaxed text-ink-400">
-                {formatNumber(answerCount, locale)} {t.brandScoreBasedOn} {formatNumber(responseCount, locale)}{" "}
-                {t.brandScoreResponses}
-                {branches.length > 0 && ` · ${t.brandScoreAcross} ${branches.length} ${t.brandScoreBranches}`}
-              </p>
-              <p className="mt-2 text-xs leading-relaxed text-ink-400">{t.brandScoreHelp}</p>
-            </>
+            </div>
           )}
         </div>
 
         {/* ---- Branch comparison ---- */}
-        <div className="border-t border-ink-100 pt-6 lg:border-s lg:border-t-0 lg:ps-8 lg:pt-0">
+        <div className="border-t border-ink-100 pt-5 lg:border-s lg:border-t-0 lg:ps-6 lg:pt-0">
           <div className="flex items-center justify-between gap-2">
             <p className="text-sm font-semibold text-ink-900">{t.branchPerformance}</p>
             <Link
@@ -117,31 +132,27 @@ export function BrandSatisfactionHero({
           </div>
 
           {scoredBranches.length === 0 ? (
-            <div className="mt-6 flex flex-col items-start gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-ink-50 text-ink-400">
-                <BuildingIcon className="h-5 w-5" />
+            <div className="mt-4 flex flex-col items-start gap-2">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-ink-50 text-ink-400">
+                <BuildingIcon className="h-4 w-4" />
               </span>
               <p className="text-sm text-ink-500">{t.branchPerformanceEmpty}</p>
             </div>
           ) : (
-            <ul className="mt-5 space-y-3.5">
+            <ul className="mt-3 divide-y divide-ink-50">
               {scoredBranches.map((b) => {
                 const bTone = scoreTone(b.score as number);
                 const bClass = scoreToneClasses[bTone];
                 return (
-                  <li key={b.id}>
-                    <div className="flex items-baseline justify-between gap-3 text-sm">
-                      <span className="truncate font-medium text-ink-800">{displayName(b)}</span>
-                      <span className="flex shrink-0 items-baseline gap-2">
-                        <span className="text-xs text-ink-400">
-                          {formatNumber(b.totalResponses, locale)} {tb.responses.toLowerCase()}
-                        </span>
-                        <span className={cn("text-sm font-semibold tabular-nums", bClass.text)}>{b.score}</span>
-                      </span>
-                    </div>
-                    <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-ink-100">
-                      <div className={cn("h-full rounded-full", bClass.bar)} style={{ width: `${b.score}%` }} />
-                    </div>
+                  <li key={b.id} className="flex items-center gap-3 py-1.5">
+                    <span className={cn("h-1.5 w-1.5 shrink-0 rounded-full", bClass.bar)} />
+                    <span className="min-w-0 flex-1 truncate text-sm text-ink-700">{displayName(b)}</span>
+                    <span className="hidden h-1 w-16 shrink-0 overflow-hidden rounded-full bg-ink-100 sm:block">
+                      <span className={cn("block h-full rounded-full", bClass.bar)} style={{ width: `${b.score}%` }} />
+                    </span>
+                    <span className={cn("w-7 shrink-0 text-end text-sm font-semibold tabular-nums", bClass.text)}>
+                      {b.score}
+                    </span>
                   </li>
                 );
               })}
