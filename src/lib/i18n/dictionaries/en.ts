@@ -114,6 +114,7 @@ const en = {
     solutionUnderstandDesc: "AI surfaces what matters most — no spreadsheets required.",
     solutionStat: "92% positive",
     solutionWatchCaption: "Real product, real dashboard",
+    solutionScreenshotAlt: "Survpay dashboard home screen showing brand satisfaction score, branch performance and response analytics",
 
     howItWorksEyebrow: "How Survpay Works",
     howItWorksTitle: "From creating your survey to making the decision",
@@ -251,6 +252,11 @@ const en = {
     insightsAnnotation4Desc: "Read exactly what your customers are saying.",
     insightsQrShare: "Share your feedback",
     insightsQrResult: "Results appear here",
+    insightsBranch1Name: "Al Olaya",
+    insightsBranch2Name: "Riyadh Park",
+    insightsBranch3Name: "Al Khobar Corniche",
+    insightsBranch4Name: "Jeddah Tahlia",
+    insightsBranch5Name: "North Jeddah",
 
     branchEyebrow: "Multi-branch",
     branchTitle: "One dashboard for every branch",

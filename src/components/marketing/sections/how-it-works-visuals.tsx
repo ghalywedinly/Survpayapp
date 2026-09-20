@@ -85,7 +85,7 @@ function Sparkline({ data, color, height = 90 }: { data: { value: number }[]; co
 
 function MockChrome({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-ink-200/70 bg-surface p-5 shadow-pop sm:p-6">
+    <div className="rounded-2xl bg-surface p-5 shadow-pop sm:p-6">
       <div className="flex items-center justify-between border-b border-ink-100 pb-3.5">
         <Logo size={20} />
         <div className="hidden items-center gap-1.5 sm:flex">
@@ -170,7 +170,7 @@ export function CreateVisual({ dict }: { dict: Dict }) {
           <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-400">{t.howItWorksTemplatesLabel}</p>
           <div className="mt-2.5 space-y-2">
             {templates.map((tpl) => (
-              <div key={tpl} className="flex items-center gap-1.5 rounded-lg border border-ink-100 bg-ink-50/50 px-2.5 py-2 text-[11px] text-ink-600">
+              <div key={tpl} className="flex items-center gap-1.5 rounded-lg bg-ink-50/70 px-2.5 py-2 text-[11px] text-ink-600">
                 <LayersIcon className="h-3.5 w-3.5 shrink-0 text-brand-content" />
                 <span className="truncate">{tpl}</span>
               </div>
@@ -186,7 +186,7 @@ export function CreateVisual({ dict }: { dict: Dict }) {
 export function ShareVisual({ dict }: { dict: Dict }) {
   const t = dict.marketing;
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-ink-200/70 bg-gradient-to-br from-brand-50 via-surface to-info-tint p-9 shadow-pop">
+    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-50 via-surface to-info-tint p-9 shadow-pop">
       <div className="flex flex-wrap items-end justify-center gap-8">
         <div className="w-[170px] rounded-[1.75rem] border-[6px] border-[#12151e] bg-surface p-4 shadow-card">
           <p className="text-center text-xs font-semibold text-ink-900">Survpay</p>
@@ -201,11 +201,11 @@ export function ShareVisual({ dict }: { dict: Dict }) {
           </div>
         </div>
 
-        <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-ink-200/70 bg-surface shadow-card">
+        <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface shadow-card">
           <LinkIcon className="h-[18px] w-[18px] text-brand-content" />
         </div>
 
-        <div className="rounded-2xl border border-ink-200/70 bg-surface p-5 text-center shadow-card">
+        <div className="rounded-2xl bg-surface p-5 text-center shadow-card">
           <div className="flex items-center justify-center gap-1.5 text-[11px] font-medium text-ink-500">
             <QrIcon className="h-4 w-4 text-brand-content" />
             Survpay
@@ -248,7 +248,7 @@ export function CollectVisual({ dict }: { dict: Dict }) {
           </div>
           <ul className="mt-3.5 space-y-3">
             {comments.map((c) => (
-              <li key={c.author} className="flex items-start gap-2.5 rounded-xl border border-ink-100 bg-ink-50/40 p-3">
+              <li key={c.author} className="flex items-start gap-2.5 rounded-xl bg-ink-50/60 p-3">
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-50 text-[11px] font-semibold text-brand-content">
                   {c.author.charAt(0)}
                 </span>
@@ -271,7 +271,7 @@ export function CollectVisual({ dict }: { dict: Dict }) {
           <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-400">Categories</p>
           <div className="mt-2.5 space-y-2">
             {categories.map((c) => (
-              <div key={c.label} className="flex items-center gap-2 rounded-lg border border-ink-100 px-2.5 py-2 text-[11px] text-ink-600">
+              <div key={c.label} className="flex items-center gap-2 rounded-lg bg-ink-50/60 px-2.5 py-2 text-[11px] text-ink-600">
                 <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${c.dot}`} />
                 {c.label}
               </div>
@@ -321,7 +321,7 @@ export function UnderstandVisual({ dict }: { dict: Dict }) {
     <MockChrome>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {metrics.map((m) => (
-          <div key={m.label} className="rounded-lg border border-ink-100 bg-ink-50/30 p-3">
+          <div key={m.label} className="rounded-lg bg-ink-50/60 p-3">
             <p className="truncate text-[11px] text-ink-500">{m.label}</p>
             <p className="mt-1 text-lg font-semibold text-ink-900">{m.value}</p>
           </div>
@@ -329,11 +329,11 @@ export function UnderstandVisual({ dict }: { dict: Dict }) {
       </div>
 
       <div className="mt-3.5 grid grid-cols-1 gap-3.5 sm:grid-cols-2">
-        <div className="rounded-xl border border-ink-100 bg-ink-50/30 p-4">
+        <div className="rounded-xl bg-ink-50/60 p-4">
           <p className="text-xs font-semibold text-ink-900">{t.analyticsTrendLabel}</p>
           <Sparkline data={trend} color={chartColors.brand} height={150} />
         </div>
-        <div className="rounded-xl border border-ink-100 bg-ink-50/30 p-4">
+        <div className="rounded-xl bg-ink-50/60 p-4">
           <p className="text-xs font-semibold text-ink-900">{t.analyticsDistributionLabel}</p>
           <div className="mt-2 flex items-center gap-4">
             <DonutChart data={quality.map((q) => ({ label: q.label, value: q.count }))} size={96} />
@@ -349,7 +349,7 @@ export function UnderstandVisual({ dict }: { dict: Dict }) {
         </div>
       </div>
 
-      <div className="mt-3.5 rounded-xl border border-ink-100 bg-ink-50/30 p-4">
+      <div className="mt-3.5 rounded-xl bg-ink-50/60 p-4">
         <p className="text-xs font-semibold text-ink-900">{t.analyticsQuestionLabel}</p>
         <ul className="mt-2.5 space-y-2.5">
           {questions.map((q) => (
@@ -383,7 +383,7 @@ export function ImproveVisual({ dict, locale }: { dict: Dict; locale: Locale }) 
       <p className="text-sm font-semibold text-ink-900">{t.howItWorksInsightsLabel}</p>
       <div className="mt-3.5 space-y-3">
         {insights.map((c) => (
-          <div key={c.title} className="flex items-start gap-3 rounded-xl border border-ink-100 bg-ink-50/40 p-3.5">
+          <div key={c.title} className="flex items-start gap-3 rounded-xl bg-ink-50/60 p-3.5">
             <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${toneClasses[c.tone]}`}>
               <c.icon className="h-4 w-4" />
             </div>

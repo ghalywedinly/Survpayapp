@@ -5,6 +5,7 @@ import { buttonClasses } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { SparklesIcon, CheckIcon, ArrowRightIcon } from "@/components/icons";
 import { CreateVisual, ShareVisual, CollectVisual, UnderstandVisual, ImproveVisual } from "./how-it-works-visuals";
+import { ScrollReveal } from "../scroll-reveal";
 
 const badgeTone = {
   brand: "bg-brand-600",
@@ -75,7 +76,7 @@ export function HowItWorks({ locale }: { locale: Locale }) {
         const reversed = i % 2 === 1;
         const nextStep = steps[i + 1];
         const text = (
-          <div key="text" className="min-w-0">
+          <ScrollReveal key="text" delay={0} className="min-w-0">
             <div className="flex items-center gap-3">
               <span className={cn("flex h-9 w-9 items-center justify-center rounded-xl text-sm font-semibold text-white", badgeTone[s.tone])}>
                 {s.n}
@@ -106,12 +107,12 @@ export function HowItWorks({ locale }: { locale: Locale }) {
                 </Link>
               )}
             </div>
-          </div>
+          </ScrollReveal>
         );
         const visual = (
-          <div key="visual" className="animate-fade-in">
+          <ScrollReveal key="visual" delay={150}>
             {s.visual}
-          </div>
+          </ScrollReveal>
         );
 
         return (

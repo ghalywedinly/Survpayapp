@@ -116,6 +116,7 @@ const ar: Dictionary = {
     solutionUnderstandDesc: "الذكاء الاصطناعي يبرز أهم ما يهم — دون جداول بيانات.",
     solutionStat: "92% إيجابي",
     solutionWatchCaption: "منتج حقيقي، لوحة تحكم حقيقية",
+    solutionScreenshotAlt: "الشاشة الرئيسية للوحة تحكم Survpay تعرض مؤشر رضا العلامة التجارية وأداء الفروع وتحليلات الإجابات",
 
     howItWorksEyebrow: "كيف يعمل Survpay؟",
     howItWorksTitle: "من إنشاء الاستبيان إلى اتخاذ القرار",
@@ -252,6 +253,11 @@ const ar: Dictionary = {
     insightsAnnotation4Desc: "اقرأ ما يقوله عملاؤك بالتفصيل.",
     insightsQrShare: "شارك رأيك",
     insightsQrResult: "تظهر النتائج هنا",
+    insightsBranch1Name: "العليا",
+    insightsBranch2Name: "الرياض بارك",
+    insightsBranch3Name: "كورنيش الخبر",
+    insightsBranch4Name: "التحلية جدة",
+    insightsBranch5Name: "شمال جدة",
 
     branchEyebrow: "تعدد الفروع",
     branchTitle: "لوحة تحكم واحدة لكل فرع",

@@ -6,7 +6,6 @@ import { Solution } from "@/components/marketing/sections/solution";
 import { HowItWorks } from "@/components/marketing/sections/how-it-works";
 import { CustomerInsightsSection } from "@/components/marketing/sections/customer-insights";
 import { Features } from "@/components/marketing/sections/features";
-import { QrFeedback } from "@/components/marketing/sections/qr-feedback";
 import { MultiBranch } from "@/components/marketing/sections/multi-branch";
 import { CouponShowcase } from "@/components/marketing/sections/coupon-showcase";
 import { Solutions } from "@/components/marketing/sections/solutions";
@@ -29,7 +28,6 @@ export default function LandingPage({ params }: { params: { locale: Locale } }) 
         <HowItWorks locale={locale} />
         <CustomerInsightsSection locale={locale} />
         <Features locale={locale} />
-        <QrFeedback locale={locale} />
         <MultiBranch locale={locale} />
         <CouponShowcase locale={locale} />
         <Solutions locale={locale} />

@@ -46,18 +46,11 @@ export function Solution({ locale }: { locale: Locale }) {
                 app.survpay.com/dashboard
               </span>
             </div>
-            <video
+            <img
+              src="/images/dashboard-home-screenshot.png"
+              alt={t.solutionScreenshotAlt}
               className="aspect-[8/5] w-full bg-[#0e0a24] object-cover object-top"
-              poster="/videos/product-tour-poster.jpg"
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="metadata"
-            >
-              <source src="/videos/product-tour.webm" type="video/webm" />
-              <source src="/videos/product-tour.mp4" type="video/mp4" />
-            </video>
+            />
           </div>
 
           <div className="absolute -bottom-5 start-6 hidden items-center gap-3 rounded-2xl border border-white/15 bg-[#1b1440]/90 px-4 py-3 shadow-[0_16px_40px_rgba(0,0,0,0.4)] backdrop-blur-xl sm:-start-6 sm:flex">
