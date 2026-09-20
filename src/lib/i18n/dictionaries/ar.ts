@@ -115,6 +115,7 @@ const ar: Dictionary = {
     solutionUnderstandTitle: "افهم فورًا",
     solutionUnderstandDesc: "الذكاء الاصطناعي يبرز أهم ما يهم — دون جداول بيانات.",
     solutionStat: "92% إيجابي",
+    solutionWatchCaption: "منتج حقيقي، لوحة تحكم حقيقية",
 
     howItWorksEyebrow: "كيف يعمل Survpay؟",
     howItWorksTitle: "من إنشاء الاستبيان إلى اتخاذ القرار",

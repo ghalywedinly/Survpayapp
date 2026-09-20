@@ -113,6 +113,7 @@ const en = {
     solutionUnderstandTitle: "Understand instantly",
     solutionUnderstandDesc: "AI surfaces what matters most — no spreadsheets required.",
     solutionStat: "92% positive",
+    solutionWatchCaption: "Real product, real dashboard",
 
     howItWorksEyebrow: "How Survpay Works",
     howItWorksTitle: "From creating your survey to making the decision",
