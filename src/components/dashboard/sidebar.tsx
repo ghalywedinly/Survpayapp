@@ -89,8 +89,10 @@ export function DashboardSidebar({
   return (
     <div
       className={cn(
-        "flex h-full shrink-0 flex-col bg-surface transition-[width] duration-200",
-        floating ? "rounded-2xl border border-ink-100 shadow-card" : "border-e border-ink-100",
+        "flex h-full shrink-0 flex-col transition-[width] duration-200",
+        floating
+          ? "rounded-2xl border border-white/40 bg-surface/70 shadow-card backdrop-blur-xl backdrop-saturate-150"
+          : "border-e border-ink-100 bg-surface",
         collapsed ? "w-[76px]" : "w-64"
       )}
     >

@@ -44,7 +44,7 @@ export function DashboardShell({
   const sidebarProps = { orgName, plan, userName, userEmail, notifications, unreadCount };
 
   return (
-    <div className="min-h-screen bg-ink-50/40">
+    <div className="min-h-screen bg-brand-wash">
       {/* Floating, fixed sidebar — desktop only. Main content gets a
           matching inline-start offset (logical, so it flips for RTL)
           instead of a flex sibling, since the sidebar no longer
