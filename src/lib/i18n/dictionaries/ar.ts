@@ -1020,6 +1020,8 @@ const ar: Dictionary = {
     rewardFailedTitle: "تعذّرت معالجة مكافأتك",
     rewardFailedBody: "تم إبلاغ فريقنا. يرجى المحاولة لاحقًا أو التواصل مع منظّم الاستبيان.",
     redemptionCoupon: "أظهر هذا الرمز لاستبدال مكافأتك شخصيًا.",
+    addToAppleWallet: "أضف إلى Apple Wallet",
+    addToGoogleWallet: "أضف إلى Google Wallet",
     closedTitle: "هذا الاستبيان لم يعد يقبل إجابات",
     closedBody: "شكرًا لاهتمامك — وصلت هذه الدراسة إلى هدف الإجابات أو تاريخ الإغلاق.",
     notFoundTitle: "الاستبيان غير موجود",

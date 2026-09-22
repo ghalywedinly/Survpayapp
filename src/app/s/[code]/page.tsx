@@ -4,6 +4,8 @@ import { cookies, headers } from "next/headers";
 import { localeCookieName, isLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
 import { PublicSurveyClient } from "@/components/survey-runtime/public-survey-client";
 import { Logo } from "@/components/brand/logo";
+import { isAppleWalletConfigured } from "@/lib/services/wallet/apple-pass";
+import { isGoogleWalletConfigured } from "@/lib/services/wallet/google-wallet";
 
 async function resolveLocale(language?: string | null): Promise<Locale> {
   if (language === "ar") return "ar";
@@ -68,6 +70,8 @@ export default async function PublicSurveyPage({
       collectFutureConsent={survey.settings?.collectFutureConsent ?? false}
       initiallyClosed={isClosed}
       branchCode={searchParams?.b}
+      walletAppleEnabled={isAppleWalletConfigured()}
+      walletGoogleEnabled={isGoogleWalletConfigured()}
       reward={{
         enabled: survey.rewardConfig?.enabled ?? false,
         amount: survey.rewardConfig?.amount ?? 0,

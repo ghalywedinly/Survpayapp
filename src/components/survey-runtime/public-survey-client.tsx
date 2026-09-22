@@ -8,9 +8,9 @@ import { SurveyRunner, type RuntimeQuestionWithLogic } from "./survey-runner";
 import { Logo } from "@/components/brand/logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Button } from "@/components/ui/button";
+import { Button, buttonClasses } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
-import { CheckCircleIcon, AlertIcon } from "@/components/icons";
+import { CheckCircleIcon, AlertIcon, WalletIcon } from "@/components/icons";
 
 type Phase = "intro" | "running" | "details" | "submitting" | "processing" | "done" | "closed" | "duplicate" | "error";
 
@@ -35,6 +35,8 @@ export function PublicSurveyClient({
   reward,
   initiallyClosed,
   branchCode,
+  walletAppleEnabled,
+  walletGoogleEnabled,
 }: {
   code: string;
   title: string;
@@ -50,6 +52,9 @@ export function PublicSurveyClient({
   initiallyClosed: boolean;
   /** Location this QR/link belongs to, carried through to the saved response. */
   branchCode?: string;
+  /** Whether the org has real Apple/Google Wallet credentials configured — the "Add to Wallet" buttons only ever render when true, never as a dead/broken button. */
+  walletAppleEnabled: boolean;
+  walletGoogleEnabled: boolean;
 }) {
   const { t, locale } = useI18n();
   const [phase, setPhase] = useState<Phase>(initiallyClosed ? "closed" : "intro");
@@ -209,6 +214,29 @@ export function PublicSurveyClient({
                   <p className="mt-1 text-xs text-mint-content">{t("publicSurvey.redemptionCoupon")}</p>
                   {rewardResult?.redemptionNote && (
                     <p className="mt-2 rounded-lg bg-surface px-3 py-2 font-mono text-xs text-ink-600">{rewardResult.redemptionNote}</p>
+                  )}
+
+                  {rewardResult?.redemptionNote && (walletAppleEnabled || walletGoogleEnabled) && (
+                    <div className="mt-4 flex flex-col gap-2">
+                      {walletAppleEnabled && (
+                        <a
+                          href={`/api/public/rewards/wallet/apple?code=${encodeURIComponent(rewardResult.redemptionNote)}&locale=${locale}`}
+                          className={buttonClasses({ variant: "secondary", className: "gap-2" })}
+                        >
+                          <WalletIcon className="h-4 w-4" />
+                          {t("publicSurvey.addToAppleWallet")}
+                        </a>
+                      )}
+                      {walletGoogleEnabled && (
+                        <a
+                          href={`/api/public/rewards/wallet/google?code=${encodeURIComponent(rewardResult.redemptionNote)}&locale=${locale}`}
+                          className={buttonClasses({ variant: "outline", className: "gap-2" })}
+                        >
+                          <WalletIcon className="h-4 w-4" />
+                          {t("publicSurvey.addToGoogleWallet")}
+                        </a>
+                      )}
+                    </div>
                   )}
                 </div>
               )}

@@ -1019,6 +1019,8 @@ const en = {
     rewardFailedTitle: "We couldn't process your reward",
     rewardFailedBody: "Our team has been notified. Please check back shortly or contact the survey organizer.",
     redemptionCoupon: "Show this code to redeem your reward in person.",
+    addToAppleWallet: "Add to Apple Wallet",
+    addToGoogleWallet: "Add to Google Wallet",
     closedTitle: "This survey is no longer accepting responses",
     closedBody: "Thank you for your interest — this study has reached its response target or closing date.",
     notFoundTitle: "Survey not found",
