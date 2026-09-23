@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useI18n } from "@/lib/i18n/provider";
-import { formatCurrency, formatDate } from "@/lib/format";
+import { formatDate } from "@/lib/format";
 import { Table, THead, TBody, TR, TH, TD } from "@/components/ui/table";
 import { SurveyStatusBadge } from "./survey-status-badge";
 import { Progress } from "@/components/ui/progress";
@@ -23,8 +23,7 @@ interface SurveyRow {
   createdAt: string;
   updatedAt: string;
   _count: { responses: number };
-  rewardConfig: { amount: number; currency: string; maxResponses: number; enabled: boolean } | null;
-  rewardBudget: { fundedAmount: number; distributedAmount: number } | null;
+  rewardConfig: { discountPercent: number; maxResponses: number; enabled: boolean } | null;
 }
 
 export function SurveysTable({ surveys }: { surveys: SurveyRow[] }) {
@@ -51,7 +50,6 @@ export function SurveysTable({ surveys }: { surveys: SurveyRow[] }) {
             <TH>{t("surveys.colStatus")}</TH>
             <TH>{t("surveys.colResponses")}</TH>
             <TH>{t("surveys.colReward")}</TH>
-            <TH>{t("surveys.colBudget")}</TH>
             <TH>{t("surveys.colCreated")}</TH>
             <TH></TH>
           </TR>
@@ -61,7 +59,6 @@ export function SurveysTable({ surveys }: { surveys: SurveyRow[] }) {
             const title = locale === "ar" && s.titleAr ? s.titleAr : s.title;
             const target = s.rewardConfig?.maxResponses ?? 0;
             const completion = target > 0 ? Math.min(100, (s._count.responses / target) * 100) : 0;
-            const remaining = s.rewardBudget ? s.rewardBudget.fundedAmount - s.rewardBudget.distributedAmount : 0;
 
             return (
               <TR key={s.id}>
@@ -83,9 +80,8 @@ export function SurveysTable({ surveys }: { surveys: SurveyRow[] }) {
                 </TD>
                 <TD>{s._count.responses.toLocaleString()}</TD>
                 <TD>
-                  {s.rewardConfig?.enabled ? formatCurrency(s.rewardConfig.amount, locale, s.rewardConfig.currency) : "—"}
+                  {s.rewardConfig?.enabled ? `${s.rewardConfig.discountPercent}%` : "—"}
                 </TD>
-                <TD>{s.rewardBudget ? formatCurrency(remaining, locale) : "—"}</TD>
                 <TD>{formatDate(s.createdAt, locale)}</TD>
                 <TD>
                   <DropdownMenu>

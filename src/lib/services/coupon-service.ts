@@ -15,9 +15,9 @@ async function findByCode(organizationId: string, rawCode: string) {
   const code = normalizeCode(rawCode);
   if (!code) return null;
   return db.rewardTransaction.findFirst({
-    where: { code, budget: { organizationId } },
+    where: { code, survey: { organizationId } },
     include: {
-      budget: { include: { survey: { select: { id: true, title: true, titleAr: true } } } },
+      survey: { select: { id: true, title: true, titleAr: true, rewardConfig: { select: { discountPercent: true } } } },
     },
   });
 }
@@ -30,11 +30,11 @@ export const CouponService = {
       found: true as const,
       redeemed: tx.redeemedAt !== null,
       code: tx.code!,
-      amount: tx.amount,
+      discountPercent: tx.survey.rewardConfig?.discountPercent ?? 0,
       issuedAt: tx.createdAt,
       redeemedAt: tx.redeemedAt,
       redeemedNote: tx.redeemedNote,
-      survey: tx.budget.survey,
+      survey: { id: tx.survey.id, title: tx.survey.title, titleAr: tx.survey.titleAr },
     };
   },
 
@@ -54,24 +54,24 @@ export const CouponService = {
     return {
       ok: true as const,
       code: tx.code!,
-      amount: tx.amount,
-      survey: tx.budget.survey,
+      discountPercent: tx.survey.rewardConfig?.discountPercent ?? 0,
+      survey: { id: tx.survey.id, title: tx.survey.title, titleAr: tx.survey.titleAr },
     };
   },
 
   async listRecent(organizationId: string, limit = 20) {
     const rows = await db.rewardTransaction.findMany({
-      where: { budget: { organizationId }, code: { not: null } },
-      include: { budget: { include: { survey: { select: { id: true, title: true, titleAr: true } } } } },
+      where: { survey: { organizationId }, code: { not: null } },
+      include: { survey: { select: { id: true, title: true, titleAr: true, rewardConfig: { select: { discountPercent: true } } } } },
       orderBy: { createdAt: "desc" },
       take: limit,
     });
     return rows.map((tx) => ({
       code: tx.code!,
-      amount: tx.amount,
+      discountPercent: tx.survey.rewardConfig?.discountPercent ?? 0,
       issuedAt: tx.createdAt,
       redeemedAt: tx.redeemedAt,
-      survey: tx.budget.survey,
+      survey: { id: tx.survey.id, title: tx.survey.title, titleAr: tx.survey.titleAr },
     }));
   },
 };

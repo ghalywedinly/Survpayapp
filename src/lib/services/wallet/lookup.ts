@@ -22,13 +22,12 @@ export async function lookupCouponForWallet(code: string, locale: Locale): Promi
     },
   });
 
-  if (!tx || tx.type !== "reward" || tx.status !== "completed" || !tx.response) return null;
+  if (!tx || tx.status !== "completed" || !tx.response) return null;
 
   const { survey, branch } = tx.response;
   return {
     code,
-    amount: tx.amount,
-    currency: survey.rewardConfig?.currency ?? "SAR",
+    discountPercent: survey.rewardConfig?.discountPercent ?? 10,
     organizationName: survey.organization.name,
     surveyTitle: locale === "ar" && survey.titleAr ? survey.titleAr : survey.title,
     branchName: branch ? (locale === "ar" && branch.nameAr ? branch.nameAr : branch.name) : null,

@@ -16,7 +16,7 @@ export default async function CouponsPage({ params }: { params: { locale: Locale
       <CouponCheckerClient
         initialRecent={recent.map((r) => ({
           code: r.code,
-          amount: r.amount,
+          discountPercent: r.discountPercent,
           issuedAt: r.issuedAt.toISOString(),
           redeemedAt: r.redeemedAt ? r.redeemedAt.toISOString() : null,
           survey: r.survey,

@@ -75,7 +75,6 @@ model Organization {
   members       OrganizationMember[]
   surveys       Survey[]
   branches      Branch[]
-  rewardBudgets RewardBudget[]
   paymentTx     PaymentTransaction[]
   invoices      Invoice[]
   auditLogs     AuditLog[]
@@ -148,7 +147,7 @@ model Survey {
   responses          SurveyResponse[]
   settings           SurveySettings?
   rewardConfig       RewardConfig?
-  rewardBudget       RewardBudget?
+  rewardTransactions RewardTransaction[]
   events             SurveyEvent[]
   reports            Report[]
   aiInsights         AIInsight[]
@@ -235,57 +234,42 @@ model RewardConfig {
   surveyId        String   @unique
   survey          Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
   enabled         Boolean  @default(true)
-  amount          Float    @default(0) // per valid response, in SAR
-  currency        String   @default("SAR")
-  rewardType      String   @default("cash") // coupon — the only reward type SurvPay issues; always set explicitly on creation (see actions/surveys.ts), the DB default is legacy and no longer valid
+  // SurvPay only ever issues percentage-discount coupons, never a cash or
+  // fixed-monetary-amount reward — e.g. discountPercent: 20 => "20% discount
+  // coupon". No money is ever funded, held, or paid out for a reward.
+  discountPercent Int      @default(10)
+  rewardType      String   @default("coupon") // coupon — the only reward type SurvPay issues; always set explicitly on creation (see actions/surveys.ts)
   maxResponses    Int      @default(100)
-  platformFeePct  Float    @default(0.08) // platform/service fee, fraction of budget
-}
-
-model RewardBudget {
-  id                String   @id @default(cuid())
-  surveyId          String   @unique
-  survey            Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
-  organizationId    String
-  organization      Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  fundedAmount      Float    @default(0)
-  distributedAmount Float    @default(0)
-  currency          String   @default("SAR")
-  transactions      RewardTransaction[]
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
 }
 
 model RewardTransaction {
   id             String       @id @default(cuid())
-  budgetId       String
-  budget         RewardBudget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  surveyId       String
+  survey         Survey       @relation(fields: [surveyId], references: [id], onDelete: Cascade)
   responseId     String?      @unique
   response       SurveyResponse? @relation(fields: [responseId], references: [id], onDelete: SetNull)
-  type           String       // funding | reward | refund
-  amount         Float
-  respondents    Int          @default(1)
   status         String       @default("completed") // pending | processing | completed | failed | expired
   provider       String       @default("mock") // which RewardProvider issued this
   note           String?
-  // Redeemable code shown to the respondent for coupon-type rewards (e.g. a
-  // restaurant discount code) — set only when provider === "coupon". The
+  // Redeemable code shown to the respondent for their discount coupon. The
   // in-app coupon-check tool looks transactions up by this code and, once,
   // flips redeemedAt so the same code can't be redeemed twice.
   code           String?      @unique
   redeemedAt     DateTime?
   redeemedNote   String?
   createdAt      DateTime     @default(now())
+
+  @@index([surveyId])
 }
 
-// Researcher billing & incentive funding are modeled as distinct concepts.
-// PaymentTransaction funds the org's incentive budget or pays a subscription
-// invoice; RewardTransaction pays out to respondents from a funded budget.
+// Researcher subscription billing only — PaymentTransaction never funds a
+// reward (SurvPay issues percentage-discount coupons, never cash/monetary
+// rewards, so there is nothing to fund or refund on the respondent side).
 model PaymentTransaction {
   id             String       @id @default(cuid())
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  purpose        String       // subscription | incentive_funding | refund
+  purpose        String       // subscription | refund
   amount         Float
   currency       String       @default("SAR")
   status         String       @default("completed") // pending | processing | completed | failed | refunded

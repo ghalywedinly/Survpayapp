@@ -1,6 +1,6 @@
 import { AdminService } from "@/lib/services/admin-service";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
-import { formatCurrency, formatDate } from "@/lib/format";
+import { formatDate } from "@/lib/format";
 import type { Locale } from "@/lib/i18n/config";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Card } from "@/components/ui/card";
@@ -37,7 +37,7 @@ export default async function AdminClientsPage({ params }: { params: { locale: L
                   <TH>{t.colCountry}</TH>
                   <TH>{t.colMembers}</TH>
                   <TH>{t.colSurveys}</TH>
-                  <TH>{t.colRewardSpend}</TH>
+                  <TH>{t.colCouponsIssued}</TH>
                   <TH>{t.colLastActivity}</TH>
                   <TH>{t.colRegistered}</TH>
                 </TR>
@@ -55,7 +55,7 @@ export default async function AdminClientsPage({ params }: { params: { locale: L
                     <TD>{org.country}</TD>
                     <TD>{org.memberCount}</TD>
                     <TD>{org.surveyCount}</TD>
-                    <TD>{formatCurrency(org.totalRewardSpend, params.locale)}</TD>
+                    <TD>{org.couponsIssued}</TD>
                     <TD>{formatDate(org.lastActivityAt, params.locale)}</TD>
                     <TD className="text-ink-500">{formatDate(org.createdAt, params.locale)}</TD>
                   </TR>

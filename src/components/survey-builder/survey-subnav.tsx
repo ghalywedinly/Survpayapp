@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useI18n } from "@/lib/i18n/provider";
 import { cn } from "@/lib/utils";
 
-type Tab = "overview" | "edit" | "preview" | "distribution" | "responses" | "analytics" | "reports" | "budget";
+type Tab = "overview" | "edit" | "preview" | "distribution" | "responses" | "analytics" | "reports";
 
 export function SurveySubnav({ surveyId, active }: { surveyId: string; active: Tab }) {
   const { t, locale } = useI18n();
@@ -18,7 +18,6 @@ export function SurveySubnav({ surveyId, active }: { surveyId: string; active: T
     { key: "responses", href: `${base}/responses`, label: t("nav.responses") },
     { key: "analytics", href: `${base}/analytics`, label: t("nav.analytics") },
     { key: "reports", href: `${base}/reports`, label: t("nav.reports") },
-    { key: "budget", href: `${base}/budget`, label: t("rewards.title") },
   ];
 
   return (

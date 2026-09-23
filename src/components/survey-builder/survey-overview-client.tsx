@@ -3,8 +3,6 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useI18n } from "@/lib/i18n/provider";
-import { formatCurrency } from "@/lib/format";
-import { platformFeePct } from "@/lib/pricing";
 import {
   updateSurveyBasicsAction,
   updateSurveyRewardAction,
@@ -22,7 +20,7 @@ interface Props {
   surveyId: string;
   status: string;
   basics: { title: string; titleAr: string; description: string; descriptionAr: string; objective: string; estimatedMinutes: number };
-  reward: { enabled: boolean; amount: number; currency: string; rewardType: "coupon"; maxResponses: number };
+  reward: { enabled: boolean; discountPercent: number; rewardType: "coupon"; maxResponses: number };
   settings: {
     responseLimit: number | null;
     startDate: string | null;
@@ -44,9 +42,6 @@ export function SurveyOverviewClient({ surveyId, status, basics: initBasics, rew
   const [basics, setBasics] = useState(initBasics);
   const [reward, setReward] = useState(initReward);
   const [settings, setSettings] = useState(initSettings);
-
-  const budget = reward.amount * reward.maxResponses;
-  const fee = Math.round(budget * platformFeePct * 100) / 100;
 
   function saveBasics() {
     startTransition(async () => {
@@ -75,8 +70,8 @@ export function SurveyOverviewClient({ surveyId, status, basics: initBasics, rew
       if (result.ok) {
         push({ title: t("wizard.publishSuccess"), tone: "success" });
         router.refresh();
-      } else if (result.error === "BUDGET_NOT_FUNDED") {
-        push({ title: t("wizard.publishNote"), tone: "error" });
+      } else {
+        push({ title: t("auth.errorGeneric"), tone: "error" });
       }
     });
   }
@@ -163,7 +158,16 @@ export function SurveyOverviewClient({ surveyId, status, basics: initBasics, rew
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div>
                 <Label>{t("wizard.rewardAmount")}</Label>
-                <Input type="number" min={1} value={reward.amount} onChange={(e) => setReward((r) => ({ ...r, amount: Number(e.target.value) }))} />
+                <div className="relative">
+                  <Input
+                    type="number"
+                    min={1}
+                    max={100}
+                    value={reward.discountPercent}
+                    onChange={(e) => setReward((r) => ({ ...r, discountPercent: Number(e.target.value) }))}
+                  />
+                  <span className="pointer-events-none absolute inset-y-0 end-3 flex items-center text-sm text-ink-400">%</span>
+                </div>
               </div>
               <div>
                 <Label>{t("wizard.rewardType")}</Label>
@@ -174,12 +178,6 @@ export function SurveyOverviewClient({ surveyId, status, basics: initBasics, rew
                 <Input type="number" min={1} value={reward.maxResponses} onChange={(e) => setReward((r) => ({ ...r, maxResponses: Number(e.target.value) }))} />
               </div>
             </div>
-          )}
-          {reward.enabled && (
-            <p className="text-xs text-ink-400">
-              {t("wizard.maxBudget")}: <span className="font-medium text-ink-700">{formatCurrency(budget, locale)}</span> · {t("wizard.platformFee")}:{" "}
-              <span className="font-medium text-ink-700">{formatCurrency(fee, locale)}</span>
-            </p>
           )}
           <Button size="sm" loading={pending} onClick={saveReward}>
             {t("common.save")}

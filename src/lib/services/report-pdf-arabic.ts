@@ -1,5 +1,5 @@
 import { getDictionary } from "@/lib/i18n/get-dictionary";
-import { formatCurrency, formatDuration } from "@/lib/format";
+import { formatDuration } from "@/lib/format";
 import { categoricalPalette } from "@/components/charts/theme";
 import { launchChromium } from "./chromium";
 import { SURVPAY_ICON_PNG_BASE64 } from "./report-assets";
@@ -74,7 +74,7 @@ export async function buildReportPdfArabic(data: ReportData): Promise<Uint8Array
     { label: t.kpiTotalResponses, value: String(overview.totalResponses), accent: COLOR.brand },
     { label: t.kpiCompletionRate, value: `${overview.completionRate.toFixed(1)}%`, accent: COLOR.mint },
     { label: t.kpiAvgTime, value: formatDuration(overview.avgCompletionSeconds, locale), accent: COLOR.amber },
-    { label: t.kpiRewardSpend, value: formatCurrency(overview.rewardSpend, locale), accent: COLOR.sky },
+    { label: t.kpiCouponsIssued, value: String(overview.couponsIssued), accent: COLOR.sky },
   ];
 
   const execSummary = `يلخص هذا التقرير ${overview.totalResponses} إجابة تم جمعها لاستبيان "${esc(title)}"، بمعدل إكمال بلغ ${overview.completionRate.toFixed(1)}% ومتوسط وقت إكمال ${formatDuration(overview.avgCompletionSeconds, locale)}.`;

@@ -11,8 +11,7 @@
 export type RewardType = "coupon";
 
 export interface RewardIssueRequest {
-  amount: number;
-  currency: string;
+  discountPercent: number;
   respondentEmail?: string | null;
 }
 

@@ -91,8 +91,6 @@ export function BuilderClient({ surveyId, initialQuestions, status }: { surveyId
     if (result.ok) {
       push({ title: t("wizard.publishSuccess"), tone: "success" });
       router.refresh();
-    } else if (result.error === "BUDGET_NOT_FUNDED") {
-      push({ title: t("wizard.publishNote"), tone: "error" });
     } else {
       push({ title: t("auth.errorGeneric"), tone: "error" });
     }

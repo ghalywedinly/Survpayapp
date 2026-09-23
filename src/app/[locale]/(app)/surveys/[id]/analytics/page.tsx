@@ -4,7 +4,7 @@ import { SurveyService } from "@/lib/services/survey-service";
 import { AnalyticsService } from "@/lib/services/analytics-service";
 import { AIService } from "@/lib/services/ai-service";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
-import { formatCurrency, formatDuration, formatPercent, formatNumber } from "@/lib/format";
+import { formatDuration, formatPercent, formatNumber } from "@/lib/format";
 import type { Locale } from "@/lib/i18n/config";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { SurveySubnav } from "@/components/survey-builder/survey-subnav";
@@ -59,7 +59,7 @@ export default async function SurveyAnalyticsPage({
         <StatCard icon={<InboxIcon className="h-[18px] w-[18px]" />} label={t.totalResponses} value={formatNumber(overview.totalResponses, params.locale)} />
         <StatCard icon={<TrendingUpIcon className="h-[18px] w-[18px]" />} label={t.completionRate} value={formatPercent(overview.completionRate, params.locale)} />
         <StatCard icon={<ClockIcon className="h-[18px] w-[18px]" />} label={t.avgTime} value={formatDuration(overview.avgCompletionSeconds, params.locale)} />
-        <StatCard icon={<WalletIcon className="h-[18px] w-[18px]" />} label={t.rewardSpend} value={formatCurrency(overview.rewardSpend, params.locale)} />
+        <StatCard icon={<WalletIcon className="h-[18px] w-[18px]" />} label={t.couponsIssued} value={formatNumber(overview.couponsIssued, params.locale)} />
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">

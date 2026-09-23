@@ -48,8 +48,7 @@ export async function POST(req: NextRequest, { params }: { params: { code: strin
             status: "status" in result.rewardResult ? result.rewardResult.status : undefined,
             redemptionNote: "redemptionNote" in result.rewardResult ? result.rewardResult.redemptionNote : undefined,
             rewardType: "rewardType" in result.rewardResult ? result.rewardResult.rewardType : undefined,
-            amount: "amount" in result.rewardResult ? result.rewardResult.amount : undefined,
-            currency: "currency" in result.rewardResult ? result.rewardResult.currency : undefined,
+            discountPercent: "discountPercent" in result.rewardResult ? result.rewardResult.discountPercent : undefined,
           }
         : null,
     });

@@ -5,7 +5,7 @@ import { AnalyticsService } from "./analytics-service";
 import { AIService } from "./ai-service";
 import { SURVPAY_ICON_PNG_BASE64 } from "./report-assets";
 import { categoricalPalette } from "@/components/charts/theme";
-import { formatCurrency, formatDuration } from "@/lib/format";
+import { formatDuration } from "@/lib/format";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/config";
 import { surveyStatusLabel } from "@/components/dashboard/survey-status-badge";
@@ -260,7 +260,7 @@ export async function buildReportPdfFromData(data: ReportData): Promise<Uint8Arr
     { label: "Total responses", value: String(overview.totalResponses), accent: palette.brand },
     { label: "Completion rate", value: `${overview.completionRate.toFixed(1)}%`, accent: palette.mint },
     { label: "Avg. time to complete", value: formatDuration(overview.avgCompletionSeconds, "en"), accent: palette.amber },
-    { label: "Reward spend", value: formatCurrency(overview.rewardSpend, "en"), accent: palette.sky },
+    { label: "Coupons issued", value: String(overview.couponsIssued), accent: palette.sky },
   ]);
 
   // ================= Response quality =================
@@ -394,8 +394,7 @@ export async function buildReportExcelFromData(data: ReportData, locale: Locale 
     { label: t.statExcludedResponses, value: Math.max(overview.totalResponses - validCount, 0) },
     { label: t.kpiCompletionRate, value: overview.completionRate / 100, numFmt: "0.0%" },
     { label: t.statAvgCompletionTime, value: formatDuration(overview.avgCompletionSeconds, locale) },
-    { label: t.statRewardSpendSar, value: overview.rewardSpend, numFmt: '"SAR" #,##0.00' },
-    { label: t.statCostPerResponseSar, value: Number(overview.costPerResponse.toFixed(2)), numFmt: '"SAR" #,##0.00' },
+    { label: t.statCouponsIssued, value: overview.couponsIssued },
   ];
 
   let r = 4;

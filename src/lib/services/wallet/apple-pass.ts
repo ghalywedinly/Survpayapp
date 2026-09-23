@@ -15,8 +15,7 @@ import JSZip from "jszip";
 // Wallet" button never renders — never a broken button.
 export interface WalletPassData {
   code: string;
-  amount: number;
-  currency: string;
+  discountPercent: number;
   organizationName: string;
   surveyTitle: string;
   branchName?: string | null;
@@ -53,7 +52,7 @@ function buildPassJson(data: WalletPassData) {
     foregroundColor: "rgb(18,21,30)",
     labelColor: "rgb(91,61,240)",
     storeCard: {
-      headerFields: [{ key: "amount", label: "REWARD", value: `${data.amount} ${data.currency}` }],
+      headerFields: [{ key: "discount", label: "COUPON", value: `${data.discountPercent}% off` }],
       primaryFields: [{ key: "org", label: "", value: data.organizationName }],
       secondaryFields: [
         { key: "survey", label: "SURVEY", value: data.surveyTitle },

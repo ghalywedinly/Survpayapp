@@ -230,7 +230,7 @@ const surveyDefs = [
     objective: "Inform Q3 channel investment decisions for a national retail chain.",
     estimatedMinutes: 6,
     status: "active",
-    rewardAmount: 8,
+    discountPercent: 15,
     rewardType: "coupon",
     maxResponses: 760,
     validTarget: 700,
@@ -315,7 +315,7 @@ const surveyDefs = [
     objective: "Benchmark app satisfaction ahead of a mobile banking redesign.",
     estimatedMinutes: 5,
     status: "active",
-    rewardAmount: 12,
+    discountPercent: 20,
     rewardType: "coupon",
     maxResponses: 610,
     validTarget: 560,
@@ -394,7 +394,7 @@ const surveyDefs = [
     objective: "Identify the top three drivers of delivery satisfaction.",
     estimatedMinutes: 4,
     status: "closed",
-    rewardAmount: 6,
+    discountPercent: 10,
     rewardType: "coupon",
     maxResponses: 860,
     validTarget: 860,
@@ -474,7 +474,7 @@ const surveyDefs = [
     objective: "Validate demand before committing to production.",
     estimatedMinutes: 7,
     status: "draft",
-    rewardAmount: 15,
+    discountPercent: 25,
     rewardType: "coupon",
     maxResponses: 300,
     validTarget: 0,
@@ -511,7 +511,7 @@ const surveyDefs = [
     objective: "Support the student affairs office's annual satisfaction report.",
     estimatedMinutes: 5,
     status: "paused",
-    rewardAmount: 5,
+    discountPercent: 10,
     rewardType: "coupon",
     maxResponses: 460,
     validTarget: 270,
@@ -613,7 +613,6 @@ async function runSeedInner() {
   await db.aIInsight.deleteMany();
   await db.report.deleteMany();
   await db.rewardTransaction.deleteMany();
-  await db.rewardBudget.deleteMany();
   await db.rewardConfig.deleteMany();
   await db.surveySettings.deleteMany();
   await db.survey.deleteMany();
@@ -813,11 +812,9 @@ async function runSeedInner() {
         rewardConfig: {
           create: {
             enabled: true,
-            amount: def.rewardAmount,
-            currency: "SAR",
+            discountPercent: def.discountPercent,
             rewardType: def.rewardType,
             maxResponses: def.maxResponses,
-            platformFeePct: 0.08,
           },
         },
       },
@@ -825,30 +822,7 @@ async function runSeedInner() {
 
     const questions = await createSurveyStructure(survey.id, def.questions);
 
-    // Fund the incentive budget generously enough to cover the valid target.
-    const funded = def.status === "draft" ? 0 : Math.round(def.rewardAmount * def.maxResponses * 1.08 * 100) / 100;
-    let budget: { id: string } | null = null;
-    if (funded > 0) {
-      budget = await db.rewardBudget.create({
-        data: { surveyId: survey.id, organizationId: org.id, fundedAmount: funded, distributedAmount: 0, currency: "SAR" },
-      });
-      await db.paymentTransaction.create({
-        data: {
-          organizationId: org.id,
-          purpose: "incentive_funding",
-          amount: funded,
-          currency: "SAR",
-          status: "completed",
-          provider: "mock",
-          relatedSurveyId: survey.id,
-          description: `Incentive budget funding for ${def.title}`,
-          createdAt: daysAgo(def.daysActive + 8),
-        },
-      });
-      await db.rewardTransaction.create({
-        data: { budgetId: budget.id, type: "funding", amount: funded, status: "completed", provider: "mock", note: "Initial funding" },
-      });
-    }
+    const rewardsActive = def.status !== "draft";
 
     if (def.status !== "draft") {
       await db.surveyEvent.create({ data: { surveyId: survey.id, type: "published", message: "Survey published", createdAt: daysAgo(def.daysActive + 5) } });
@@ -859,13 +833,10 @@ async function runSeedInner() {
     const flaggedCount = def.validTarget > 0 ? Math.round(def.validTarget * 0.06) : 0;
     const total = def.validTarget + rejectedCount + flaggedCount;
 
-    let distributed = 0;
     let rewardedCount = 0;
     const rewardTxBatch: {
-      budgetId: string;
+      surveyId: string;
       responseId: string;
-      type: string;
-      amount: number;
       status: string;
       provider: string;
       note: string | null;
@@ -901,8 +872,7 @@ async function runSeedInner() {
       const completionSeconds = isFlagged ? randomInt(3, 8) : randomInt(def.estimatedMinutes * 30, def.estimatedMinutes * 90);
 
       let rewardStatus = "not_applicable";
-      if (status === "valid" && budget && distributed + def.rewardAmount <= funded) {
-        distributed += def.rewardAmount;
+      if (status === "valid" && rewardsActive && rewardedCount < def.maxResponses) {
         rewardedCount += 1;
         rewardStatus = "completed";
         const code = generateCouponCode();
@@ -911,10 +881,8 @@ async function runSeedInner() {
         // list of untouched codes.
         const redeemed = Math.random() < 0.4;
         rewardTxBatch.push({
-          budgetId: budget.id,
+          surveyId: survey.id,
           responseId: respId,
-          type: "reward",
-          amount: def.rewardAmount,
           status: "completed",
           provider: "coupon",
           note: code,
@@ -972,10 +940,6 @@ async function runSeedInner() {
     for (const batch of chunk(answerRows, 1000)) await db.responseAnswer.createMany({ data: batch });
     for (const batch of chunk(rewardTxBatch, 500)) await db.rewardTransaction.createMany({ data: batch });
 
-    if (budget) {
-      await db.rewardBudget.update({ where: { id: budget.id }, data: { distributedAmount: distributed } });
-    }
-
     if (total >= 100) {
       await db.surveyEvent.create({ data: { surveyId: survey.id, type: "milestone_100", message: "Reached 100 responses", createdAt: daysAgo(Math.max(0, def.daysActive - 3)) } });
       await db.notification.create({
@@ -1025,15 +989,15 @@ async function runSeedInner() {
       });
     }
 
-    if (budget && distributed / funded > 0.85) {
+    if (rewardsActive && rewardedCount / def.maxResponses > 0.85) {
       await db.notification.create({
         data: {
           organizationId: org.id,
-          type: "budget_low",
-          title: `Incentive budget running low for ${def.title}`,
-          titleAr: `ميزانية الحوافز منخفضة لاستبيان ${def.titleAr}`,
-          body: `Less than 15% of the incentive budget remains for "${def.title}".`,
-          bodyAr: `تبقّى أقل من 15% من ميزانية الحوافز لاستبيان "${def.titleAr}".`,
+          type: "coupon_cap_near",
+          title: `Coupon cap nearly reached for ${def.title}`,
+          titleAr: `اقتربت الاستبانة من الحد الأقصى للكوبونات: ${def.titleAr}`,
+          body: `Less than 15% of the coupon allowance remains for "${def.title}".`,
+          bodyAr: `تبقّى أقل من 15% من الحد الأقصى للكوبونات لاستبيان "${def.titleAr}".`,
           createdAt: daysAgo(2),
         },
       });

@@ -1,6 +1,5 @@
 import { db } from "@/lib/db";
 import { randomCode } from "@/lib/utils";
-import { PaymentService } from "./payment-service";
 import { NotificationService } from "./notification-service";
 
 export const SurveyService = {
@@ -22,7 +21,6 @@ export const SurveyService = {
       include: {
         _count: { select: { responses: true } },
         rewardConfig: true,
-        rewardBudget: true,
       },
       orderBy: { createdAt: "desc" },
     });
@@ -35,26 +33,14 @@ export const SurveyService = {
         questions: { include: { options: { orderBy: { order: "asc" } } }, orderBy: { order: "asc" } },
         settings: true,
         rewardConfig: true,
-        rewardBudget: true,
         _count: { select: { responses: true } },
       },
     });
   },
 
   async publish(surveyId: string, organizationId: string) {
-    const survey = await db.survey.findFirst({
-      where: { id: surveyId, organizationId },
-      include: { rewardConfig: true, rewardBudget: true },
-    });
+    const survey = await db.survey.findFirst({ where: { id: surveyId, organizationId } });
     if (!survey) throw new Error("Survey not found");
-
-    if (survey.rewardConfig?.enabled) {
-      const required = PaymentService.calculateBudget(survey.rewardConfig.amount, survey.rewardConfig.maxResponses).total;
-      const funded = survey.rewardBudget?.fundedAmount ?? 0;
-      if (funded < required) {
-        throw new Error("BUDGET_NOT_FUNDED");
-      }
-    }
 
     const updated = await db.survey.update({
       where: { id: surveyId },
@@ -112,11 +98,9 @@ export const SurveyService = {
           ? {
               create: {
                 enabled: survey.rewardConfig.enabled,
-                amount: survey.rewardConfig.amount,
-                currency: survey.rewardConfig.currency,
+                discountPercent: survey.rewardConfig.discountPercent,
                 rewardType: survey.rewardConfig.rewardType,
                 maxResponses: survey.rewardConfig.maxResponses,
-                platformFeePct: survey.rewardConfig.platformFeePct,
               },
             }
           : undefined,

@@ -74,8 +74,7 @@ export default async function PublicSurveyPage({
       walletGoogleEnabled={isGoogleWalletConfigured()}
       reward={{
         enabled: survey.rewardConfig?.enabled ?? false,
-        amount: survey.rewardConfig?.amount ?? 0,
-        currency: survey.rewardConfig?.currency ?? "SAR",
+        discountPercent: survey.rewardConfig?.discountPercent ?? 10,
         rewardType: "coupon" as const,
       }}
       questions={survey.questions.map((q) => ({

@@ -2,16 +2,11 @@ import { db } from "@/lib/db";
 
 export const AnalyticsService = {
   async getDashboardMetrics(organizationId: string) {
-    const [activeSurveys, totalResponses, rewardAgg, spendAgg, surveys] = await Promise.all([
+    const [activeSurveys, totalResponses, couponsIssued, surveys] = await Promise.all([
       db.survey.count({ where: { organizationId, status: "active" } }),
       db.surveyResponse.count({ where: { survey: { organizationId } } }),
-      db.rewardTransaction.aggregate({
-        where: { type: "reward", status: "completed", budget: { organizationId } },
-        _sum: { amount: true },
-      }),
-      db.paymentTransaction.aggregate({
-        where: { organizationId, purpose: "incentive_funding" },
-        _sum: { amount: true },
+      db.rewardTransaction.count({
+        where: { status: "completed", survey: { organizationId } },
       }),
       db.survey.findMany({ where: { organizationId }, include: { _count: { select: { responses: true } } } }),
     ]);
@@ -31,8 +26,7 @@ export const AnalyticsService = {
     return {
       activeSurveys,
       totalResponses,
-      rewardsDistributed: rewardAgg._sum.amount ?? 0,
-      researchSpend: spendAgg._sum.amount ?? 0,
+      couponsIssued,
       avgCompletionRate: avgCompletionRate * 100,
     };
   },
@@ -96,21 +90,17 @@ export const AnalyticsService = {
   },
 
   async getSurveyOverview(surveyId: string) {
-    const [total, valid, agg, rewardAgg, budget] = await Promise.all([
+    const [total, valid, agg, couponsIssued] = await Promise.all([
       db.surveyResponse.count({ where: { surveyId } }),
       db.surveyResponse.count({ where: { surveyId, status: "valid" } }),
       db.surveyResponse.aggregate({ where: { surveyId, completionSeconds: { not: null } }, _avg: { completionSeconds: true } }),
-      db.rewardTransaction.aggregate({ where: { type: "reward", status: "completed", budget: { surveyId } }, _sum: { amount: true } }),
-      db.rewardBudget.findUnique({ where: { surveyId } }),
+      db.rewardTransaction.count({ where: { surveyId, status: "completed" } }),
     ]);
-    const rewardSpend = rewardAgg._sum.amount ?? 0;
     return {
       totalResponses: total,
       completionRate: total > 0 ? (valid / total) * 100 : 0,
       avgCompletionSeconds: Math.round(agg._avg.completionSeconds ?? 0),
-      rewardSpend,
-      costPerResponse: total > 0 ? rewardSpend / total : 0,
-      budget,
+      couponsIssued,
     };
   },
 

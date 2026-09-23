@@ -59,8 +59,8 @@ export default async function AdminOverviewPage({ params }: { params: { locale: 
         />
         <StatCard
           icon={<WalletIcon className="h-[18px] w-[18px]" />}
-          label={t.statRewardsDistributed}
-          value={formatCurrency(overview.totalRewardsDistributed, params.locale)}
+          label={t.statCouponsIssued}
+          value={formatNumber(overview.totalCouponsIssued, params.locale)}
         />
         <StatCard
           icon={<CreditCardIcon className="h-[18px] w-[18px]" />}

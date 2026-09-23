@@ -1,9 +1,7 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useI18n } from "@/lib/i18n/provider";
-import { formatCurrency } from "@/lib/format";
-import { platformFeePct } from "@/lib/pricing";
 import type { ClientQuestion } from "@/lib/question-types";
 import { createBlankQuestion, newId } from "@/lib/question-types";
 import { createSurveyAction, type WizardPayload } from "@/lib/actions/surveys";
@@ -28,7 +26,7 @@ const initialState: WizardState = {
   objective: "",
   estimatedMinutes: 5,
   questions: [],
-  reward: { enabled: true, amount: 10, currency: "SAR", rewardType: "coupon", maxResponses: 200 },
+  reward: { enabled: true, discountPercent: 20, rewardType: "coupon", maxResponses: 200 },
   settings: {
     responseLimit: null,
     startDate: null,
@@ -51,12 +49,6 @@ export function SurveyWizard() {
   const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(null);
 
   const steps = [t("wizard.step1Title"), t("wizard.step2Title"), t("wizard.step3Title"), t("wizard.step4Title"), t("wizard.step5Title")];
-
-  const budget = useMemo(() => {
-    const incentiveBudget = state.reward.amount * state.reward.maxResponses;
-    const fee = Math.round(incentiveBudget * platformFeePct * 100) / 100;
-    return { incentiveBudget, fee, total: incentiveBudget + fee };
-  }, [state.reward]);
 
   function updateQuestion(q: ClientQuestion) {
     setState((s) => ({ ...s, questions: s.questions.map((x) => (x.id === q.id ? q : x)) }));
@@ -201,45 +193,32 @@ export function SurveyWizard() {
             </label>
 
             {state.reward.enabled && (
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-                <div className="space-y-5 lg:col-span-3">
-                  <div>
-                    <Label>{t("wizard.rewardAmount")} (SAR)</Label>
+              <div className="space-y-5">
+                <div>
+                  <Label>{t("wizard.rewardAmount")}</Label>
+                  <div className="relative max-w-xs">
                     <Input
                       type="number"
                       min={1}
-                      value={state.reward.amount}
-                      onChange={(e) => setState((s) => ({ ...s, reward: { ...s.reward, amount: Number(e.target.value) } }))}
+                      max={100}
+                      value={state.reward.discountPercent}
+                      onChange={(e) => setState((s) => ({ ...s, reward: { ...s.reward, discountPercent: Number(e.target.value) } }))}
                     />
-                  </div>
-                  <div>
-                    <Label>{t("wizard.rewardType")}</Label>
-                    <p className="mt-2 text-sm text-ink-600">{t("wizard.rewardTypeCoupon")}</p>
-                  </div>
-                  <div>
-                    <Label>{t("wizard.maxResponses")}</Label>
-                    <Input
-                      type="number"
-                      min={1}
-                      value={state.reward.maxResponses}
-                      onChange={(e) => setState((s) => ({ ...s, reward: { ...s.reward, maxResponses: Number(e.target.value) } }))}
-                    />
+                    <span className="pointer-events-none absolute inset-y-0 end-3 flex items-center text-sm text-ink-400">%</span>
                   </div>
                 </div>
-
-                <div className="rounded-xl border border-ink-200 bg-ink-50/60 p-5 lg:col-span-2">
-                  <p className="text-xs font-medium uppercase tracking-wide text-ink-400">{t("wizard.maxBudget")}</p>
-                  <p className="mt-1 text-2xl font-semibold text-ink-900">{formatCurrency(budget.incentiveBudget, locale)}</p>
-                  <div className="mt-4 space-y-2 border-t border-ink-200 pt-3 text-sm">
-                    <div className="flex justify-between text-ink-500">
-                      <span>{t("wizard.platformFee")}</span>
-                      <span className="font-medium text-ink-700">{formatCurrency(budget.fee, locale)}</span>
-                    </div>
-                    <div className="flex justify-between font-semibold text-ink-900">
-                      <span>{t("wizard.estimatedTotal")}</span>
-                      <span>{formatCurrency(budget.total, locale)}</span>
-                    </div>
-                  </div>
+                <div>
+                  <Label>{t("wizard.rewardType")}</Label>
+                  <p className="mt-2 text-sm text-ink-600">{t("wizard.rewardTypeCoupon")}</p>
+                </div>
+                <div className="max-w-xs">
+                  <Label>{t("wizard.maxResponses")}</Label>
+                  <Input
+                    type="number"
+                    min={1}
+                    value={state.reward.maxResponses}
+                    onChange={(e) => setState((s) => ({ ...s, reward: { ...s.reward, maxResponses: Number(e.target.value) } }))}
+                  />
                 </div>
               </div>
             )}
@@ -309,19 +288,9 @@ export function SurveyWizard() {
                 <Row label={t("wizard.summaryQuestions")} value={String(state.questions.length)} />
                 <Row label={t("wizard.summaryDuration")} value={`${state.estimatedMinutes} ${t("common.minutes")}`} />
                 <Row label={t("wizard.summaryTarget")} value={state.reward.enabled ? String(state.reward.maxResponses) : "—"} />
-                <Row label={t("wizard.summaryReward")} value={state.reward.enabled ? formatCurrency(state.reward.amount, locale) : t("common.no")} />
-                <Row label={t("wizard.summaryBudget")} value={state.reward.enabled ? formatCurrency(budget.incentiveBudget, locale) : "—"} />
-                <Row label={t("wizard.summaryFee")} value={state.reward.enabled ? formatCurrency(budget.fee, locale) : "—"} />
+                <Row label={t("wizard.summaryReward")} value={state.reward.enabled ? `${state.reward.discountPercent}%` : t("common.no")} />
               </dl>
-              {state.reward.enabled && (
-                <div className="mt-4 flex items-center justify-between rounded-lg bg-brand-50 px-4 py-3">
-                  <span className="text-sm font-medium text-brand-content">{t("wizard.summaryTotalCost")}</span>
-                  <span className="text-lg font-semibold text-brand-content">{formatCurrency(budget.total, locale)}</span>
-                </div>
-              )}
             </div>
-
-            {state.reward.enabled && <p className="text-xs text-ink-400">{t("wizard.publishNote")}</p>}
           </div>
         )}
       </Card>

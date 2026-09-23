@@ -15,8 +15,6 @@ export interface PlanDefinition {
   highlighted?: boolean;
 }
 
-export const platformFeePct = 0.08; // service fee applied to funded incentive budgets
-
 const YEARLY_DISCOUNT = 0.2; // 20% off the annual total vs. paying monthly
 const yearlyFrom = (monthly: number) => Math.round(monthly * 12 * (1 - YEARLY_DISCOUNT));
 
@@ -49,7 +47,7 @@ export const plans: PlanDefinition[] = [
       "In-person coupon redemption & verification tool",
       "Team collaboration & roles",
       "Custom branding",
-      "Budget tracking & automatic payout",
+      "Automatic coupon issuance & redemption tracking",
       "Priority support",
     ],
     highlighted: true,
@@ -68,7 +66,7 @@ export const plans: PlanDefinition[] = [
       "Higher & custom response volumes",
       "Dedicated account manager",
       "Custom integrations & SLAs",
-      "Volume-based incentive payout rates",
+      "Custom coupon terms at scale",
     ],
   },
 ];

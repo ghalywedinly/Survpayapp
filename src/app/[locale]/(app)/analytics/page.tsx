@@ -2,7 +2,7 @@ import Link from "next/link";
 import { requireOrgContext } from "@/lib/auth/guards";
 import { AnalyticsService } from "@/lib/services/analytics-service";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
-import { formatCurrency, formatPercent } from "@/lib/format";
+import { formatPercent } from "@/lib/format";
 import type { Locale } from "@/lib/i18n/config";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { StatCard } from "@/components/ui/stat-card";
@@ -30,7 +30,7 @@ export default async function AnalyticsOverviewPage({ params }: { params: { loca
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         <StatCard icon={<UsersIcon className="h-[18px] w-[18px]" />} label={dict.analyticsPage.totalResponses} value={metrics.totalResponses.toLocaleString()} />
         <StatCard icon={<TrendingUpIcon className="h-[18px] w-[18px]" />} label={dict.analyticsPage.completionRate} value={formatPercent(metrics.avgCompletionRate, params.locale)} />
-        <StatCard icon={<WalletIcon className="h-[18px] w-[18px]" />} label={dict.analyticsPage.rewardSpend} value={formatCurrency(metrics.rewardsDistributed, params.locale)} />
+        <StatCard icon={<WalletIcon className="h-[18px] w-[18px]" />} label={dict.analyticsPage.couponsIssued} value={metrics.couponsIssued.toLocaleString()} />
         <StatCard icon={<BarChartIcon className="h-[18px] w-[18px]" />} label={dict.dashboard.metricActiveSurveys} value={String(metrics.activeSurveys)} />
       </div>
 

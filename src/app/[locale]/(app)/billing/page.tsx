@@ -1,5 +1,4 @@
 import { requireOrgContext } from "@/lib/auth/guards";
-import { RewardService } from "@/lib/services/reward-service";
 import { PaymentService } from "@/lib/services/payment-service";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/config";
@@ -11,8 +10,7 @@ export default async function BillingPage({ params }: { params: { locale: Locale
   const ctx = await requireOrgContext(params.locale);
   const dict = getDictionary(params.locale);
 
-  const [totals, invoices, transactions] = await Promise.all([
-    RewardService.orgTotals(ctx.organization.id),
+  const [invoices, transactions] = await Promise.all([
     PaymentService.listInvoices(ctx.organization.id),
     PaymentService.listTransactions(ctx.organization.id),
   ]);
@@ -22,7 +20,6 @@ export default async function BillingPage({ params }: { params: { locale: Locale
       <PageHeader title={dict.billing.title} subtitle={dict.billing.subtitle} />
       <BillingClient
         currentPlan={ctx.organization.plan as PlanId}
-        totals={totals}
         invoices={invoices.map((i) => ({
           id: i.id,
           number: i.number,

@@ -4,14 +4,13 @@ import { SurveyService } from "@/lib/services/survey-service";
 import { AnalyticsService } from "@/lib/services/analytics-service";
 import { RewardService } from "@/lib/services/reward-service";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
-import { formatCurrency, formatPercent } from "@/lib/format";
+import { formatPercent } from "@/lib/format";
 import type { Locale } from "@/lib/i18n/config";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { SurveySubnav } from "@/components/survey-builder/survey-subnav";
 import { SurveyOverviewClient } from "@/components/survey-builder/survey-overview-client";
 import { SurveyStatusBadge } from "@/components/dashboard/survey-status-badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 
 export default async function SurveyOverviewPage({ params }: { params: { locale: Locale; id: string } }) {
   const ctx = await requireOrgContext(params.locale);
@@ -19,9 +18,9 @@ export default async function SurveyOverviewPage({ params }: { params: { locale:
   const survey = await SurveyService.getFull(params.id, ctx.organization.id);
   if (!survey) notFound();
 
-  const [overview, budgetSummary] = await Promise.all([
+  const [overview, couponActivity] = await Promise.all([
     AnalyticsService.getSurveyOverview(survey.id),
-    RewardService.getBudgetSummary(survey.id),
+    RewardService.getCouponActivity(survey.id),
   ]);
 
   const title = params.locale === "ar" && survey.titleAr ? survey.titleAr : survey.title;
@@ -50,8 +49,7 @@ export default async function SurveyOverviewPage({ params }: { params: { locale:
             }}
             reward={{
               enabled: survey.rewardConfig?.enabled ?? false,
-              amount: survey.rewardConfig?.amount ?? 10,
-              currency: survey.rewardConfig?.currency ?? "SAR",
+              discountPercent: survey.rewardConfig?.discountPercent ?? 20,
               rewardType: "coupon" as const,
               maxResponses: survey.rewardConfig?.maxResponses ?? 100,
             }}
@@ -73,23 +71,18 @@ export default async function SurveyOverviewPage({ params }: { params: { locale:
             <CardContent className="space-y-4 p-5">
               <Stat label={dict.responses.metricTotal} value={overview.totalResponses.toLocaleString()} />
               <Stat label={dict.analyticsPage.completionRate} value={formatPercent(overview.completionRate, params.locale)} />
-              <Stat label={dict.analyticsPage.rewardSpend} value={formatCurrency(overview.rewardSpend, params.locale)} />
-              <Stat label={dict.analyticsPage.costPerResponse} value={formatCurrency(overview.costPerResponse, params.locale)} />
+              <Stat label={dict.analyticsPage.couponsIssued} value={overview.couponsIssued.toLocaleString()} />
             </CardContent>
           </Card>
 
-          {budgetSummary && (
+          {couponActivity && (
             <Card>
               <CardContent className="p-5">
                 <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">{dict.rewards.overviewTitle}</p>
-                <p className="mt-2 text-xl font-semibold text-ink-900">{formatCurrency(budgetSummary.remaining, params.locale)}</p>
-                <p className="text-xs text-ink-400">{dict.rewards.remaining}</p>
-                <Progress
-                  value={budgetSummary.budget.fundedAmount > 0 ? (budgetSummary.budget.distributedAmount / budgetSummary.budget.fundedAmount) * 100 : 0}
-                  className="mt-3"
-                />
-                <p className="mt-2 text-xs text-ink-400">
-                  {formatCurrency(budgetSummary.budget.distributedAmount, params.locale)} / {formatCurrency(budgetSummary.budget.fundedAmount, params.locale)}
+                <p className="mt-2 text-xl font-semibold text-ink-900">{couponActivity.issuedCount.toLocaleString()}</p>
+                <p className="text-xs text-ink-400">{dict.rewards.couponsIssued}</p>
+                <p className="mt-3 text-xs text-ink-400">
+                  {couponActivity.redeemedCount.toLocaleString()} {dict.rewards.couponsRedeemed}
                 </p>
               </CardContent>
             </Card>

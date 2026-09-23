@@ -5,18 +5,20 @@ import { Prisma } from "@prisma/client";
 /**
  * RewardService only ever releases a reward for a response that has already
  * been validated (SurveyCompletion → RewardService, never the reverse), and
- * only while the survey's funded budget has room left.
+ * only while the survey's response cap (rewardConfig.maxResponses) has room
+ * left. Rewards are always a percentage-discount coupon — never cash or a
+ * fixed monetary amount — so there is no budget to fund, spend, or refund.
  */
 export const RewardService = {
   async processReward(responseId: string) {
     const response = await db.surveyResponse.findUnique({
       where: { id: responseId },
-      include: { survey: { include: { rewardConfig: true, rewardBudget: true } } },
+      include: { survey: { include: { rewardConfig: true } } },
     });
     if (!response) throw new Error("Response not found");
 
-    const { rewardConfig, rewardBudget } = response.survey;
-    if (!rewardConfig?.enabled || !rewardBudget) {
+    const { rewardConfig } = response.survey;
+    if (!rewardConfig?.enabled) {
       await db.surveyResponse.update({ where: { id: responseId }, data: { rewardStatus: "not_applicable" } });
       return { issued: false, reason: "rewards_disabled" };
     }
@@ -26,18 +28,19 @@ export const RewardService = {
       return { issued: false, reason: "response_not_valid" };
     }
 
-    const remaining = rewardBudget.fundedAmount - rewardBudget.distributedAmount;
-    if (remaining < rewardConfig.amount) {
+    const issuedCount = await db.rewardTransaction.count({
+      where: { surveyId: response.surveyId, status: "completed" },
+    });
+    if (issuedCount >= rewardConfig.maxResponses) {
       await db.surveyResponse.update({ where: { id: responseId }, data: { rewardStatus: "failed" } });
-      return { issued: false, reason: "budget_exhausted" };
+      return { issued: false, reason: "cap_reached" };
     }
 
     await db.surveyResponse.update({ where: { id: responseId }, data: { rewardStatus: "processing" } });
 
     const provider = rewardProviders[rewardConfig.rewardType] ?? rewardProviders.coupon;
     const result = await provider.issue({
-      amount: rewardConfig.amount,
-      currency: rewardConfig.currency,
+      discountPercent: rewardConfig.discountPercent,
       respondentEmail: response.respondentEmail,
     });
 
@@ -53,20 +56,13 @@ export const RewardService = {
         await db.$transaction([
           db.rewardTransaction.create({
             data: {
-              budgetId: rewardBudget.id,
+              surveyId: response.surveyId,
               responseId: response.id,
-              type: "reward",
-              amount: rewardConfig.amount,
-              respondents: 1,
               status: result.status,
               provider: provider.type,
               note: result.redemptionNote,
               code,
             },
-          }),
-          db.rewardBudget.update({
-            where: { id: rewardBudget.id },
-            data: { distributedAmount: { increment: rewardConfig.amount } },
           }),
           db.surveyResponse.update({
             where: { id: response.id },
@@ -88,37 +84,19 @@ export const RewardService = {
       redemptionNote: result.redemptionNote,
       redemptionCode: code,
       rewardType: rewardConfig.rewardType,
-      amount: rewardConfig.amount,
-      currency: rewardConfig.currency,
+      discountPercent: rewardConfig.discountPercent,
     };
   },
 
-  async listBudgetsForOrg(organizationId: string) {
-    return db.rewardBudget.findMany({
-      where: { organizationId },
-      include: { survey: { select: { id: true, title: true, titleAr: true, status: true, code: true } } },
-      orderBy: { createdAt: "desc" },
-    });
-  },
-
-  async orgTotals(organizationId: string) {
-    const agg = await db.rewardBudget.aggregate({
-      where: { organizationId },
-      _sum: { fundedAmount: true, distributedAmount: true },
-    });
-    const funded = agg._sum.fundedAmount ?? 0;
-    const distributed = agg._sum.distributedAmount ?? 0;
-    return { funded, distributed, remaining: funded - distributed };
-  },
-
-  async getBudgetSummary(surveyId: string) {
-    const budget = await db.rewardBudget.findUnique({
-      where: { surveyId },
-      include: { transactions: { orderBy: { createdAt: "desc" } } },
-    });
-    if (!budget) return null;
-    const remaining = budget.fundedAmount - budget.distributedAmount;
-    const rewardedCount = budget.transactions.filter((t) => t.type === "reward" && t.status === "completed").length;
-    return { budget, remaining, rewardedCount };
+  /** Read-only coupon activity for a survey — issuance/redemption counts and the transaction log, with no monetary figures. */
+  async getCouponActivity(surveyId: string) {
+    const [rewardConfig, transactions] = await Promise.all([
+      db.rewardConfig.findUnique({ where: { surveyId } }),
+      db.rewardTransaction.findMany({ where: { surveyId }, orderBy: { createdAt: "desc" } }),
+    ]);
+    if (!rewardConfig) return null;
+    const issuedCount = transactions.filter((t) => t.status === "completed").length;
+    const redeemedCount = transactions.filter((t) => t.redeemedAt !== null).length;
+    return { rewardConfig, transactions, issuedCount, redeemedCount };
   },
 };

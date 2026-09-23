@@ -16,7 +16,7 @@ export const AdminService = {
       publishedSurveys,
       totalResponses,
       totalValidResponses,
-      rewardAgg,
+      totalCouponsIssued,
       subscriptionAgg,
       newOrgs30d,
       newUsers30d,
@@ -28,7 +28,7 @@ export const AdminService = {
       db.survey.count({ where: { status: { in: ["active", "closed", "scheduled"] } } }),
       db.surveyResponse.count(),
       db.surveyResponse.count({ where: { status: "valid" } }),
-      db.rewardTransaction.aggregate({ where: { type: "reward", status: "completed" }, _sum: { amount: true } }),
+      db.rewardTransaction.count({ where: { status: "completed" } }),
       db.paymentTransaction.aggregate({ where: { purpose: "subscription" }, _sum: { amount: true } }),
       db.organization.count({ where: { createdAt: { gte: since30d } } }),
       db.user.count({ where: { role: { not: "platform_admin" }, createdAt: { gte: since30d } } }),
@@ -44,7 +44,7 @@ export const AdminService = {
       publishedSurveys,
       totalResponses,
       totalValidResponses,
-      totalRewardsDistributed: rewardAgg._sum.amount ?? 0,
+      totalCouponsIssued,
       totalSubscriptionRevenue: subscriptionAgg._sum.amount ?? 0,
       newOrgs30d,
       newUsers30d,
@@ -53,18 +53,24 @@ export const AdminService = {
   },
 
   async listOrganizations() {
-    const [orgs, memberCounts, surveyCounts, rewardSpend, lastSurveyActivity] = await Promise.all([
+    const [orgs, memberCounts, surveyCounts, couponTxs, lastSurveyActivity] = await Promise.all([
       db.organization.findMany({ orderBy: { createdAt: "desc" } }),
       db.organizationMember.groupBy({ by: ["organizationId"], _count: { _all: true } }),
       db.survey.groupBy({ by: ["organizationId"], _count: { _all: true } }),
-      db.rewardBudget.groupBy({ by: ["organizationId"], _sum: { distributedAmount: true, fundedAmount: true } }),
+      db.rewardTransaction.findMany({
+        where: { status: "completed" },
+        select: { survey: { select: { organizationId: true } } },
+      }),
       db.survey.groupBy({ by: ["organizationId"], _max: { createdAt: true } }),
     ]);
 
     const memberMap = new Map(memberCounts.map((r) => [r.organizationId, r._count._all]));
     const surveyMap = new Map(surveyCounts.map((r) => [r.organizationId, r._count._all]));
-    const spendMap = new Map(rewardSpend.map((r) => [r.organizationId, r._sum.distributedAmount ?? 0]));
-    const fundedMap = new Map(rewardSpend.map((r) => [r.organizationId, r._sum.fundedAmount ?? 0]));
+    const couponsMap = new Map<string, number>();
+    for (const tx of couponTxs) {
+      const orgId = tx.survey.organizationId;
+      couponsMap.set(orgId, (couponsMap.get(orgId) ?? 0) + 1);
+    }
     const activityMap = new Map(lastSurveyActivity.map((r) => [r.organizationId, r._max.createdAt]));
 
     return orgs.map((org) => ({
@@ -77,8 +83,7 @@ export const AdminService = {
       createdAt: org.createdAt,
       memberCount: memberMap.get(org.id) ?? 0,
       surveyCount: surveyMap.get(org.id) ?? 0,
-      totalFunded: fundedMap.get(org.id) ?? 0,
-      totalRewardSpend: spendMap.get(org.id) ?? 0,
+      couponsIssued: couponsMap.get(org.id) ?? 0,
       lastActivityAt: activityMap.get(org.id) ?? org.createdAt,
     }));
   },

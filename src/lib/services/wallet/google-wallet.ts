@@ -45,7 +45,7 @@ export function buildGoogleWalletSaveUrl(data: WalletPassData): string {
     classId,
     genericType: "GENERIC_TYPE_UNSPECIFIED",
     cardTitle: { defaultValue: { language: "en", value: data.organizationName } },
-    header: { defaultValue: { language: "en", value: `${data.amount} ${data.currency} reward` } },
+    header: { defaultValue: { language: "en", value: `${data.discountPercent}% discount coupon` } },
     subheader: { defaultValue: { language: "en", value: data.surveyTitle } },
     textModulesData: [
       ...(data.branchName ? [{ header: "BRANCH", body: data.branchName, id: "branch" }] : []),

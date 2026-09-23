@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
 import { requireOrgContext } from "@/lib/auth/guards";
 import { SurveyService } from "@/lib/services/survey-service";
-import { PaymentService } from "@/lib/services/payment-service";
 import type { ClientQuestion } from "@/lib/question-types";
 import type { Locale } from "@/lib/i18n/config";
 
@@ -19,8 +18,7 @@ export interface WizardPayload {
   questions: ClientQuestion[];
   reward: {
     enabled: boolean;
-    amount: number;
-    currency: string;
+    discountPercent: number;
     rewardType: "coupon";
     maxResponses: number;
   };
@@ -93,8 +91,7 @@ export async function createSurveyAction(locale: Locale, payload: WizardPayload)
       rewardConfig: {
         create: {
           enabled: payload.reward.enabled,
-          amount: payload.reward.amount,
-          currency: payload.reward.currency || "SAR",
+          discountPercent: payload.reward.discountPercent,
           rewardType: payload.reward.rewardType,
           maxResponses: payload.reward.maxResponses,
         },
@@ -136,15 +133,6 @@ export async function createSurveyAction(locale: Locale, payload: WizardPayload)
     }
   }
 
-  if (payload.reward.enabled) {
-    const required = PaymentService.calculateBudget(payload.reward.amount, payload.reward.maxResponses).total;
-    await PaymentService.fundIncentiveBudget({
-      organizationId: ctx.organization.id,
-      surveyId: survey.id,
-      amount: required,
-    });
-  }
-
   if (payload.publish) {
     await SurveyService.publish(survey.id, ctx.organization.id);
   }
@@ -159,8 +147,7 @@ export async function publishSurveyAction(locale: Locale, surveyId: string) {
     await SurveyService.publish(surveyId, ctx.organization.id);
     revalidatePath(`/${locale}/surveys`);
     return { ok: true as const };
-  } catch (e) {
-    if (e instanceof Error && e.message === "BUDGET_NOT_FUNDED") return { ok: false as const, error: "BUDGET_NOT_FUNDED" };
+  } catch {
     return { ok: false as const, error: "UNKNOWN" };
   }
 }
@@ -253,7 +240,7 @@ export async function updateSurveyQuestionsAction(locale: Locale, surveyId: stri
 export async function updateSurveyRewardAction(
   locale: Locale,
   surveyId: string,
-  reward: { enabled: boolean; amount: number; currency: string; rewardType: "coupon"; maxResponses: number }
+  reward: { enabled: boolean; discountPercent: number; rewardType: "coupon"; maxResponses: number }
 ) {
   const ctx = await requireOrgContext(locale);
   const survey = await db.survey.findFirst({ where: { id: surveyId, organizationId: ctx.organization.id } });

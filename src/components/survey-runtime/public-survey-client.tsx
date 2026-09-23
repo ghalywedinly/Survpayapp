@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n/provider";
-import { formatCurrency } from "@/lib/format";
 import { getRespondentHash, detectDevice } from "@/lib/respondent";
 import { SurveyRunner, type RuntimeQuestionWithLogic } from "./survey-runner";
 import { Logo } from "@/components/brand/logo";
@@ -16,8 +15,7 @@ type Phase = "intro" | "running" | "details" | "submitting" | "processing" | "do
 
 interface RewardConfigInfo {
   enabled: boolean;
-  amount: number;
-  currency: string;
+  discountPercent: number;
   rewardType: "coupon";
 }
 
@@ -137,7 +135,7 @@ export function PublicSurveyClient({
               </p>
               {reward.enabled && (
                 <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-mint-50 px-3 py-1.5 text-xs font-semibold text-mint-content">
-                  {formatCurrency(reward.amount, locale, reward.currency)} · {t("publicSurvey.yourReward")}
+                  {reward.discountPercent}% {t("publicSurvey.discountCoupon")} · {t("publicSurvey.yourReward")}
                 </div>
               )}
               <Button size="lg" className="mt-6 w-full" onClick={() => setPhase(questions.length ? "running" : needsDetails ? "details" : "submitting")}>
@@ -207,7 +205,7 @@ export function PublicSurveyClient({
               {reward.enabled && (
                 <div className="mt-6 w-full rounded-xl border border-mint-200 bg-mint-50/60 p-5">
                   <p className="text-xs font-medium uppercase tracking-wide text-mint-content">{t("publicSurvey.yourReward")}</p>
-                  <p className="mt-1 text-2xl font-semibold text-mint-content">{formatCurrency(reward.amount, locale, reward.currency)}</p>
+                  <p className="mt-1 text-2xl font-semibold text-mint-content">{reward.discountPercent}% {t("publicSurvey.discountCoupon")}</p>
                   <p className="mt-3 text-sm font-medium text-mint-content">
                     {rewardResult?.status === "completed" ? t("publicSurvey.rewardReady") : t("publicSurvey.rewardPending")}
                   </p>

@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, THead, TBody, TR, TH, TD } from "@/components/ui/table";
 import { Dialog, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/toast";
-import { CreditCardIcon, WalletIcon, PlusIcon } from "@/components/icons";
+import { CreditCardIcon, PlusIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
 const planNameKey: Record<PlanId, "planMarketName" | "planCxName" | "planBusinessName"> = {
@@ -40,12 +40,10 @@ interface Tx {
 
 export function BillingClient({
   currentPlan,
-  totals,
   invoices,
   transactions,
 }: {
   currentPlan: PlanId;
-  totals: { funded: number; distributed: number; remaining: number };
   invoices: Invoice[];
   transactions: Tx[];
 }) {
@@ -78,31 +76,6 @@ export function BillingClient({
             <Button variant="outline" onClick={() => setPlanDialog(true)}>
               {t("billing.changePlan")}
             </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-1.5">
-            <WalletIcon className="h-4 w-4" /> {t("billing.incentiveTitle")}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-ink-500">{t("billing.incentiveDesc")}</p>
-          <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-3">
-            <div>
-              <p className="text-xs text-ink-400">{t("billing.totalFunded")}</p>
-              <p className="text-xl font-semibold text-ink-900">{formatCurrency(totals.funded, locale)}</p>
-            </div>
-            <div>
-              <p className="text-xs text-ink-400">{t("billing.totalDistributed")}</p>
-              <p className="text-xl font-semibold text-ink-900">{formatCurrency(totals.distributed, locale)}</p>
-            </div>
-            <div>
-              <p className="text-xs text-ink-400">{t("billing.totalRemaining")}</p>
-              <p className="text-xl font-semibold text-mint-content">{formatCurrency(totals.remaining, locale)}</p>
-            </div>
           </div>
         </CardContent>
       </Card>

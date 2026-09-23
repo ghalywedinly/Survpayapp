@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useI18n } from "@/lib/i18n/provider";
-import { formatCurrency, formatDate } from "@/lib/format";
+import { formatDate } from "@/lib/format";
 import { checkCouponAction, redeemCouponAction } from "@/lib/actions/coupons";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,12 +14,12 @@ import { useToast } from "@/components/ui/toast";
 import { CheckCircleIcon, AlertIcon, TicketIcon } from "@/components/icons";
 
 type SurveyRef = { id: string; title: string; titleAr: string | null };
-type RecentRow = { code: string; amount: number; issuedAt: string; redeemedAt: string | null; survey: SurveyRef };
+type RecentRow = { code: string; discountPercent: number; issuedAt: string; redeemedAt: string | null; survey: SurveyRef };
 
 type CheckResult =
   | { kind: "not_found" }
-  | { kind: "valid"; code: string; amount: number; issuedAt: string; survey: SurveyRef }
-  | { kind: "redeemed"; code: string; amount: number; issuedAt: string; redeemedAt: string; survey: SurveyRef };
+  | { kind: "valid"; code: string; discountPercent: number; issuedAt: string; survey: SurveyRef }
+  | { kind: "redeemed"; code: string; discountPercent: number; issuedAt: string; redeemedAt: string; survey: SurveyRef };
 
 export function CouponCheckerClient({ initialRecent }: { initialRecent: RecentRow[] }) {
   const { t, locale } = useI18n();
@@ -44,9 +44,9 @@ export function CouponCheckerClient({ initialRecent }: { initialRecent: RecentRo
         return;
       }
       if (res.redeemed) {
-        setResult({ kind: "redeemed", code: res.code, amount: res.amount, issuedAt: String(res.issuedAt), redeemedAt: String(res.redeemedAt), survey: res.survey });
+        setResult({ kind: "redeemed", code: res.code, discountPercent: res.discountPercent, issuedAt: String(res.issuedAt), redeemedAt: String(res.redeemedAt), survey: res.survey });
       } else {
-        setResult({ kind: "valid", code: res.code, amount: res.amount, issuedAt: String(res.issuedAt), survey: res.survey });
+        setResult({ kind: "valid", code: res.code, discountPercent: res.discountPercent, issuedAt: String(res.issuedAt), survey: res.survey });
       }
     });
   }
@@ -61,8 +61,8 @@ export function CouponCheckerClient({ initialRecent }: { initialRecent: RecentRo
         return;
       }
       const redeemedAt = new Date().toISOString();
-      setResult({ kind: "redeemed", code: res.code, amount: res.amount, issuedAt: result.issuedAt, redeemedAt, survey: res.survey });
-      setRecent((cur) => [{ code: res.code, amount: res.amount, issuedAt: result.issuedAt, redeemedAt, survey: res.survey }, ...cur.filter((r) => r.code !== res.code)]);
+      setResult({ kind: "redeemed", code: res.code, discountPercent: res.discountPercent, issuedAt: result.issuedAt, redeemedAt, survey: res.survey });
+      setRecent((cur) => [{ code: res.code, discountPercent: res.discountPercent, issuedAt: result.issuedAt, redeemedAt, survey: res.survey }, ...cur.filter((r) => r.code !== res.code)]);
       setNote("");
       toast.push({ title: t("coupons.redeemSuccess"), tone: "success" });
     });
@@ -118,7 +118,7 @@ export function CouponCheckerClient({ initialRecent }: { initialRecent: RecentRo
                 <div className="space-y-1.5 text-sm">
                   <Row label={t("coupons.codeLabel")} value={result.code} mono />
                   <Row label={t("coupons.surveyLabel")} value={surveyTitle(result.survey)} />
-                  <Row label={t("coupons.amountLabel")} value={formatCurrency(result.amount, locale)} />
+                  <Row label={t("coupons.amountLabel")} value={`${result.discountPercent}%`} />
                   <Row label={t("coupons.issuedLabel")} value={formatDate(result.issuedAt, locale)} />
                 </div>
               )}
@@ -165,7 +165,7 @@ export function CouponCheckerClient({ initialRecent }: { initialRecent: RecentRo
                 <TR key={r.code}>
                   <TD className="font-mono text-xs">{r.code}</TD>
                   <TD>{surveyTitle(r.survey)}</TD>
-                  <TD>{formatCurrency(r.amount, locale)}</TD>
+                  <TD>{r.discountPercent}%</TD>
                   <TD>{formatDate(r.issuedAt, locale)}</TD>
                   <TD>
                     <Badge tone={r.redeemedAt ? "neutral" : "success"}>{r.redeemedAt ? t("coupons.statusRedeemed") : t("coupons.statusUnredeemed")}</Badge>
