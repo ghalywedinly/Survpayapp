@@ -77,15 +77,18 @@ const en = {
     settings: "Settings",
   },
   marketing: {
-    heroBadge: "🇸🇦 Customer feedback, simplified",
+    heroBadge: "Customer feedback, simplified",
     heroTitle: "Listen to your customers. Improve every visit.",
     heroSubtitle:
       "Survpay helps Saudi restaurants, cafés, retail stores and clinics collect customer feedback through surveys and QR codes, understand what matters, and turn insights into a better experience.",
     heroCtaPrimary: "Get started",
     heroCtaSecondary: "See how it works",
-    heroNote: "🇸🇦 Built for Saudi businesses · Arabic & English",
+    heroNote: "Built for Saudi businesses · Arabic & English",
     heroImageAlt: "A café team member handing a customer their order, with a Survpay QR feedback code on the counter",
     trustedBy: "Trusted by businesses across Saudi Arabia",
+    valueChipBilingual: "Bilingual — Arabic & English",
+    valueChipQr: "QR-first feedback",
+    valueChipPricing: "Simple SAR pricing",
 
     problemEyebrow: "The problem",
     problemTitle: "Most businesses are guessing, not listening",
@@ -314,10 +317,10 @@ const en = {
     trust4Title: "Local",
     trust4Desc: "Designed for Saudi Arabia — bilingual by default, SAR pricing, and local business context.",
 
-    saudiEyebrow: "🇸🇦 Made for Saudi Arabia",
+    saudiEyebrow: "Made for Saudi Arabia",
     saudiTitle: "Built in Saudi Arabia, for Saudi businesses",
     saudiDesc: "Survpay is designed around how Saudi businesses actually work — bilingual by default, QR-first, and priced simply.",
-    saudiPoint1Title: "🇸🇦 Saudi-focused",
+    saudiPoint1Title: "Saudi-focused",
     saudiPoint1Desc: "Built with Saudi restaurants, cafés and retail businesses in mind.",
     saudiPoint2Title: "العربية + English",
     saudiPoint2Desc: "A fully native Arabic RTL experience alongside English — not a translated afterthought.",

@@ -16,6 +16,7 @@ export function Solutions({ locale }: { locale: Locale }) {
       desc: t.solutionsCxDesc,
       list: [t.solutionsCxList1, t.solutionsCxList2, t.solutionsCxList3, t.solutionsCxList4],
       cta: t.solutionsCxCta,
+      highlighted: true,
     },
     {
       icon: BarChartIcon,
@@ -24,6 +25,7 @@ export function Solutions({ locale }: { locale: Locale }) {
       desc: t.solutionsMarketDesc,
       list: [t.solutionsMarketList1, t.solutionsMarketList2, t.solutionsMarketList3, t.solutionsMarketList4],
       cta: t.solutionsMarketCta,
+      highlighted: false,
     },
   ];
 
@@ -35,7 +37,19 @@ export function Solutions({ locale }: { locale: Locale }) {
 
         <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2">
           {cards.map((c) => (
-            <div key={c.name} className="flex flex-col rounded-2xl border border-ink-200/70 bg-surface p-8 shadow-soft">
+            <div
+              key={c.name}
+              className={
+                c.highlighted
+                  ? "relative flex flex-col rounded-2xl border border-brand-300 bg-surface p-8 shadow-soft ring-2 ring-brand-500/20"
+                  : "relative flex flex-col rounded-2xl border border-ink-200/70 bg-surface p-8 shadow-soft"
+              }
+            >
+              {c.highlighted && (
+                <span className="absolute -top-3 start-8 rounded-full bg-brand-600 px-3 py-1 text-xs font-semibold text-white">
+                  {dict.pricingPage.mostPopular}
+                </span>
+              )}
               <span className="inline-flex w-fit items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-content">
                 {c.badge}
               </span>

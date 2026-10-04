@@ -30,14 +30,16 @@ export function Trust({ locale }: { locale: Locale }) {
           <TrustBadgeIllustration className="hidden h-48 w-48 shrink-0 lg:block" />
         </div>
 
-        <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-14 grid grid-cols-1 divide-y divide-white/10 border-y border-white/10 sm:grid-cols-2 sm:divide-y-0 sm:border-y-0 sm:gap-x-10 lg:grid-cols-4">
           {items.map((it) => (
-            <div key={it.title} className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-brand-300">
+            <div key={it.title} className="flex items-start gap-4 py-6 sm:border-t sm:border-white/10 sm:py-8">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-brand-300">
                 <it.icon className="h-5 w-5" />
               </div>
-              <h3 className="mt-4 text-sm font-semibold">{it.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-white/55">{it.desc}</p>
+              <div>
+                <h3 className="text-sm font-semibold">{it.title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-white/55">{it.desc}</p>
+              </div>
             </div>
           ))}
         </div>

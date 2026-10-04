@@ -1,6 +1,6 @@
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/config";
-import { InboxIcon, ListIcon, EyeIcon, MessageIcon, PhoneIcon } from "@/components/icons";
+import { InboxIcon, ListIcon, EyeIcon, MessageIcon, PhoneIcon, ArrowRightIcon } from "@/components/icons";
 
 export function Problem({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale);
@@ -55,7 +55,10 @@ export function Problem({ locale }: { locale: Locale }) {
               ))}
             </div>
 
-            <p className="mt-8 text-lg font-medium text-ink-900">{t.problemClosing}</p>
+            <div className="mt-8 flex items-start gap-3 rounded-xl border-s-2 border-brand-500 bg-brand-50/60 py-2.5 ps-4">
+              <ArrowRightIcon className="mt-1 h-4 w-4 shrink-0 text-brand-content rtl:rotate-180" />
+              <p className="text-lg font-medium leading-snug text-ink-900">{t.problemClosing}</p>
+            </div>
           </div>
         </div>
       </div>
